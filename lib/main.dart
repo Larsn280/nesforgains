@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/app.dart';
 import 'package:nesforgains/database.dart/database.dart';
+import 'package:nesforgains/logger.dart';
 
 void main() async {
   try {
@@ -11,6 +12,6 @@ void main() async {
       sqflite: sqflite,
     ));
   } catch (e, traceStack) {
-    // logger.e(e, stackTrace: traceStack);
+    logger.e(e, stackTrace: traceStack);
   }
 }
