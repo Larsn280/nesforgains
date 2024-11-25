@@ -21,10 +21,10 @@ Future<void> onCreate(Database db, int version) async {
 }
 
 Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-  await migrateDishTable(db, oldVersion, newVersion);
-  await migrateNutritionTable(db, oldVersion, newVersion);
-  await migrateIngredientTable(db, oldVersion, newVersion);
-  await migrateStageTable(db, oldVersion, newVersion);
-  await migrateRecipeTable(db, oldVersion, newVersion);
-  await migrateExerciseTable(db, oldVersion, newVersion);
+  // await migrateDishTable(db, oldVersion, newVersion);
+  // await migrateNutritionTable(db, oldVersion, newVersion);
+  // await migrateIngredientTable(db, oldVersion, newVersion);
+  // await migrateStageTable(db, oldVersion, newVersion);
+  // await migrateRecipeTable(db, oldVersion, newVersion);
+  // await migrateExerciseTable(db, oldVersion, newVersion);
 }
