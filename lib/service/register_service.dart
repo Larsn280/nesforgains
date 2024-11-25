@@ -1,14 +1,14 @@
 import 'package:sqflite/sqflite.dart';
 
 class RegisterService {
-  final Database sqflite;
+  final Database _sqflite;
 
-  RegisterService(this.sqflite);
+  RegisterService(this._sqflite);
 
   // Check if email already exists in the database.
   Future<bool> checkIfUserExists(String email) async {
     // Query the database for a user with the given email
-    final List<Map<String, dynamic>> results = await sqflite.query(
+    final List<Map<String, dynamic>> results = await _sqflite.query(
       'AppUser',
       where: 'email = ?', // Use parameterized query to prevent SQL injection
       whereArgs: [email.toLowerCase()],
@@ -42,7 +42,7 @@ class RegisterService {
         String newUsername = parts[0].toLowerCase();
 
         // Insert the new user into the database
-        await sqflite.insert(
+        await _sqflite.insert(
           'AppUser',
           {
             'email': email.toLowerCase(),

@@ -13,11 +13,7 @@ Future<void> onCreate(Database db, int version) async {
 }
 
 Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-  // Call migration methods for each table
-  await migrateAppUserTable(db, oldVersion, newVersion);
-  await migrateWorkoutTable(db, oldVersion, newVersion);
-  await migrateExerciseTable(db, oldVersion, newVersion);
-  // Add other table migration calls here
+  // await migrateAppUserTable(db, oldVersion, newVersion);
   // await migrateWorkoutTable(db, oldVersion, newVersion);
-  // await migrateRecipeTable(db, oldVersion, newVersion);
+  await migrateExerciseTable(db, oldVersion, newVersion);
 }

@@ -2,14 +2,14 @@ import 'package:nesforgains/models/user_data.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LoginService {
-  final Database sqflite;
+  final Database _sqflite;
 
-  LoginService(this.sqflite);
+  LoginService(this._sqflite);
 
   Future<UserData> loginUser(String usernameOrEmail, String password) async {
     try {
       // Query the database for users matching the username/email
-      final List<Map<String, dynamic>> results = await sqflite.query(
+      final List<Map<String, dynamic>> results = await _sqflite.query(
         'AppUser', // The table name
         where:
             '(username = ? OR email = ?) AND password = ?', // SQL WHERE clause

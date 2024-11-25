@@ -5,14 +5,13 @@ Future<void> createExerciseTable(Database db) async {
     CREATE TABLE Exercise (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       workoutId INTEGER NOT NULL,
-      exercise TEXT,
+      name TEXT,
       kg REAL,
       reps INTEGER,
       sets INTEGER,
       FOREIGN KEY (workoutId) REFERENCES Workout (id) ON DELETE CASCADE
     )
   ''');
-  print('Exercise table created successfully!');
 }
 
 Future<void> migrateExerciseTable(
@@ -20,16 +19,17 @@ Future<void> migrateExerciseTable(
   if (oldVersion < newVersion) {
     await db.execute('DROP TABLE IF EXISTS Exercise');
     await db.execute('''
-      CREATE TABLE IF NOT EXISTS Exercise (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        workoutId INTEGER NOT NULL,
-        exercise TEXT,
-        kg REAL,
-        reps INTEGER,
-        sets INTEGER,
-        FOREIGN KEY (workoutId) REFERENCES Workout (id) ON DELETE CASCADE
-      )
-    ''');
+    CREATE TABLE Exercise (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      workoutId INTEGER NOT NULL,
+      name TEXT,
+      kg REAL,
+      reps INTEGER,
+      sets INTEGER,
+      FOREIGN KEY (workoutId) REFERENCES Workout (id) ON DELETE CASCADE
+    )
+  ''');
+
     print('Exercise table added during migration!');
   }
 }
