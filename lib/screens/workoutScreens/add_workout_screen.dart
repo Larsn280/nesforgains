@@ -187,7 +187,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                 'Please enter exercise eg: Benchpress...'),
                         _buildFormTextFormField(
                             controller: _weightController,
-                            lable: 'Weight (kg, comma separated)',
+                            lable: '(Kg, comma separated)',
                             validatorText: 'Please enter weight in kg...'),
 
                         _buildFormTextFormField(

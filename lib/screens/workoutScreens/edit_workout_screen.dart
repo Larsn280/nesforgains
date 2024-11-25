@@ -164,14 +164,18 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                       children: [
                         const SizedBox(height: 16.0),
                         _buildFormTextFormField(
-                            'Workout (eg: Chest)', _workoutController),
+                            'Workout (eg: Chest, Legs, Bak)', _workoutController),
                         _buildFormTextFormField(
-                            'Exercise (eg: Benchpress)', _exerciseController),
+                            'Exercises eg: (Benchpress, comma separated)',
+                            _exerciseController),
                         _buildFormTextFormField(
                             'Date (YYYY-MM-DD)', _dateController),
-                        _buildFormTextFormField('Reps', _repsController),
-                        _buildFormTextFormField('Sets', _setsController),
-                        _buildFormTextFormField('Weight (kg)', _kgController),
+                        _buildFormTextFormField(
+                            '(Reps, comma separated)', _repsController),
+                        _buildFormTextFormField(
+                            '(Sets, comma separated)', _setsController),
+                        _buildFormTextFormField(
+                            '(Kg, comma separated)', _kgController),
                       ],
                     ),
                   ),

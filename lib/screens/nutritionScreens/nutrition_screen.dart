@@ -8,7 +8,6 @@ import 'package:nesforgains/service/nutrition_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
-import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
 class NutritionScreen extends StatefulWidget {

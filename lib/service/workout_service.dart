@@ -62,15 +62,14 @@ class WorkoutService {
 
         return ResponseData(
           checksuccess: true,
-          message:
-              'Successfully added workout: ${workout.name}: ${workout.date}',
+          message: 'Successfully added workout: ${workout.name}: $date',
         );
       }
 
       // If workout already exists, respond accordingly
       return ResponseData(
         checksuccess: false,
-        message: 'Workout already logged: ${workout.name}: ${workout.date}',
+        message: 'Workout already logged: ${workout.name}: $date',
       );
     } catch (e) {
       return ResponseData(
