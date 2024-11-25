@@ -3,6 +3,7 @@ import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/screens/authScreens/login_screen.dart';
 import 'package:nesforgains/screens/authScreens/register_screen.dart';
 import 'package:nesforgains/screens/home_screen.dart';
+import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -35,7 +36,9 @@ class App extends StatelessWidget {
           '/homeScreen': (context) => const HomeScreen(),
           '/registerScreen': (context) => RegisterScreen(sqflite: sqflite),
           '/displayworkoutScreen': (context) =>
-              DisplayWorkoutScreen(sqflite: sqflite)
+              DisplayWorkoutScreen(sqflite: sqflite),
+          '/displayrecipeScreen': (context) =>
+              DisplayRecipeScreen(sqflite: sqflite),
         }));
   }
 }
