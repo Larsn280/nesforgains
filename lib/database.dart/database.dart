@@ -12,7 +12,7 @@ Future<Database> setupSQLite() async {
 
   // Open or create the SQLite database
   final database =
-      await openDatabase(path, version: 5, // Increment the version number
+      await openDatabase(path, version: 8, // Increment the version number
           onCreate: (db, version) async {
     await onCreate(db, version);
   }, onUpgrade: (db, oldVersion, newVersion) async {

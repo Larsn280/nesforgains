@@ -1,6 +1,8 @@
 import 'package:nesforgains/tables/app_user_table.dart';
+import 'package:nesforgains/tables/dish_table.dart';
 import 'package:nesforgains/tables/exercise_table.dart';
 import 'package:nesforgains/tables/ingredient_table.dart';
+import 'package:nesforgains/tables/nutrition_table.dart';
 import 'package:nesforgains/tables/recipe_table.dart';
 import 'package:nesforgains/tables/stage_table.dart';
 import 'package:nesforgains/tables/workout_table.dart';
@@ -14,15 +16,15 @@ Future<void> onCreate(Database db, int version) async {
   await createRecipeTable(db);
   await createIngredientTable(db);
   await createStageTable(db);
-  // Add other table creation calls here
-  // await createRecipeTable(db);
+  await createDishTable(db);
+  await createNutritionTable(db);
 }
 
 Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
-  // await migrateAppUserTable(db, oldVersion, newVersion);
-  await migrateWorkoutTable(db, oldVersion, newVersion);
-  await migrateRecipeTable(db, oldVersion, newVersion);
+  await migrateDishTable(db, oldVersion, newVersion);
+  await migrateNutritionTable(db, oldVersion, newVersion);
   await migrateIngredientTable(db, oldVersion, newVersion);
   await migrateStageTable(db, oldVersion, newVersion);
-  // await migrateExerciseTable(db, oldVersion, newVersion);
+  await migrateRecipeTable(db, oldVersion, newVersion);
+  await migrateExerciseTable(db, oldVersion, newVersion);
 }

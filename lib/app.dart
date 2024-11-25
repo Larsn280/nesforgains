@@ -3,7 +3,10 @@ import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/screens/authScreens/login_screen.dart';
 import 'package:nesforgains/screens/authScreens/register_screen.dart';
 import 'package:nesforgains/screens/book_of_exuses.dart';
+import 'package:nesforgains/screens/dishScreens/display_dishes_screen.dart';
 import 'package:nesforgains/screens/home_screen.dart';
+import 'package:nesforgains/screens/nutritionScreens/display_daily_nutrition_screen.dart';
+import 'package:nesforgains/screens/nutritionScreens/nutrition_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -37,6 +40,11 @@ class App extends StatelessWidget {
           '/homeScreen': (context) => const HomeScreen(),
           '/bookofexusesScreen': (context) => const BookOfExuses(),
           '/registerScreen': (context) => RegisterScreen(sqflite: sqflite),
+          '/nutritionScreen': (context) => NutritionScreen(sqflite: sqflite),
+          '/displaydishesScreen': (context) =>
+              DisplayDishesScreen(sqflite: sqflite),
+          '/displaynutritionScreen': (context) =>
+              DisplayDailyNutritionScreen(sqflite: sqflite),
           '/displayworkoutScreen': (context) =>
               DisplayWorkoutScreen(sqflite: sqflite),
           '/displayrecipeScreen': (context) =>
