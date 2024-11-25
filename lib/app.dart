@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/screens/authScreens/login_screen.dart';
 import 'package:nesforgains/screens/authScreens/register_screen.dart';
+import 'package:nesforgains/screens/book_of_exuses.dart';
 import 'package:nesforgains/screens/home_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
                   );
           },
           '/homeScreen': (context) => const HomeScreen(),
+          '/bookofexusesScreen': (context) => const BookOfExuses(),
           '/registerScreen': (context) => RegisterScreen(sqflite: sqflite),
           '/displayworkoutScreen': (context) =>
               DisplayWorkoutScreen(sqflite: sqflite),
