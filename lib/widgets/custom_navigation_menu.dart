@@ -171,7 +171,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                           ),
                           InkWell(
                               onTap: () {
-                                AuthProvider.of(context).logout();
+                                AuthProvider.of(context).logout(context);
                                 _removeOverlay();
                               },
                               child: Container(

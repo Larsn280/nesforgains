@@ -16,11 +16,12 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout() {
+  void logout(BuildContext context) {
     id = 0;
     username = '';
     _isLoggedIn = false;
     notifyListeners();
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
   bool checkLoginStatus() {
