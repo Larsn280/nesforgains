@@ -8,11 +8,11 @@ Future<Database> setupSQLite() async {
   final dir = await getApplicationDocumentsDirectory();
   final path = join(dir.path, 'nesforgains.db');
 
-  // await deleteDatabase(path);
+  await deleteDatabase(path);
 
   // Open or create the SQLite database
   final database =
-      await openDatabase(path, version: 8, // Increment the version number
+      await openDatabase(path, version: 9, // Increment the version number
           onCreate: (db, version) async {
     await onCreate(db, version);
   }, onUpgrade: (db, oldVersion, newVersion) async {

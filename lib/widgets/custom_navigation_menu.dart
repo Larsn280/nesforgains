@@ -136,6 +136,16 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                                   },
                                   color: subColor,
                                 ),
+                                buildMenuOption(
+                                  icon: Icons.list,
+                                  label: 'Scoreboard',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/displayscoreboardScreen');
+                                    _removeOverlay();
+                                  },
+                                  color: subColor,
+                                ),
                               ],
                             ),
                           buildMenuOption(

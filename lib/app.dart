@@ -4,6 +4,7 @@ import 'package:nesforgains/screens/authScreens/login_screen.dart';
 import 'package:nesforgains/screens/authScreens/register_screen.dart';
 import 'package:nesforgains/screens/book_of_exuses.dart';
 import 'package:nesforgains/screens/dishScreens/display_dishes_screen.dart';
+import 'package:nesforgains/screens/display_scoreboard_screen.dart';
 import 'package:nesforgains/screens/home_screen.dart';
 import 'package:nesforgains/screens/nutritionScreens/display_daily_nutrition_screen.dart';
 import 'package:nesforgains/screens/nutritionScreens/nutrition_screen.dart';
@@ -49,6 +50,8 @@ class App extends StatelessWidget {
               DisplayWorkoutScreen(sqflite: sqflite),
           '/displayrecipeScreen': (context) =>
               DisplayRecipeScreen(sqflite: sqflite),
+          '/displayscoreboardScreen': (context) =>
+              DisplayScoreboardScreen(sqflite: sqflite),
         }));
   }
 }

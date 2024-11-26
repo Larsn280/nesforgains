@@ -6,6 +6,7 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/screens/workoutScreens/add_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_details_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
+import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
