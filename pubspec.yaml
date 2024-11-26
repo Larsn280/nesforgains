@@ -19,7 +19,13 @@ dependencies:
   isar: ^3.1.0+1
   path: ^1.9.0
   logger: ^2.3.0
+  # For DateTimeFormatInFrontend
   intl: ^0.17.0
+  # For AWS
+  http: ^1.2.2
+  aws_common: ^0.3.0
+  aws_signature_v4: ^0.3.0
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -32,3 +38,4 @@ flutter:
   assets:
     - assets/
     - assets/animations/
+    - .env
