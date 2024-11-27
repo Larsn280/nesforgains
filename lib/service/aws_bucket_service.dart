@@ -46,53 +46,178 @@ class AwsBucketService {
     }
   }
 
-  Future<Map<String, dynamic>?> downloadScoreboard() async {
+  Future<String> downloadScoreboard() async {
     const bucketName = 'scoreboardbucketnesforgains-flutter';
-    final region =
-        dotenv.env['AWS_REGION'] ?? 'eu-north-1'; // Get region from .env
+    final region = dotenv.env['AWS_REGION'] ?? 'eu-north-1';
     final accessKeyId = dotenv.env['AWS_ACCESS_KEY_ID']!;
     final secretAccessKey = dotenv.env['AWS_SECRET_ACCESS_KEY']!;
 
-    // Create AWS credentials from the environment
     final credentials = AWSCredentials(accessKeyId, secretAccessKey);
     final awsSigner = AWSSigV4Signer(
       credentialsProvider: AWSCredentialsProvider(credentials),
     );
 
-    // The endpoint to get the file
     final endpoint = Uri.https(
       '$bucketName.s3.$region.amazonaws.com',
-      '/Benchpress.json', // The file you want to get
+      '/Benchpress.json',
     );
 
-    // Create the signing scope
     final scope = AWSCredentialScope(region: region, service: AWSService.s3);
 
-    // Create the HTTP request
     final request = AWSHttpRequest(
       method: AWSHttpMethod.get,
       uri: endpoint,
     );
 
-    // Sign the request
     final signedRequest = await awsSigner.sign(
       request,
       credentialScope: scope,
     );
 
-    // Perform the HTTP request
-    final response = await http.get(
-      signedRequest.uri,
-      headers: signedRequest.headers,
+    try {
+      // Make the actual request to S3
+      final response = await http.get(
+        signedRequest.uri,
+        headers: signedRequest.headers,
+      );
+
+      if (response.statusCode == 200) {
+        // File found, returning its content
+        final responseBody = utf8.decode(response.bodyBytes);
+        logger.i("File downloaded: $responseBody");
+
+        // If the file is empty or doesn't contain the expected structure, handle it.
+        if (responseBody.isEmpty || !responseBody.contains('scoreboard')) {
+          logger.e("File is empty or doesn't contain the expected structure.");
+          await createScoreboardFile(); // Recreate the file with default structure
+          return ''; // Returning empty string as a new file will be created
+        }
+
+        return responseBody;
+      } else if (response.statusCode == 404) {
+        // File not found, create it
+        logger.e("Benchpress.json not found. Creating new file...");
+        await createScoreboardFile();
+        return ''; // Returning empty string as a new file will be created
+      } else {
+        // Handle other errors
+        logger.e("Failed to download file: ${response.statusCode}");
+        throw Exception("Failed to download file from S3.");
+      }
+    } catch (e) {
+      logger.e("Error downloading file: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> createScoreboardFile() async {
+    const bucketName = 'scoreboardbucketnesforgains-flutter';
+    final region = dotenv.env['AWS_REGION'] ?? 'eu-north-1';
+    final accessKeyId = dotenv.env['AWS_ACCESS_KEY_ID']!;
+    final secretAccessKey = dotenv.env['AWS_SECRET_ACCESS_KEY']!;
+
+    final credentials = AWSCredentials(accessKeyId, secretAccessKey);
+    final awsSigner = AWSSigV4Signer(
+      credentialsProvider: AWSCredentialsProvider(credentials),
     );
 
-    // Handle the response
+    final endpoint = Uri.https(
+      '$bucketName.s3.$region.amazonaws.com',
+      '/Benchpress.json',
+    );
+
+    final scope = AWSCredentialScope(region: region, service: AWSService.s3);
+
+    // JSON data to initialize the file (default structure, you can customize it)
+    final jsonData = json.encode({
+      "scoreboard": [], // Initial empty scoreboard array
+      "updatedAt":
+          DateTime.now().toIso8601String(), // Track last update timestamp
+    });
+
+    // Convert the JSON string to bytes (List<int>)
+    final bodyBytes = utf8.encode(jsonData); // Convert to List<int> (bytes)
+
+    final request = AWSHttpRequest(
+      method: AWSHttpMethod.put,
+      uri: endpoint,
+      body: bodyBytes, // Pass the body as List<int> (bytes)
+    );
+
+    final signedRequest = await awsSigner.sign(
+      request,
+      credentialScope: scope,
+    );
+
+    try {
+      // Upload the file to S3
+      final response = await http.put(
+        signedRequest.uri,
+        headers: signedRequest.headers,
+        body: bodyBytes, // Send the body as bytes (List<int>)
+      );
+
+      if (response.statusCode == 200) {
+        logger.i("Benchpress.json successfully created in S3.");
+      } else {
+        logger.e("Failed to create Benchpress.json: ${response.statusCode}");
+        throw Exception("Failed to create file in S3.");
+      }
+    } catch (e) {
+      logger.e("Error creating Benchpress.json in S3: $e");
+      rethrow;
+    }
+  }
+
+  Future<bool> uploadScoreboard(List<Map<String, dynamic>> scores) async {
+    const bucketName = 'scoreboardbucketnesforgains-flutter';
+    final region = dotenv.env['AWS_REGION'] ?? 'eu-north-1';
+    final accessKeyId = dotenv.env['AWS_ACCESS_KEY_ID']!;
+    final secretAccessKey = dotenv.env['AWS_SECRET_ACCESS_KEY']!;
+
+    final credentials = AWSCredentials(accessKeyId, secretAccessKey);
+    final awsSigner = AWSSigV4Signer(
+      credentialsProvider: AWSCredentialsProvider(credentials),
+    );
+
+    final endpoint = Uri.https(
+      '$bucketName.s3.$region.amazonaws.com',
+      '/Benchpress.json',
+    );
+
+    // Convert the scores into JSON format
+    final content = jsonEncode({"scores": scores});
+
+    final scope = AWSCredentialScope(region: region, service: AWSService.s3);
+
+    final request = AWSHttpRequest(
+      method: AWSHttpMethod.put,
+      uri: endpoint,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': content.length.toString(),
+      },
+      body: utf8.encode(content),
+    );
+
+    final signedRequest = await awsSigner.sign(
+      request,
+      credentialScope: scope,
+    );
+
+    final response = await http.put(
+      signedRequest.uri,
+      headers: signedRequest.headers,
+      body: signedRequest.body,
+    );
+
     if (response.statusCode == 200) {
-      // Parse and return the JSON content
-      return jsonDecode(response.body);
+      logger.i("Benchpress.json successfully updated in S3.");
+      return true;
     } else {
-      logger.e('Failed to download file: ${response.statusCode}');
-      return null;
+      logger
+          .e("Failed to update Benchpress.json in S3: ${response.statusCode}");
+      return false;
     }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/service/aws_bucket_service.dart';
 import 'package:nesforgains/viewModels/userscore_viewmodel.dart';
@@ -10,39 +12,42 @@ class ScoreboardService {
 
   Future<void> syncS3ToDatabase() async {
     try {
-      final awsBucketService = AwsBucketService();
-      // Step 1: Download the JSON file
-      final scoreboardData = await awsBucketService.downloadScoreboard();
+      final awsbucketService = AwsBucketService();
+      // Download the scoreboard data from S3 as a String
+      var scoreboardJson = await awsbucketService.downloadScoreboard();
 
-      if (scoreboardData == null) {
-        logger.e("No data found in the S3 JSON file.");
+      if (scoreboardJson.isEmpty) {
+        // If the file is empty, create an empty structure or default data
+        logger.e("The scoreboard file is empty. Creating default structure.");
+        // You might want to insert default values into the database here.
+        scoreboardJson = json.encode({
+          "scoreboard": [], // Initial empty scoreboard array
+          "updatedAt":
+              DateTime.now().toIso8601String(), // Track last update timestamp
+        });
+      }
+
+      // Parse the downloaded JSON string into a Map or List (depending on the structure)
+      final scoreboardData =
+          jsonDecode(scoreboardJson); // Parse the JSON string
+
+      // Check if the JSON data has the expected structure
+      if (scoreboardData is! Map || !scoreboardData.containsKey('scoreboard')) {
+        logger.e(
+            "The scoreboard data is in an unexpected format. Creating default structure.");
+        // Insert default data into the database here, if needed.
         return;
       }
 
-      // Step 2: Parse and extract relevant fields
-      final name = scoreboardData['name'] as String?;
-      final maxBench = scoreboardData['max-bench'] as int?;
+      // Now you can work with the parsed data
+      logger.i("Syncing data to database: $scoreboardData");
 
-      if (name == null || maxBench == null) {
-        logger.e("Invalid data structure in the S3 JSON file.");
-        return;
-      }
-
-      // Step 3: Define the exercise (you can customize this)
-      const exercise = "Benchpress";
-
-      // Step 4: Insert into the UserScore table
-      final query = '''
-      INSERT INTO UserScore (userid, username, exercise, maxlift)
-      VALUES (?, ?, ?, ?)
-    ''';
-
-      // Assuming `sqflite` is your database instance
-      await sqflite.rawInsert(query, [null, name, exercise, maxBench]);
-
-      logger.i("Data successfully synced from S3 to the database!");
+      // Your code for syncing the data to the local database goes here
+      // For example:
+      // await database.insert('scoreboard', scoreboardData);
     } catch (e) {
       logger.e("Error syncing data from S3: $e");
+      rethrow; // Rethrow the error after logging it
     }
   }
 
@@ -102,6 +107,21 @@ class ScoreboardService {
     } catch (e) {
       logger.e('Error updating user scores: $e');
       throw Exception('Failed to update user scores: $e');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchLocalUserScores() async {
+    final query = '''
+    SELECT id, userid, date, username, exercise, maxlift FROM UserScore
+  ''';
+
+    try {
+      // Assuming `sqflite` is your database instance
+      final scores = await sqflite.rawQuery(query);
+      return scores; // Returns a list of maps containing UserScore data
+    } catch (e) {
+      logger.e("Error fetching local UserScore data: $e");
+      return [];
     }
   }
 }
