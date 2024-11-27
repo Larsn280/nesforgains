@@ -169,7 +169,7 @@ class AwsBucketService {
     }
   }
 
-  Future<bool> uploadScoreboard(List<Map<String, dynamic>> scores) async {
+  Future<bool> uploadScoreboard(String scoresJson) async {
     const bucketName = 'scoreboardbucketnesforgains-flutter';
     final region = dotenv.env['AWS_REGION'] ?? 'eu-north-1';
     final accessKeyId = dotenv.env['AWS_ACCESS_KEY_ID']!;
@@ -185,8 +185,16 @@ class AwsBucketService {
       '/Benchpress.json',
     );
 
-    // Convert the scores into JSON format
-    final content = jsonEncode({"scores": scores});
+    final content = scoresJson; // Use the JSON string as content
+
+    // Validate JSON
+    try {
+      final testDecoded = jsonDecode(content);
+      logger.i("Validated JSON structure: $testDecoded");
+    } catch (e) {
+      logger.e("Invalid JSON passed to upload: $e");
+      return false;
+    }
 
     final scope = AWSCredentialScope(region: region, service: AWSService.s3);
 
@@ -195,20 +203,27 @@ class AwsBucketService {
       uri: endpoint,
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': content.length.toString(),
+        'Content-Length': utf8.encode(content).length.toString(),
       },
-      body: utf8.encode(content),
+      body: utf8.encode(content), // Encode JSON to bytes
     );
 
+    // Sign the request
     final signedRequest = await awsSigner.sign(
       request,
       credentialScope: scope,
     );
 
+    // Debugging logs
+    logger.i("Signed URI: ${signedRequest.uri}");
+    logger.i("Signed Headers: ${signedRequest.headers}");
+    logger.i("Request Body: $content");
+
+    // Perform the PUT request
     final response = await http.put(
       signedRequest.uri,
       headers: signedRequest.headers,
-      body: signedRequest.body,
+      body: utf8.encode(content), // Send encoded JSON bytes
     );
 
     if (response.statusCode == 200) {
