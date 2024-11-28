@@ -159,7 +159,17 @@ class ScoreboardService {
   }
 
   Future<void> updateUserScoresWithMaxLifts(String username) async {
-    const query = '''
+    const deleteQuery = '''
+    DELETE FROM UserScore
+    WHERE userid IN (
+      SELECT w.userId
+      FROM Workout w
+      INNER JOIN Exercise e ON e.workoutId = w.id
+      WHERE e.name IN ('Benchpress', 'Squats', 'Deadlift')
+    ) AND exercise IN ('Benchpress', 'Squats', 'Deadlift');
+  ''';
+
+    const insertQuery = '''
     INSERT INTO UserScore (userid, date, username, exercise, maxlift)
     SELECT 
         w.userId AS userid,
@@ -169,15 +179,17 @@ class ScoreboardService {
         CAST(MAX(e.kg) AS INTEGER) AS maxlift
     FROM Exercise e
     INNER JOIN Workout w ON e.workoutId = w.id
-    LEFT JOIN UserScore us ON us.userid = w.userId AND us.exercise = e.name
     WHERE e.name IN ('Benchpress', 'Squats', 'Deadlift')  -- Filter for specified exercises
-    GROUP BY w.userId, e.name
-    HAVING (us.maxlift IS NULL OR us.maxlift != CAST(MAX(e.kg) AS INTEGER));
+    GROUP BY w.userId, e.name;
   ''';
 
     try {
-      // Use rawInsert for an INSERT statement
-      await sqflite.rawInsert(query, [username]);
+      // Delete old scores for specified exercises (Benchpress, Squats, Deadlift)
+      await sqflite.rawDelete(deleteQuery);
+      print('Old scores deleted successfully.');
+
+      // Now insert the new max lifts for the specified exercises
+      await sqflite.rawInsert(insertQuery, [username]);
       print('User scores updated successfully for $username.');
     } catch (e) {
       logger.e('Error updating user scores: $e');
