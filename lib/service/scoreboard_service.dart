@@ -90,6 +90,41 @@ class ScoreboardService {
   }
 
   Future<List<UserscoreViewmodel>>
+      getAllExerciseScoresInDescendingOrder() async {
+    try {
+      // Define the SQL query with a WHERE clause to filter for Benchpress
+      const query = '''
+    SELECT username, date, exercise, MAX(maxlift) as maxlift
+    FROM UserScore
+    -- WHERE exercise = 'Squats'  -- Filter for Benchpress
+    GROUP BY username, exercise
+    ORDER BY maxlift DESC
+    ''';
+
+      // Execute the query
+      final results = await sqflite.rawQuery(query);
+
+      // If the table is empty, return an empty list
+      if (results.isEmpty) {
+        return [];
+      }
+
+      // Convert the results into a list of UserscoreViewmodel
+      return results.map((row) {
+        return UserscoreViewmodel(
+          name: row['username'] as String?,
+          date: row['date'] as String?,
+          exercise: row['exercise'] as String?,
+          maxlift: row['maxlift'] as int?,
+        );
+      }).toList();
+    } catch (e) {
+      logger.e('Error fetching Powerlifting scores: $e');
+      throw Exception('Failed to fetch Powerlifting scores: $e');
+    }
+  }
+
+  Future<List<UserscoreViewmodel>>
       getBenchpressScoresInDescendingOrder() async {
     try {
       // Define the SQL query with a WHERE clause to filter for Benchpress
@@ -125,22 +160,24 @@ class ScoreboardService {
 
   Future<void> updateUserScoresWithMaxLifts(String username) async {
     const query = '''
-  INSERT INTO UserScore (userid, username, exercise, maxlift)
-  SELECT 
-      w.userId AS userid,
-      ? AS username,  -- Use a parameter placeholder for the username
-      e.name AS exercise,
-      CAST(MAX(e.kg) AS INTEGER) AS maxlift
-  FROM Exercise e
-  INNER JOIN Workout w ON e.workoutId = w.id
-  LEFT JOIN UserScore us ON us.userid = w.userId AND us.exercise = e.name
-  GROUP BY w.userId, e.name
-  HAVING (us.maxlift IS NULL OR us.maxlift != CAST(MAX(e.kg) AS INTEGER));
+    INSERT INTO UserScore (userid, date, username, exercise, maxlift)
+    SELECT 
+        w.userId AS userid,
+        w.date AS date,
+        ? AS username,  -- Use a parameter placeholder for the username
+        e.name AS exercise,
+        CAST(MAX(e.kg) AS INTEGER) AS maxlift
+    FROM Exercise e
+    INNER JOIN Workout w ON e.workoutId = w.id
+    LEFT JOIN UserScore us ON us.userid = w.userId AND us.exercise = e.name
+    WHERE e.name IN ('Benchpress', 'Squats', 'Deadlift')  -- Filter for specified exercises
+    GROUP BY w.userId, e.name
+    HAVING (us.maxlift IS NULL OR us.maxlift != CAST(MAX(e.kg) AS INTEGER));
   ''';
 
     try {
-      // Pass the username value as a parameter
-      await sqflite.rawQuery(query, [username]);
+      // Use rawInsert for an INSERT statement
+      await sqflite.rawInsert(query, [username]);
       print('User scores updated successfully for $username.');
     } catch (e) {
       logger.e('Error updating user scores: $e');

@@ -37,7 +37,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
     try {
       await scoreboardService.updateUserScoresWithMaxLifts(username);
       final response =
-          await scoreboardService.getBenchpressScoresInDescendingOrder();
+          await scoreboardService.getAllExerciseScoresInDescendingOrder();
       return response;
     } catch (e) {
       logger.e('Error fetching scores', error: e);
@@ -144,12 +144,12 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      score.name!,
+                                      '${score.name}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
-                                    const Text(
-                                      'datum',
+                                    Text(
+                                      '${score.date}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -162,8 +162,8 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        'Benchpress',
+                                      Text(
+                                        score.exercise!,
                                         style: const TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
