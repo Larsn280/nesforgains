@@ -184,11 +184,11 @@ class ScoreboardService {
   ''';
 
     try {
-      // Delete old scores for specified exercises (Benchpress, Squats, Deadlift)
+      // Step 1: Delete old scores for specified exercises
       await sqflite.rawDelete(deleteQuery);
       print('Old scores deleted successfully.');
 
-      // Now insert the new max lifts for the specified exercises
+      // Step 2: Insert the new max lifts for the specified exercises (whether higher or lower)
       await sqflite.rawInsert(insertQuery, [username]);
       print('User scores updated successfully for $username.');
     } catch (e) {
