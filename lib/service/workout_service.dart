@@ -80,7 +80,7 @@ class WorkoutService {
     }
   }
 
-  Future<List<Workout>> fetchAllWorkouts(int userId) async {
+  Future<List<Workout>> fetchAllWorkouts(String userId) async {
     try {
       // Fetch workouts along with their exercises in one query using JOIN
       final List<Map<String, dynamic>> rows = await _sqflite.rawQuery(

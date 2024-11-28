@@ -42,7 +42,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
     }
   }
 
-  void _handleDeleteDish(String name, int userId) async {
+  void _handleDeleteDish(String name, String userId) async {
     try {
       await nutritionService.deleteDish(name, userId);
       // Triggar en rebuild av widget trädet.

@@ -7,7 +7,7 @@ class Workout {
 
   String? date;
 
-  int? userId;
+  String? userId;
 
   String? markedColor;
 

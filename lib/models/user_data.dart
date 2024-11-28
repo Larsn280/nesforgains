@@ -1,5 +1,5 @@
 class UserData {
-  final int id;
+  final String id;
   final String username;
 
   UserData({

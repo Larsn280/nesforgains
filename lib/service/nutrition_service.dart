@@ -8,7 +8,7 @@ class NutritionService {
 
   NutritionService(this._sqflite);
 
-  Future<Nutrition> fetchDailyNutritionById(int userId) async {
+  Future<Nutrition> fetchDailyNutritionById(String userId) async {
     try {
       // Get the current date (set the time to 00:00:00)
       final currentDate = DateTime.now();
@@ -33,7 +33,7 @@ class NutritionService {
           protein: intake['protein'] as int,
           carbohydrates: intake['carbohydrates'] as int,
           fat: intake['fat'] as int,
-          userId: intake['userId'] as int,
+          userId: intake['userId'] as String,
         );
       }
 
@@ -62,7 +62,7 @@ class NutritionService {
     }
   }
 
-  Future<List<Nutrition>> fetchNutritionListByUserId(int userId) async {
+  Future<List<Nutrition>> fetchNutritionListByUserId(String userId) async {
     try {
       // Query the Nutrition table for all entries with the given userId
       final nutritionItems = await _sqflite.query(
@@ -85,7 +85,7 @@ class NutritionService {
           protein: item['protein'] as int,
           carbohydrates: item['carbohydrates'] as int,
           fat: item['fat'] as int,
-          userId: item['userId'] as int,
+          userId: item['userId'] as String,
         );
       }).toList();
 
@@ -100,7 +100,7 @@ class NutritionService {
     }
   }
 
-  Future<ResponseData> postDailyDish(String dish, int userId) async {
+  Future<ResponseData> postDailyDish(String dish, String userId) async {
     try {
       // Fetch the dish item from the dish table for the given userId
       final dishItems = await _sqflite.query(
@@ -187,7 +187,7 @@ class NutritionService {
     }
   }
 
-  Future<ResponseData> putDailyDish(String dish, int userId) async {
+  Future<ResponseData> putDailyDish(String dish, String userId) async {
     try {
       // Fetch the dish item from the Dish table for the given userId
       final dishItems = await _sqflite.query(

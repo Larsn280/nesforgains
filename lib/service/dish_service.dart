@@ -8,7 +8,7 @@ class DishService {
 
   DishService(this._sqflite);
 
-  Future<List<Dish>> fetchAllDishesById(int userId) async {
+  Future<List<Dish>> fetchAllDishesById(String userId) async {
     try {
       // Query the dishes for the given userId
       final dishData = await _sqflite.query(
@@ -44,7 +44,7 @@ class DishService {
     }
   }
 
-  Future<List<String>> fetchAllDishNamesById(int userId) async {
+  Future<List<String>> fetchAllDishNamesById(String userId) async {
     try {
       // Query the Dish table by userId
       final dishData = await _sqflite.query(
@@ -72,7 +72,7 @@ class DishService {
     }
   }
 
-  Future<ResponseData> addDish(Dish data, int userId) async {
+  Future<ResponseData> addDish(Dish data, String userId) async {
     try {
       // Query the Dish table to check if the dish already exists
       final existingDish = await _sqflite.query(
@@ -115,7 +115,7 @@ class DishService {
     }
   }
 
-  Future<ResponseData> deleteDish(String name, int userId) async {
+  Future<ResponseData> deleteDish(String name, String userId) async {
     try {
       // Check if the dish name is provided
       if (name.isEmpty) {
@@ -165,7 +165,7 @@ class DishService {
   }
 
   Future<ResponseData> editDish(
-      Dish dishData, String oldDishName, int userId) async {
+      Dish dishData, String oldDishName, String userId) async {
     try {
       // Early return if the new dish name is empty
       if (dishData.dish == '') {

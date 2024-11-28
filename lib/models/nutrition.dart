@@ -5,7 +5,7 @@ class Nutrition {
   final int protein;
   final int carbohydrates;
   final int fat;
-  int? userId;
+  String? userId;
 
   Nutrition({
     this.id,

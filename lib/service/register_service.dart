@@ -1,7 +1,9 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
 class RegisterService {
   final Database _sqflite;
+  var uuid = const Uuid();
 
   RegisterService(this._sqflite);
 
@@ -37,6 +39,7 @@ class RegisterService {
       if (userExists) {
         return 'User with email: $email already exists!';
       } else {
+        String newUserId = uuid.v4();
         // Generate a username from the email
         List<String> parts = email.split('@');
         String newUsername = parts[0].toLowerCase();
@@ -45,13 +48,13 @@ class RegisterService {
         await _sqflite.insert(
           'AppUser',
           {
+            'id': newUserId,
             'email': email.toLowerCase(),
             'username': newUsername,
             'password': password,
             'age': 0, // Default age value
           },
         );
-
         return '$email was created!';
       }
     } catch (e) {

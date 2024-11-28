@@ -3,7 +3,7 @@ import 'package:sqflite/sqflite.dart';
 Future<void> createAppUserTable(Database db) async {
   await db.execute('''
     CREATE TABLE AppUser (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT PRIMARY KEY,
       username TEXT,
       email TEXT,
       password TEXT,
@@ -19,7 +19,7 @@ Future<void> migrateAppUserTable(
     await db.execute('DROP TABLE IF EXISTS AppUser');
     await db.execute('''
     CREATE TABLE AppUser (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          id TEXT PRIMARY KEY,
           username TEXT,
           email TEXT,
           password TEXT,

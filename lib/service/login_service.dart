@@ -29,7 +29,7 @@ class LoginService {
       // Map the result to a `UserData` object
       final user = results.first;
       return UserData(
-        id: user['id'] as int,
+        id: user['id'] as String,
         username: user['username'] as String,
       );
     } catch (e) {
