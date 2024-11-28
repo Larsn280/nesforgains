@@ -4,7 +4,7 @@ Future<void> createUserScoreTable(Database db) async {
   await db.execute('''
     CREATE TABLE UserScore (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userid INTEGER,
+      userid TEXT,
       date TEXT,
       username TEXT,
       exercise TEXT,

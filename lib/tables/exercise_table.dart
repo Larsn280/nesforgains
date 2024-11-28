@@ -4,7 +4,7 @@ Future<void> createExerciseTable(Database db) async {
   await db.execute('''
     CREATE TABLE Exercise (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      workoutId INTEGER NOT NULL,
+      workoutId TEXT NOT NULL,
       name TEXT,
       kg REAL,
       reps INTEGER,
@@ -21,7 +21,7 @@ Future<void> migrateExerciseTable(
     await db.execute('''
     CREATE TABLE Exercise (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      workoutId INTEGER NOT NULL,
+      workoutId TEXT NOT NULL,
       name TEXT,
       kg REAL,
       reps INTEGER,

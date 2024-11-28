@@ -6,8 +6,9 @@ Future<void> createWorkoutTable(Database db) async {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       date TEXT,
-      userId INTEGER,
-      markedColor TEXT
+      userId TEXT,
+      markedColor TEXT,
+      FOREIGN KEY (userid) REFERENCES AppUser (id) ON DELETE CASCADE
     )
   ''');
 }

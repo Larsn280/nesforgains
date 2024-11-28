@@ -59,7 +59,7 @@ class WorkoutService {
             );
           }
         });
-
+        print(workout.userId);
         return ResponseData(
           checksuccess: true,
           message: 'Successfully added workout: ${workout.name}: $date',

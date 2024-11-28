@@ -1,7 +1,7 @@
 class Exercise {
   int? id;
 
-  int? workoutId;
+  String? workoutId;
 
   String? name;
 
