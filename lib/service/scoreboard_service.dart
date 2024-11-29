@@ -196,10 +196,8 @@ class ScoreboardService {
   Future<void> compareScoreboardWithDatabase(
       List<Map<String, dynamic>> scoreboard) async {
     try {
-      // Fetch data from UserScore table (local database)
       final localScores = await fetchLocalUserScores();
 
-      // Create a set of unique keys for the local database and S3 scoreboard
       final localKeys = localScores.map((localScore) {
         return "${localScore['userid']}_${localScore['exercise']}";
       }).toSet();
@@ -210,67 +208,73 @@ class ScoreboardService {
 
       bool isUpdated = false;
 
-      // 1. Handle entries in the local database but missing in the S3 scoreboard
+      final batch = sqflite.batch();
+
       for (var localScore in localScores) {
         final localKey = "${localScore['userid']}_${localScore['exercise']}";
         if (!scoreboardKeys.contains(localKey)) {
           logger.i(
               "Adding missing local score for ${localScore['username']} (${localScore['exercise']}) to scoreboard.");
 
-          // Add the local score to the S3 scoreboard
           scoreboard.add({
             'userid': localScore['userid'],
             'username': localScore['username'],
             'exercise': localScore['exercise'],
             'maxlift': localScore['maxlift'],
-            'date': localScore['date'], // Ensure the date format matches
+            'date': localScore['date'],
           });
 
           isUpdated = true;
         }
       }
 
-      // 2. Handle entries in the S3 scoreboard but missing in the local database
       for (var s3Score in scoreboard) {
         final s3Key = "${s3Score['userid']}_${s3Score['exercise']}";
         if (!localKeys.contains(s3Key)) {
           logger.i(
               "Adding missing S3 score for ${s3Score['username']} (${s3Score['exercise']}) to local database.");
 
-          // Insert the missing score into the local database
-          await insertUserScoreToDatabase(UserScore(
-            userid: s3Score['userid'],
-            username: s3Score['username'],
-            exercise: s3Score['exercise'],
-            maxlift: s3Score['maxlift'],
-            date: s3Score['date'],
-          ));
+          batch.insert(
+              'UserScore',
+              {
+                'userid': s3Score['userid'],
+                'username': s3Score['username'],
+                'exercise': s3Score['exercise'],
+                'maxlift': s3Score['maxlift'],
+                'date': s3Score['date'],
+              },
+              conflictAlgorithm: ConflictAlgorithm.ignore);
         } else {
-          // Update existing local score if maxlift is different
           final existingLocalScore = localScores.firstWhere(
-              (localScore) =>
-                  localScore['userid'] == s3Score['userid'] &&
-                  localScore['exercise'] == s3Score['exercise'],
-              orElse: () => {});
+            (localScore) =>
+                localScore['userid'] == s3Score['userid'] &&
+                localScore['exercise'] == s3Score['exercise'],
+            orElse: () =>
+                <String, dynamic>{}, // Return an empty map instead of null
+          );
 
           if (existingLocalScore.isNotEmpty &&
               existingLocalScore['maxlift'] != s3Score['maxlift']) {
             logger.i(
                 "Updating local database for ${existingLocalScore['username']} (${existingLocalScore['exercise']}).");
 
-            // Update the existing local score in the database
-            await updateUserScoreInDatabase(UserScore(
-              userid: s3Score['userid'],
-              username: s3Score['username'],
-              exercise: s3Score['exercise'],
-              maxlift: s3Score['maxlift'],
-              date: s3Score['date'],
-            ));
+            batch.update(
+              'UserScore',
+              {
+                'maxlift': s3Score['maxlift'],
+                'date': s3Score['date'],
+              },
+              where: 'userid = ? AND exercise = ?',
+              whereArgs: [s3Score['userid'], s3Score['exercise']],
+            );
+
+            isUpdated = true;
           }
         }
       }
 
-      // 3. If the scoreboard was updated, upload it back to S3
+      await batch.commit();
+
       if (isUpdated) {
         final updatedScoreboard = {
           'scoreboard': scoreboard,
