@@ -20,23 +20,20 @@ class ScoreboardService {
       if (scoreboardJson.isEmpty) {
         // If the file is empty, create an empty structure or default data
         logger.e("The scoreboard file is empty. Creating default structure.");
-        // You might want to insert default values into the database here.
+        // Default empty scoreboard structure
         scoreboardJson = json.encode({
-          "scoreboard": [], // Initial empty scoreboard array
-          "updatedAt":
-              DateTime.now().toIso8601String(), // Track last update timestamp
+          "scoreboard": [],
+          "updatedAt": DateTime.now().toIso8601String(),
         });
       }
 
       // Parse the downloaded JSON string into a Map or List (depending on the structure)
-      final scoreboardData =
-          jsonDecode(scoreboardJson); // Parse the JSON string
+      final scoreboardData = jsonDecode(scoreboardJson);
 
       // Check if the JSON data has the expected structure
       if (scoreboardData is! Map || !scoreboardData.containsKey('scoreboard')) {
         logger.e(
-            "The scoreboard data is in an unexpected format. Creating default structure.");
-        // Insert default data into the database here, if needed.
+            "The scoreboard data is in an unexpected format. Aborting sync.");
         return;
       }
 
@@ -44,46 +41,32 @@ class ScoreboardService {
       final List<Map<String, dynamic>> scoreboardList =
           List<Map<String, dynamic>>.from(scoreboardData['scoreboard']);
 
-      // Now you can work with the parsed data
+      // Log the scoreboard data for debugging
       logger.i("Syncing data to database: $scoreboardList");
 
-      if (scoreboardList.isEmpty) {
-        logger.e("The scoreboard is empty. No data to sync.");
-        // Fetch data from the local database (UserScore table)
-        final localScores = await fetchLocalUserScores();
+      // Check if the local database is empty
+      final localScores = await fetchLocalUserScores();
 
-        if (localScores.isEmpty) {
-          logger.e("Local database is empty. No data to sync.");
-          return;
-        } else {
-          var updatedScoreboardJson = json.encode({
-            "scoreboard": localScores.map((score) {
-              return {
-                "userid": score['userid'],
-                "username": score['username'],
-                "exercise": score['exercise'],
-                "maxlift": score['maxlift'],
-                "date": score['date'],
-              };
-            }).toList(),
-            "updatedAt": DateTime.now().toIso8601String(),
-          });
+      if (localScores.isEmpty) {
+        logger.i("Local database is empty. Populating it with S3 data.");
 
-          // Upload the updated scoreboard to the S3 bucket
-          await awsbucketService.uploadScoreboard(updatedScoreboardJson);
-          logger.i(
-              "Updated the scoreboard file in S3 with local UserScore data.");
-          return; // Exit here since we've already updated the file
+        // Populate the local database with the scoreboard data from S3
+        for (var score in scoreboardList) {
+          await insertUserScoreToDatabase(UserScore(
+            userid: score['userid'],
+            username: score['username'],
+            exercise: score['exercise'],
+            maxlift: score['maxlift'],
+            date: score['date'],
+          ));
         }
-        // You can insert default values into the database or log a message if needed
+
+        logger.i("Local database populated with data from S3.");
       } else {
-        // TODO
+        logger.i("Local database is not empty. Comparing data for updates.");
+        // Compare the data and sync changes
         await compareScoreboardWithDatabase(scoreboardList);
       }
-
-      // Your code for syncing the data to the local database goes here
-      // For example:
-      // await database.insert('scoreboard', scoreboardData);
     } catch (e) {
       logger.e("Error syncing data from S3: $e");
       rethrow; // Rethrow the error after logging it
@@ -130,7 +113,7 @@ class ScoreboardService {
     try {
       // Define the SQL query with a WHERE clause to filter for Benchpress
       const query = '''
-    SELECT username, exercise, MAX(maxlift) as maxlift
+    SELECT username, date, exercise, MAX(maxlift) as maxlift
     FROM UserScore
     WHERE exercise = 'Benchpress'  -- Filter for Benchpress
     GROUP BY username, exercise
@@ -149,6 +132,7 @@ class ScoreboardService {
       return results.map((row) {
         return UserscoreViewmodel(
           name: row['username'] as String?,
+          date: row['date'] as String?,
           exercise: row['exercise'] as String?,
           maxlift: row['maxlift'] as int?,
         );
@@ -296,11 +280,27 @@ class ScoreboardService {
     }
   }
 
-// Simulate inserting missing scores to the database (adjust for actual DB logic)
   Future<void> insertUserScoreToDatabase(UserScore userScore) async {
-    // Insert the missing user score into your database (adjust for your DB logic)
-    logger.i(
-        "Inserting missing score for ${userScore.username} in exercise ${userScore.exercise} into database.");
-    // For example: await database.insert('user_scores', userScore.toMap());
+    try {
+      // Insert the user score into the UserScore table
+      await sqflite.insert(
+        'UserScore', // Table name
+        {
+          'userid': userScore.userid, // Foreign key to AppUser table
+          'date': userScore.date,
+          'username': userScore.username,
+          'exercise': userScore.exercise,
+          'maxlift': userScore.maxlift,
+        },
+        conflictAlgorithm:
+            ConflictAlgorithm.ignore, // Ignore if a conflict occurs
+      );
+
+      logger.i(
+          "Inserted score for ${userScore.username} in exercise ${userScore.exercise} date ${userScore.date} into the UserScore table.");
+    } catch (e) {
+      logger.e("Error inserting score into UserScore table: $e");
+      rethrow; // Re-throw the error for higher-level handling
+    }
   }
 }

@@ -1,5 +1,5 @@
 class UserScore {
-  int? userid;
+  String? userid;
   String? date;
   String? username;
   String? exercise;
