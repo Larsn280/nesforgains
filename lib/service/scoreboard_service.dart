@@ -14,62 +14,58 @@ class ScoreboardService {
   Future<void> syncS3ToDatabase() async {
     try {
       final awsbucketService = AwsBucketService();
-      // Download the scoreboard data from S3 as a String
+
+      // Step 1: Download data from S3
       var scoreboardJson = await awsbucketService.downloadScoreboard();
 
       if (scoreboardJson.isEmpty) {
-        // If the file is empty, create an empty structure or default data
         logger.e("The scoreboard file is empty. Creating default structure.");
-        // Default empty scoreboard structure
         scoreboardJson = json.encode({
           "scoreboard": [],
           "updatedAt": DateTime.now().toIso8601String(),
         });
       }
 
-      // Parse the downloaded JSON string into a Map or List (depending on the structure)
       final scoreboardData = jsonDecode(scoreboardJson);
 
-      // Check if the JSON data has the expected structure
       if (scoreboardData is! Map || !scoreboardData.containsKey('scoreboard')) {
         logger.e(
             "The scoreboard data is in an unexpected format. Aborting sync.");
         return;
       }
 
-      // Extract the 'scoreboard' list from the parsed data
       final List<Map<String, dynamic>> scoreboardList =
           List<Map<String, dynamic>>.from(scoreboardData['scoreboard']);
 
-      // Log the scoreboard data for debugging
       logger.i("Syncing data to database: $scoreboardList");
 
-      // Check if the local database is empty
+      // Step 2: Fetch local database records
       final localScores = await fetchLocalUserScores();
 
+      // Step 3: Populate local database if it's empty
       if (localScores.isEmpty) {
         logger.i("Local database is empty. Populating it with S3 data.");
-
-        // Populate the local database with the scoreboard data from S3
         for (var score in scoreboardList) {
-          await insertUserScoreToDatabase(UserScore(
+          final userScore = UserScore(
             userid: score['userid'],
             username: score['username'],
             exercise: score['exercise'],
             maxlift: score['maxlift'],
             date: score['date'],
-          ));
+          );
+          await insertUserScoreToDatabase(userScore);
+          logger.i(
+              "Inserted score for ${userScore.username} (${userScore.exercise}).");
         }
-
-        logger.i("Local database populated with data from S3.");
+        logger.i("Local database populated with S3 data.");
       } else {
+        // Step 4: Compare and sync changes
         logger.i("Local database is not empty. Comparing data for updates.");
-        // Compare the data and sync changes
         await compareScoreboardWithDatabase(scoreboardList);
       }
     } catch (e) {
       logger.e("Error syncing data from S3: $e");
-      rethrow; // Rethrow the error after logging it
+      rethrow;
     }
   }
 
@@ -203,23 +199,25 @@ class ScoreboardService {
       // Fetch data from UserScore table (local database)
       final localScores = await fetchLocalUserScores();
 
-      // Create a set of unique keys from the scoreboard for fast lookup
+      // Create a set of unique keys for the local database and S3 scoreboard
+      final localKeys = localScores.map((localScore) {
+        return "${localScore['userid']}_${localScore['exercise']}";
+      }).toSet();
+
       final scoreboardKeys = scoreboard.map((scoreEntry) {
         return "${scoreEntry['userid']}_${scoreEntry['exercise']}";
       }).toSet();
 
-      // Track whether we need to update the scoreboard
       bool isUpdated = false;
 
+      // 1. Handle entries in the local database but missing in the S3 scoreboard
       for (var localScore in localScores) {
         final localKey = "${localScore['userid']}_${localScore['exercise']}";
-
-        // Check if this local score is missing in the scoreboard
         if (!scoreboardKeys.contains(localKey)) {
           logger.i(
               "Adding missing local score for ${localScore['username']} (${localScore['exercise']}) to scoreboard.");
 
-          // Add the local score to the scoreboard
+          // Add the local score to the S3 scoreboard
           scoreboard.add({
             'userid': localScore['userid'],
             'username': localScore['username'],
@@ -228,33 +226,51 @@ class ScoreboardService {
             'date': localScore['date'], // Ensure the date format matches
           });
 
-          // Mark that the scoreboard was updated
           isUpdated = true;
+        }
+      }
+
+      // 2. Handle entries in the S3 scoreboard but missing in the local database
+      for (var s3Score in scoreboard) {
+        final s3Key = "${s3Score['userid']}_${s3Score['exercise']}";
+        if (!localKeys.contains(s3Key)) {
+          logger.i(
+              "Adding missing S3 score for ${s3Score['username']} (${s3Score['exercise']}) to local database.");
+
+          // Insert the missing score into the local database
+          await insertUserScoreToDatabase(UserScore(
+            userid: s3Score['userid'],
+            username: s3Score['username'],
+            exercise: s3Score['exercise'],
+            maxlift: s3Score['maxlift'],
+            date: s3Score['date'],
+          ));
         } else {
-          // If the score exists in the scoreboard, check if maxlift is different
-          final existingScore = scoreboard.firstWhere(
-              (score) =>
-                  score['userid'] == localScore['userid'] &&
-                  score['exercise'] == localScore['exercise'],
-              orElse: () => {} // Return an empty map instead of null
-              );
+          // Update existing local score if maxlift is different
+          final existingLocalScore = localScores.firstWhere(
+              (localScore) =>
+                  localScore['userid'] == s3Score['userid'] &&
+                  localScore['exercise'] == s3Score['exercise'],
+              orElse: () => {});
 
-          if (existingScore.isNotEmpty) {
-            // Update if maxlift is different
-            if (localScore['maxlift'] != existingScore['maxlift']) {
-              logger.i(
-                  "Updating maxlift for ${localScore['username']} (${localScore['exercise']}) in scoreboard.");
+          if (existingLocalScore.isNotEmpty &&
+              existingLocalScore['maxlift'] != s3Score['maxlift']) {
+            logger.i(
+                "Updating local database for ${existingLocalScore['username']} (${existingLocalScore['exercise']}).");
 
-              // Update the existing entry with the new maxlift and date
-              existingScore['maxlift'] = localScore['maxlift'];
-              existingScore['date'] = localScore['date']; // Update the date
-              isUpdated = true;
-            }
+            // Update the existing local score in the database
+            await updateUserScoreInDatabase(UserScore(
+              userid: s3Score['userid'],
+              username: s3Score['username'],
+              exercise: s3Score['exercise'],
+              maxlift: s3Score['maxlift'],
+              date: s3Score['date'],
+            ));
           }
         }
       }
 
-      // If the scoreboard was updated, wrap it with `updatedAt` and upload to S3
+      // 3. If the scoreboard was updated, upload it back to S3
       if (isUpdated) {
         final updatedScoreboard = {
           'scoreboard': scoreboard,
@@ -266,6 +282,7 @@ class ScoreboardService {
 
         final uploadResult =
             await awsbucketService.uploadScoreboard(updatedScoreboardJson);
+
         if (uploadResult) {
           logger.i("Scoreboard successfully updated and uploaded to S3.");
         } else {
@@ -301,6 +318,27 @@ class ScoreboardService {
     } catch (e) {
       logger.e("Error inserting score into UserScore table: $e");
       rethrow; // Re-throw the error for higher-level handling
+    }
+  }
+
+  Future<void> updateUserScoreInDatabase(UserScore userScore) async {
+    try {
+      // Update the user score where userid and exercise match
+      await sqflite.update(
+        'UserScore', // Table name
+        {
+          'date': userScore.date,
+          'maxlift': userScore.maxlift,
+        },
+        where: 'userid = ? AND exercise = ?',
+        whereArgs: [userScore.userid, userScore.exercise],
+      );
+
+      logger.i(
+          "Updated score for ${userScore.username} in exercise ${userScore.exercise} to maxlift ${userScore.maxlift}.");
+    } catch (e) {
+      logger.e("Error updating score in UserScore table: $e");
+      rethrow;
     }
   }
 }
