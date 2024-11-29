@@ -77,6 +77,7 @@ class ScoreboardService {
         }
         // You can insert default values into the database or log a message if needed
       } else {
+        // TODO
         await compareScoreboardWithDatabase(scoreboardList);
       }
 
@@ -212,47 +213,85 @@ class ScoreboardService {
     }
   }
 
-  // Function to check if the scoreboard matches the UserScore table
   Future<void> compareScoreboardWithDatabase(
       List<Map<String, dynamic>> scoreboard) async {
     try {
       // Fetch data from UserScore table (local database)
       final localScores = await fetchLocalUserScores();
 
-      // Loop through each entry in the scoreboard and check if it matches any UserScore
-      for (var scoreEntry in scoreboard) {
-        // Create a UserScore object from the scoreboard data
-        final userScore = UserScore(
-          userid: scoreEntry['userid'], // Ensure the key matches your structure
-          username: scoreEntry['username'],
-          exercise: scoreEntry['exercise'],
-          maxlift: scoreEntry['maxlift'],
-          date: scoreEntry['date'],
-        );
+      // Create a set of unique keys from the scoreboard for fast lookup
+      final scoreboardKeys = scoreboard.map((scoreEntry) {
+        return "${scoreEntry['userid']}_${scoreEntry['exercise']}";
+      }).toSet();
 
-        // Check if this score exists in the local UserScore table
-        bool isFound = localScores.any((localScore) {
-          // Compare excluding the `id` field
-          return localScore['userid'] == userScore.userid &&
-              localScore['username'] == userScore.username &&
-              localScore['exercise'] == userScore.exercise &&
-              localScore['maxlift'] ==
-                  userScore
-                      .maxlift; // Optional: include maxlift if you want to compare it
-        });
+      // Track whether we need to update the scoreboard
+      bool isUpdated = false;
 
-        if (isFound) {
+      for (var localScore in localScores) {
+        final localKey = "${localScore['userid']}_${localScore['exercise']}";
+
+        // Check if this local score is missing in the scoreboard
+        if (!scoreboardKeys.contains(localKey)) {
           logger.i(
-              "Found matching score for ${userScore.username} in exercise ${userScore.exercise}");
+              "Adding missing local score for ${localScore['username']} (${localScore['exercise']}) to scoreboard.");
+
+          // Add the local score to the scoreboard
+          scoreboard.add({
+            'userid': localScore['userid'],
+            'username': localScore['username'],
+            'exercise': localScore['exercise'],
+            'maxlift': localScore['maxlift'],
+            'date': localScore['date'], // Ensure the date format matches
+          });
+
+          // Mark that the scoreboard was updated
+          isUpdated = true;
         } else {
-          logger.e(
-              "No match found for ${userScore.username} in exercise ${userScore.exercise}, adding to database.");
-          await insertUserScoreToDatabase(
-              userScore); // Insert the missing score into the database
+          // If the score exists in the scoreboard, check if maxlift is different
+          final existingScore = scoreboard.firstWhere(
+              (score) =>
+                  score['userid'] == localScore['userid'] &&
+                  score['exercise'] == localScore['exercise'],
+              orElse: () => {} // Return an empty map instead of null
+              );
+
+          if (existingScore.isNotEmpty) {
+            // Update if maxlift is different
+            if (localScore['maxlift'] != existingScore['maxlift']) {
+              logger.i(
+                  "Updating maxlift for ${localScore['username']} (${localScore['exercise']}) in scoreboard.");
+
+              // Update the existing entry with the new maxlift and date
+              existingScore['maxlift'] = localScore['maxlift'];
+              existingScore['date'] = localScore['date']; // Update the date
+              isUpdated = true;
+            }
+          }
         }
       }
+
+      // If the scoreboard was updated, wrap it with `updatedAt` and upload to S3
+      if (isUpdated) {
+        final updatedScoreboard = {
+          'scoreboard': scoreboard,
+          'updatedAt': DateTime.now().toIso8601String(),
+        };
+
+        final updatedScoreboardJson = jsonEncode(updatedScoreboard);
+        final awsbucketService = AwsBucketService();
+
+        final uploadResult =
+            await awsbucketService.uploadScoreboard(updatedScoreboardJson);
+        if (uploadResult) {
+          logger.i("Scoreboard successfully updated and uploaded to S3.");
+        } else {
+          logger.e("Failed to upload updated scoreboard to S3.");
+        }
+      } else {
+        logger.i("No updates were needed for the scoreboard.");
+      }
     } catch (e) {
-      logger.e("Error comparing scoreboard with database: $e");
+      logger.e("Error comparing and updating scoreboard: $e");
       rethrow;
     }
   }

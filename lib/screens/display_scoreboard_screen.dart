@@ -37,7 +37,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
     try {
       await scoreboardService.updateUserScoresWithMaxLifts(username);
       final response =
-          await scoreboardService.getAllExerciseScoresInDescendingOrder();
+          await scoreboardService.getBenchpressScoresInDescendingOrder();
       return response;
     } catch (e) {
       logger.e('Error fetching scores', error: e);
