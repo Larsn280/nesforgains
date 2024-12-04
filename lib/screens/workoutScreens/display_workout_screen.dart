@@ -6,6 +6,7 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/screens/workoutScreens/add_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_details_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
+import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
@@ -29,11 +30,13 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
   late Future<List<Workout>> _futureWorkouts;
   List<CheckboxItem> isFirstCheckedList = [];
   List<CheckboxItem> isSecondCheckedList = [];
+  late ScoreboardService scoreboardService;
 
   @override
   void initState() {
     super.initState();
     workoutService = WorkoutService(widget.sqflite);
+    scoreboardService = ScoreboardService(widget.sqflite);
     _futureWorkouts = _fetchAllWorkouts();
     _initializeIsCheckedList();
   }
@@ -116,6 +119,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
       ),
     );
     if (result == true) {
+      await scoreboardService.syncS3ToDatabase();
       setState(() {
         _futureWorkouts = _fetchAllWorkouts();
         _initializeIsCheckedList();

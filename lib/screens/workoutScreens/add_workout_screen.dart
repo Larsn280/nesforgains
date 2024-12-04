@@ -101,6 +101,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
             _selectedDate = null;
           }
           responseMessage = response.message;
+          if (mounted) {
+            Navigator.pop(context, true);
+          }
         });
 
         CustomSnackbar.showSnackBar(message: responseMessage);

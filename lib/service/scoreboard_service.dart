@@ -179,7 +179,7 @@ class ScoreboardService {
   }
 
   Future<List<Map<String, dynamic>>> fetchLocalUserScores() async {
-    final query = '''
+    const query = '''
     SELECT id, userid, date, username, exercise, maxlift FROM UserScore
   ''';
 

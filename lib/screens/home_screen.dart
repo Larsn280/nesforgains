@@ -54,22 +54,43 @@ class _HomeScreenState extends State<HomeScreen> {
                         Stack(
                           alignment: Alignment.bottomCenter,
                           children: [
-                            Image.asset(
-                              'assets/animations/Chc3.gif',
+                            Image.network(
+                              'https://media1.tenor.com/m/CLaeT1-M8ooAAAAd/hacer-ejercicio-santa-claus.gif',
                               key: const ValueKey('animation'),
                               fit: BoxFit.cover,
+                              loadingBuilder: (BuildContext context,
+                                  Widget child,
+                                  ImageChunkEvent? loadingProgress) {
+                                if (loadingProgress == null) {
+                                  return child; // Image is fully loaded.
+                                }
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            (loadingProgress
+                                                    .expectedTotalBytes ??
+                                                1)
+                                        : null,
+                                    color: Colors
+                                        .white, // Show progress if available.
+                                  ),
+                                );
+                              },
                             ),
-                            const Positioned(
-                              bottom: 10.0,
-                              child: Text(
-                                'Benchpress!!!',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
-                                ),
-                              ),
-                            ),
+                            // const Positioned(
+                            //   bottom: 10.0,
+                            //   child: Text(
+                            //     'Benchpress!!!',
+                            //     style: TextStyle(
+                            //       color: Colors.white,
+                            //       fontWeight: FontWeight.bold,
+                            //       fontSize: 20.0,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         const SizedBox(height: 20.0),
@@ -77,14 +98,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8.0),
                         const Text(
-                          'NESForGains is your personal companion on the journey to better health and fitness. '
-                          'Track your workouts, monitor your nutrition, and discover new recipes—all in one place. '
-                          'With NESForGains, you can effortlessly log your progress, helping you stay focused and motivated every step of the way.\n\n'
-                          'Add your latest workout to build strength over time, keep tabs on your meals to balance your nutrition, '
-                          'or explore new recipes to fuel your goals. NESForGains makes it easy to see your achievements and plan for tomorrow’s gains.\n\n'
-                          'Let’s keep leveling up—one rep, one meal, and one day at a time!',
+                          '🎅 Träning i juletid: För att kunna lyfta både granen och alla godsaker! 🎄\n'
+                          'När snön faller och julens alla smaker lockar, är det lätt att fastna i soffan med en kopp glögg. '
+                          'Men vi vet alla att julen handlar om mer än bara julbord och ledighet – det handlar om att hålla igång '
+                          'så att du kan njuta av allt det goda utan att känna dig som en julaftons-dekadens!\n\n'
+                          '🎁 Kasta in några rejäla pass: Förbered dig på att bära hem alla julklappar utan att behöva be om hjälp – '
+                          'en stark kropp gör att du orkar mer än bara att öppna paket.\n'
+                          '🍪 Balans är nyckeln: Sätt upp målet att kunna njuta av pepparkakor och glögg utan att behöva ångra dig dagen efter. '
+                          'Det handlar inte om att säga nej till allt, utan att hitta en balans som funkar för dig.\n'
+                          '🎅 Upptäck nya recept: Fyll på med måltider som får dig att känna dig både stark och nöjd – för ja, du kan äta både gott och nyttigt samtidigt!\n\n'
+                          'Så, när julen rullar in, kör på med träning, god mat och ett hälsosamt sinne. För vi vet att det är möjligt att vara både stark och julglad – ett lyft, en tallrik och en dag i taget! 💪🎄',
                           textAlign: TextAlign.center,
-                        ),
+                        )
                       ],
                     ),
                   ),
