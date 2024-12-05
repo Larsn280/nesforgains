@@ -11,7 +11,7 @@ class AuthState extends ChangeNotifier {
 
   void login(String id, String username) {
     this.id = id;
-    this.username = username;
+    this.username = username[0].toUpperCase() + username.substring(1);
     _isLoggedIn = true;
     notifyListeners();
   }

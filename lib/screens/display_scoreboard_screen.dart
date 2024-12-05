@@ -35,6 +35,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
 
   Future<List<UserscoreViewmodel>> _fetchAllScores() async {
     try {
+      await scoreboardService.syncS3ToDatabase();
       await scoreboardService.updateUserScoresWithMaxLifts(username);
       final response =
           await scoreboardService.getBenchpressScoresInDescendingOrder();

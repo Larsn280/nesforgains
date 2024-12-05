@@ -30,13 +30,11 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
   late Future<List<Workout>> _futureWorkouts;
   List<CheckboxItem> isFirstCheckedList = [];
   List<CheckboxItem> isSecondCheckedList = [];
-  late ScoreboardService scoreboardService;
 
   @override
   void initState() {
     super.initState();
     workoutService = WorkoutService(widget.sqflite);
-    scoreboardService = ScoreboardService(widget.sqflite);
     _futureWorkouts = _fetchAllWorkouts();
     _initializeIsCheckedList();
   }
@@ -119,7 +117,6 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
       ),
     );
     if (result == true) {
-      await scoreboardService.syncS3ToDatabase();
       setState(() {
         _futureWorkouts = _fetchAllWorkouts();
         _initializeIsCheckedList();
