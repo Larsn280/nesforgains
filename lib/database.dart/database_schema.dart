@@ -29,5 +29,5 @@ Future<void> onUpgrade(Database db, int oldVersion, int newVersion) async {
   // await migrateStageTable(db, oldVersion, newVersion);
   // await migrateRecipeTable(db, oldVersion, newVersion);
   // await migrateExerciseTable(db, oldVersion, newVersion);
-  // await migrateUserScoreTable(db, oldVersion, newVersion);
+  await migrateUserScoreTable(db, oldVersion, newVersion);
 }

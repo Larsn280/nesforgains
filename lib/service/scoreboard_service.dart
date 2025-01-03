@@ -256,8 +256,9 @@ class ScoreboardService {
           if (existingLocalScore.isNotEmpty &&
               existingLocalScore['maxlift'] != s3Score['maxlift']) {
             logger.i(
-                "Updating local database for ${existingLocalScore['username']} (${existingLocalScore['exercise']}).");
+                "Updating local database for ${existingLocalScore['username']} (${existingLocalScore['exercise']}) with new maxlift: ${s3Score['maxlift']}.");
 
+            // Update the local database
             batch.update(
               'UserScore',
               {
@@ -267,6 +268,10 @@ class ScoreboardService {
               where: 'userid = ? AND exercise = ?',
               whereArgs: [s3Score['userid'], s3Score['exercise']],
             );
+
+            // Update the scoreboard entry
+            s3Score['maxlift'] = existingLocalScore['maxlift'];
+            s3Score['date'] = existingLocalScore['date'];
 
             isUpdated = true;
           }

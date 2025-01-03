@@ -18,7 +18,7 @@ Future<void> migrateUserScoreTable(
     Database db, int oldVersion, int newVersion) async {
   if (oldVersion < newVersion) {
     await db.execute('''
-    ALTER TABLE UserScore ADD COLUMN date TEXT''');
-    print('UserScore table was updated during migration!');
+    DELETE FROM UserScore''');
+    print('UserScore table was cleaned during migration!');
   }
 }
