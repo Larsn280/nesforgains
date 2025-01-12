@@ -5,6 +5,7 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/screens/workoutScreens/edit_workout_screen.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
+import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -89,35 +90,38 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppConstants.appbackgroundimage),
-            fit: BoxFit.cover,
+    return CustomBackNavigation.customBackNavigation(
+      context: context,
+      child: SizedBox.expand(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppConstants.appbackgroundimage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const CustomAppbar(
-                title: 'Workout Details',
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              CustomCards.buildListCard(
-                context: context,
-                child: _buildWorkoutDetails(workout),
-              ),
-              const SizedBox(height: 8.0),
-              CustomButtons.buildElevatedFunctionButton(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const CustomAppbar(
+                  title: 'Workout Details',
+                ),
+                const SizedBox(
+                  height: 40.0,
+                ),
+                CustomCards.buildListCard(
                   context: context,
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  text: 'Go back'),
-            ],
+                  child: _buildWorkoutDetails(workout),
+                ),
+                const SizedBox(height: 8.0),
+                CustomButtons.buildElevatedFunctionButton(
+                    context: context,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    text: 'Go back'),
+              ],
+            ),
           ),
         ),
       ),

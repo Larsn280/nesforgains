@@ -6,6 +6,7 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
+import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -138,60 +139,64 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppConstants.appbackgroundimage),
-              fit: BoxFit.cover,
+    return CustomBackNavigation.customBackNavigation(
+      context: context,
+      child: Scaffold(
+        body: SizedBox.expand(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(AppConstants.appbackgroundimage),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Edit Workout',
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                CustomCards.buildFormCard(
-                  context: context,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 16.0),
-                        _buildFormTextFormField(
-                            'Workout (eg: Chest, Legs, Bak)', _workoutController),
-                        _buildFormTextFormField(
-                            'Exercises eg: (Benchpress, comma separated)',
-                            _exerciseController),
-                        _buildFormTextFormField(
-                            'Date (YYYY-MM-DD)', _dateController),
-                        _buildFormTextFormField(
-                            '(Reps, comma separated)', _repsController),
-                        _buildFormTextFormField(
-                            '(Sets, comma separated)', _setsController),
-                        _buildFormTextFormField(
-                            '(Kg, comma separated)', _kgController),
-                      ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const CustomAppbar(
+                    title: 'Edit Workout',
+                  ),
+                  const SizedBox(
+                    height: 40.0,
+                  ),
+                  CustomCards.buildFormCard(
+                    context: context,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 16.0),
+                          _buildFormTextFormField(
+                              'Workout (eg: Chest, Legs, Bak)',
+                              _workoutController),
+                          _buildFormTextFormField(
+                              'Exercises eg: (Benchpress, comma separated)',
+                              _exerciseController),
+                          _buildFormTextFormField(
+                              'Date (YYYY-MM-DD)', _dateController),
+                          _buildFormTextFormField(
+                              '(Reps, comma separated)', _repsController),
+                          _buildFormTextFormField(
+                              '(Sets, comma separated)', _setsController),
+                          _buildFormTextFormField(
+                              '(Kg, comma separated)', _kgController),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 30.0),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: _handleEditWorkout,
-                    text: 'Save'),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    text: 'Back'),
-              ],
+                  const SizedBox(height: 30.0),
+                  CustomButtons.buildElevatedFunctionButton(
+                      context: context,
+                      onPressed: _handleEditWorkout,
+                      text: 'Save'),
+                  CustomButtons.buildElevatedFunctionButton(
+                      context: context,
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      text: 'Back'),
+                ],
+              ),
             ),
           ),
         ),

@@ -6,9 +6,9 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/screens/workoutScreens/add_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_details_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
-import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
+import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_checkboxes.dart';
@@ -178,58 +178,62 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppConstants.appbackgroundimage),
-            fit: BoxFit.cover,
+    return CustomBackNavigation.customBackNavigation(
+      context: context,
+      child: Scaffold(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppConstants.appbackgroundimage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CustomAppbar(
-              title: 'Workouts',
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            const SizedBox(height: 16.0),
-            Expanded(
-              child: FutureBuilder<List<Workout>>(
-                future: _futureWorkouts,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildTrainingList([], 'Indicator');
-                  } else if (snapshot.hasError) {
-                    return _buildTrainingList([], 'Error loading logs');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildTrainingList([], 'No training logs available');
-                  }
-
-                  final logs = snapshot.data!;
-                  return _buildTrainingList(logs, '');
-                },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CustomAppbar(
+                title: 'Workouts',
               ),
-            ),
-            const SizedBox(height: 8.0),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: () {
-                  _navigateToAddWorkout();
-                },
-                text: 'Add'),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-                text: 'Home'),
-            const SizedBox(height: 20.0),
-          ],
+              const SizedBox(
+                height: 40.0,
+              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: FutureBuilder<List<Workout>>(
+                  future: _futureWorkouts,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return _buildTrainingList([], 'Indicator');
+                    } else if (snapshot.hasError) {
+                      return _buildTrainingList([], 'Error loading logs');
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return _buildTrainingList(
+                          [], 'No training logs available');
+                    }
+
+                    final logs = snapshot.data!;
+                    return _buildTrainingList(logs, '');
+                  },
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: () {
+                    _navigateToAddWorkout();
+                  },
+                  text: 'Add'),
+              CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                  text: 'Home'),
+              const SizedBox(height: 20.0),
+            ],
+          ),
         ),
       ),
     );
