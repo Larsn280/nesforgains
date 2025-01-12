@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           alignment: Alignment.bottomCenter,
                           children: [
                             Image.network(
-                              'https://media1.tenor.com/m/CLaeT1-M8ooAAAAd/hacer-ejercicio-santa-claus.gif',
+                              'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp5amkwY2x0MWR5cmRvY3F0bzljNjB2MTY2Z3hqM3R0bWQ4ZGI2diZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/pF8sfgvZvDKPm/giphy.webp',
                               key: const ValueKey('animation'),
                               fit: BoxFit.cover,
                               loadingBuilder: (BuildContext context,
