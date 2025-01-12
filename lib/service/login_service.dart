@@ -1,18 +1,18 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nesforgains/models/user_data.dart';
 import 'package:sqflite/sqflite.dart';
 
 class LoginService {
   final Database _sqflite;
+  static const _storage = FlutterSecureStorage();
 
   LoginService(this._sqflite);
 
   Future<UserData> loginUser(String usernameOrEmail, String password) async {
     try {
-      // Query the database for users matching the username/email
       final List<Map<String, dynamic>> results = await _sqflite.query(
-        'AppUser', // The table name
-        where:
-            '(username = ? OR email = ?) AND password = ?', // SQL WHERE clause
+        'AppUser',
+        where: '(username = ? OR email = ?) AND password = ?',
         whereArgs: [
           usernameOrEmail.toLowerCase(),
           usernameOrEmail.toLowerCase(),
@@ -22,18 +22,31 @@ class LoginService {
 
       if (results.isEmpty) {
         throw Exception('Invalid username/email or password.');
-      } else if (results.length > 1) {
-        throw Exception('Multiple users found with the same username/email.');
       }
 
-      // Map the result to a `UserData` object
       final user = results.first;
-      return UserData(
+      final userData = UserData(
         id: user['id'] as String,
         username: user['username'] as String,
       );
+
+      // Save the user session securely
+      await _storage.write(key: 'user_id', value: userData.id);
+      await _storage.write(key: 'username', value: userData.username);
+
+      return userData;
     } catch (e) {
       throw Exception('Error logging in user: $e');
     }
+  }
+
+  Future<void> logoutUser() async {
+    // Clear the stored session
+    await _storage.deleteAll();
+  }
+
+  Future<bool> isLoggedIn() async {
+    final userId = await _storage.read(key: 'user_id');
+    return userId != null;
   }
 }
