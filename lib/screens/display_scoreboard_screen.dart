@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/service/auth_service.dart';
+import 'package:nesforgains/service/aws_bucket_service.dart';
 import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/viewModels/userscore_viewmodel.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
@@ -23,14 +24,36 @@ class DisplayScoreboardScreen extends StatefulWidget {
 class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
   late Future<List<UserscoreViewmodel>> _futureScores;
   late ScoreboardService scoreboardService;
+  late AwsBucketService awsBucketService;
   late String username;
+  late String userId;
 
   @override
   void initState() {
     super.initState();
     username = AuthProvider.of(context).username;
+    userId = AuthProvider.of(context).id;
     scoreboardService = ScoreboardService(widget.sqflite);
-    _futureScores = _fetchAllScores();
+    awsBucketService = AwsBucketService();
+    // _futureScores = _fetchAllScores();
+    _futureScores = _fetchAllS3BucketScores();
+  }
+
+  Future<List<UserscoreViewmodel>> _fetchAllS3BucketScores() async {
+    try {
+      final maxlift =
+          await scoreboardService.fetchHighestMaxliftForBenchpress(userId);
+      await awsBucketService.syncBenchpressToS3(userId, username, maxlift);
+      final response = await awsBucketService.fetchUserscoreDirectlyFromS3();
+      return response;
+    } catch (e) {
+      logger.e('Error fetching scores', error: e);
+      CustomSnackbar.showSnackBar(
+          message:
+              'An error occurred while fetching the scores. Please try again.');
+
+      return [];
+    }
   }
 
   Future<List<UserscoreViewmodel>> _fetchAllScores() async {

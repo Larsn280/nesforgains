@@ -11,6 +11,35 @@ class ScoreboardService {
 
   ScoreboardService(this.sqflite);
 
+  // Fetch the highest maxlift for "Benchpress" from local workouts
+  Future<int> fetchHighestMaxliftForBenchpress(String userId) async {
+    try {
+      // Fetch all exercises for the user
+      final List<Map<String, dynamic>> rows = await sqflite.rawQuery('''
+      SELECT Exercise.kg
+      FROM Exercise
+      JOIN Workout ON Workout.id = Exercise.workoutId
+      WHERE Workout.userId = ? AND Exercise.name = 'Benchpress'
+    ''', [userId]);
+
+      int highestMaxlift = 0;
+
+      // Loop through the rows and find the highest maxlift for "Benchpress"
+      for (var row in rows) {
+        final double kg = row['kg'] ?? 0;
+        if (kg > highestMaxlift) {
+          highestMaxlift = kg.toInt();
+        }
+      }
+
+      return highestMaxlift;
+    } catch (e) {
+      logger.e("Error fetching highest maxlift for Benchpress: $e");
+      return 0;
+    }
+  }
+
+  //TODO Skapa en fetch som tittar på molnet istället.
   Future<void> syncS3ToDatabase() async {
     try {
       final awsbucketService = AwsBucketService();
