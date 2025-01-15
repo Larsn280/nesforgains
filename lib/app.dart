@@ -11,6 +11,7 @@ import 'package:nesforgains/screens/nutritionScreens/nutrition_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
+import 'package:nesforgains/service/secure_storage_service.dart'; // Import SecureStorageService
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -22,21 +23,33 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthProvider(
-        child: MaterialApp(
-            scaffoldMessengerKey: scaffoldMessengerKey,
-            title: 'NESForGains',
-            theme: AppConstants.themeData,
-            initialRoute: '/',
-            routes: {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthState()),
+        Provider(create: (_) => SecureStorageService()),
+      ],
+      child: MaterialApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        title: 'NESForGains',
+        theme: AppConstants.themeData,
+        initialRoute: '/',
+        routes: {
           '/': (context) {
-            final isLoggedIn =
-                Provider.of<AuthState>(context).checkLoginStatus();
-            return isLoggedIn
-                ? const HomeScreen()
-                : LoginScreen(
-                    sqflite: sqflite,
-                  );
+            return FutureBuilder(
+              future:
+                  Provider.of<AuthState>(context, listen: false).initialize(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  final isLoggedIn =
+                      Provider.of<AuthState>(context).checkLoginStatus();
+                  return isLoggedIn
+                      ? const HomeScreen()
+                      : LoginScreen(sqflite: sqflite);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            );
           },
           '/homeScreen': (context) => const HomeScreen(),
           '/bookofexusesScreen': (context) => const BookOfExuses(),
@@ -52,6 +65,8 @@ class App extends StatelessWidget {
               DisplayRecipeScreen(sqflite: sqflite),
           '/displayscoreboardScreen': (context) =>
               DisplayScoreboardScreen(sqflite: sqflite),
-        }));
+        },
+      ),
+    );
   }
 }

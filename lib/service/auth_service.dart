@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:nesforgains/service/secure_storage_service.dart';
 import 'package:provider/provider.dart';
 
 class AuthState extends ChangeNotifier {
@@ -9,6 +10,19 @@ class AuthState extends ChangeNotifier {
 
   bool get isLoggedIn => _isLoggedIn;
 
+  // Method to initialize the AuthState from secure storage
+  Future<void> initialize() async {
+    final storedId = await SecureStorageService().read('user_id');
+    final storedUsername = await SecureStorageService().read('username');
+
+    if (storedId != null && storedUsername != null) {
+      id = storedId;
+      username = storedUsername;
+      _isLoggedIn = true;
+    }
+    notifyListeners();
+  }
+
   void login(String id, String username) {
     this.id = id;
     this.username = username[0].toUpperCase() + username.substring(1);
@@ -16,11 +30,19 @@ class AuthState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
+    // Clear the stored session from secure storage
+    await SecureStorageService().deleteAll();
+
+    // Reset local variables
     id = '';
     username = '';
     _isLoggedIn = false;
+
+    // Notify listeners
     notifyListeners();
+
+    // Navigate to the login screen
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 
