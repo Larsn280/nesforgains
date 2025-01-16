@@ -34,6 +34,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   late WorkoutService workoutService;
 
+  final List<String> _workoutList = ['Chest', 'Legs', 'Back'];
+
   @override
   void initState() {
     super.initState();
@@ -188,18 +190,22 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               ),
                               // Checkmark Icon, visible only when a date is selected
                               if (_selectedDate != null)
-                                Icon(
+                                const Icon(
                                   Icons.check_circle,
                                   color: Colors.green, // Green checkmark
                                 ),
                             ],
                           ),
-
-                          _buildFormTextFormField(
+                          _buildFormDropdownList(
                               controller: _workoutController,
-                              lable: 'Workout (eg: Chest, Legs, Bak)',
-                              validatorText:
-                                  'Please enter workout eg: Legs...'),
+                              defultText: 'Select Workout Type',
+                              selectList: _workoutList),
+
+                          // _buildFormTextFormField(
+                          //     controller: _workoutController,
+                          //     lable: 'Workout (eg: Chest, Legs, Bak)',
+                          //     validatorText:
+                          //         'Please enter workout eg: Legs...'),
 
                           _buildFormTextFormField(
                               controller: _exerciseController,
@@ -246,6 +252,33 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildFormDropdownList({
+    required TextEditingController controller,
+    required String defultText,
+    required List<String> selectList,
+  }) {
+    return Row(
+      children: [
+        Text(
+          _workoutController.text.isEmpty
+              ? defultText
+              : _workoutController.text,
+          style: const TextStyle(color: Colors.white),
+        ),
+        const Spacer(),
+        controller.text.isEmpty
+            ? IconButton(
+                onPressed: () => {},
+                icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
+              )
+            : const Icon(
+                Icons.check_circle,
+                color: Colors.green,
+              ),
+      ],
     );
   }
 
