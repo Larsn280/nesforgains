@@ -153,30 +153,45 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                           // Date Picker
                           Row(
                             children: [
-                              Text(
-                                _selectedDate == null
-                                    ? 'Select Date'
-                                    : DateFormat('y-MMM-d')
-                                        .format(_selectedDate!),
-                                style: const TextStyle(color: Colors.white),
+                              // Text and Date Picker Icon are grouped together
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      _selectedDate == null
+                                          ? 'Select Date'
+                                          : DateFormat('y-MMM-d')
+                                              .format(_selectedDate!),
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.calendar_today,
+                                          color: Colors.white),
+                                      onPressed: () async {
+                                        DateTime? pickedDate =
+                                            await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(2000),
+                                          lastDate: DateTime(2101),
+                                        );
+                                        if (pickedDate != null) {
+                                          setState(() {
+                                            _selectedDate = pickedDate;
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.calendar_today,
-                                    color: Colors.white),
-                                onPressed: () async {
-                                  DateTime? pickedDate = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(2000),
-                                    lastDate: DateTime(2101),
-                                  );
-                                  if (pickedDate != null) {
-                                    setState(() {
-                                      _selectedDate = pickedDate;
-                                    });
-                                  }
-                                },
-                              ),
+                              // Checkmark Icon, visible only when a date is selected
+                              if (_selectedDate != null)
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.green, // Green checkmark
+                                ),
                             ],
                           ),
 
