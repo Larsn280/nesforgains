@@ -59,7 +59,7 @@ class AwsBucketService {
         }
 
         final List<dynamic> scoreboard = jsonData['scoreboard'];
-        return scoreboard.map((score) {
+        final List<UserscoreViewmodel> userScores = scoreboard.map((score) {
           return UserscoreViewmodel(
             name: score['username'] as String?,
             date: score['date'] as String?,
@@ -67,6 +67,28 @@ class AwsBucketService {
             maxlift: _parseMaxlift(score['maxlift']),
           );
         }).toList();
+
+        // Sort the list by maxlift (descending) and by date (ascending) in case of ties
+        userScores.sort((a, b) {
+          // Compare maxlift in descending order, considering null values
+          final maxliftA =
+              a.maxlift ?? double.negativeInfinity; // Handle null maxlift
+          final maxliftB =
+              b.maxlift ?? double.negativeInfinity; // Handle null maxlift
+
+          int maxliftComparison = maxliftB.compareTo(maxliftA);
+          if (maxliftComparison != 0) {
+            return maxliftComparison;
+          }
+
+          // Compare date in ascending order, considering null values
+          final dateA = a.date ?? ''; // Handle null date (empty string if null)
+          final dateB = b.date ?? ''; // Handle null date (empty string if null)
+
+          return dateA.compareTo(dateB);
+        });
+
+        return userScores;
       } else {
         logger.e("Failed to fetch JSON from S3: ${response.statusCode}");
         return [];

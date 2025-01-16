@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
+import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -19,6 +21,22 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     userName = AuthProvider.of(context).username;
+  }
+
+  Future<void> _launchTrello() async {
+    final Uri trelloUrl =
+        Uri.parse('https://trello.com/b/LOoMkuCs/nesforgains');
+    if (!await launchUrl(trelloUrl, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $trelloUrl');
+    }
+  }
+
+  Future<void> _launchKalkylator() async {
+    final Uri kalkylatorUrl =
+        Uri.parse('https://strengthlevel.com/one-rep-max-calculator');
+    if (!await launchUrl(kalkylatorUrl, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $kalkylatorUrl');
+    }
   }
 
   @override
@@ -91,6 +109,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             //     ),
                             //   ),
                             // ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButtons.buildElevatedUrlButton(
+                                context: context,
+                                onPressed: _launchTrello,
+                                text: 'Trello'),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.15,
+                            ),
+                            CustomButtons.buildElevatedUrlButton(
+                                context: context,
+                                onPressed: _launchKalkylator,
+                                text: 'Kalkylator')
                           ],
                         ),
                         const SizedBox(height: 20.0),
