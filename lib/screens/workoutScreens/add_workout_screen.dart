@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/exercise.dart';
+import 'package:nesforgains/models/selected_exercise.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
@@ -26,14 +27,13 @@ class AddWorkoutScreen extends StatefulWidget {
 class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final _formKey = GlobalKey<FormState>();
   final _workoutController = TextEditingController();
-  final _exerciseController = TextEditingController();
-  final _weightController = TextEditingController();
-  final _repsController = TextEditingController();
-  final _setsController = TextEditingController();
+
   DateTime? _selectedDate;
   late String responseMessage;
 
   late WorkoutService workoutService;
+
+  late List<SelectedExercise> selectedExercises;
 
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
@@ -48,10 +48,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   @override
   void dispose() {
     _workoutController.dispose();
-    _exerciseController.dispose();
-    _weightController.dispose();
-    _repsController.dispose();
-    _setsController.dispose();
     super.dispose();
   }
 
@@ -60,22 +56,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       final List<Exercise> exerciseList = [];
       if (_formKey.currentState!.validate() && _selectedDate != null) {
         final workoutValue = _workoutController.text.toString();
-        final splitExerciseList = _exerciseController.text.split(',');
-        final splitKgList = _weightController.text.split(',');
-        final splitRepList = _repsController.text.split(',');
-        final splitSetList = _setsController.text.split(',');
-
-        // Validate matching lengths of lists
-        if (splitExerciseList.length != splitKgList.length ||
-            splitExerciseList.length != splitRepList.length ||
-            splitExerciseList.length != splitSetList.length) {
-          setState(() {
-            responseMessage =
-                'Please ensure all fields have the same number of entries.';
-          });
-          CustomSnackbar.showSnackBar(message: responseMessage);
-          return;
-        }
 
         final userIdValue = AuthProvider.of(context).id;
 
@@ -85,14 +65,14 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
             date: _selectedDate.toString(),
             userId: userIdValue);
 
-        for (int i = 0; i < splitExerciseList.length; i++) {
-          final exercise = Exercise(
-            name: splitExerciseList[i].trim(),
-            kg: double.tryParse(splitKgList[i].trim()),
-            rep: int.tryParse(splitRepList[i].trim()),
-            set: int.tryParse(splitSetList[i].trim()),
+        for (var exercise in selectedExercises) {
+          final newExercise = Exercise(
+            name: exercise.name.trim(),
+            kg: exercise.weight,
+            rep: int.tryParse(exercise.reps.trim()),
+            set: int.tryParse(exercise.sets.trim()),
           );
-          exerciseList.add(exercise);
+          exerciseList.add(newExercise);
         }
 
         final response = await workoutService.addWorkout(workout, exerciseList);
@@ -100,10 +80,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
         setState(() {
           if (response.checksuccess) {
             _workoutController.clear();
-            _exerciseController.clear();
-            _weightController.clear();
-            _repsController.clear();
-            _setsController.clear();
             _selectedDate = null;
           }
           responseMessage = response.message;
@@ -213,7 +189,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                           ),
                           CustomDropdownlist(
                             defaultText: 'Select Exercise',
-                            controller: _exerciseController,
+                            exerciseList: selectedExercises,
                             selectList: _exerciseList,
                             multiselectList: true,
                           ),
@@ -229,22 +205,22 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                           //         'Exercises eg: (Benchpress, comma separated)',
                           //     validatorText:
                           //         'Please enter exercise eg: Benchpress...'),
-                          _buildFormTextFormField(
-                              controller: _weightController,
-                              lable: '(Kg, comma separated)',
-                              validatorText: 'Please enter weight in kg...'),
+                          // _buildFormTextFormField(
+                          //     controller: _weightController,
+                          //     lable: '(Kg, comma separated)',
+                          //     validatorText: 'Please enter weight in kg...'),
 
-                          _buildFormTextFormField(
-                              controller: _repsController,
-                              lable: 'Reps (comma separated)',
-                              validatorText:
-                                  'Please enter reps (comma separated)...'),
+                          // _buildFormTextFormField(
+                          //     controller: _repsController,
+                          //     lable: 'Reps (comma separated)',
+                          //     validatorText:
+                          //         'Please enter reps (comma separated)...'),
 
-                          _buildFormTextFormField(
-                              controller: _setsController,
-                              lable: 'Sets (comma separated)',
-                              validatorText:
-                                  'Please enter sets (comma separated)'),
+                          // _buildFormTextFormField(
+                          //     controller: _setsController,
+                          //     lable: 'Sets (comma separated)',
+                          //     validatorText:
+                          //         'Please enter sets (comma separated)'),
                         ],
                       ),
                     ),

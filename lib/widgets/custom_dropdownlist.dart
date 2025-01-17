@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:nesforgains/models/selected_exercise.dart';
 
 class CustomDropdownlist extends StatefulWidget {
   final String defaultText;
-  final TextEditingController controller;
+  TextEditingController? controller;
+  List<SelectedExercise>? exerciseList;
   bool multiselectList;
   final List<String> selectList;
 
   CustomDropdownlist({
     super.key,
     required this.defaultText,
-    required this.controller,
+    this.controller,
+    this.exerciseList,
     required this.multiselectList,
     required this.selectList,
   });
@@ -45,12 +48,12 @@ class _CustomDropdownlistState extends State<CustomDropdownlist> {
                 children: [
                   // Text or default text aligned to the left
                   Text(
-                    widget.controller.text.isEmpty
+                    widget.controller?.text.isEmpty ?? true
                         ? widget.defaultText
-                        : widget.controller.text,
+                        : widget.controller!.text,
                     style: const TextStyle(color: Colors.white),
                   ),
-                  widget.controller.text.isEmpty
+                  widget.controller?.text.isEmpty ?? true
                       ? // Arrow icon aligned to the right
                       const Icon(Icons.arrow_drop_down, color: Colors.white)
                       : const Icon(Icons.check_circle, color: Colors.green),
@@ -71,7 +74,7 @@ class _CustomDropdownlistState extends State<CustomDropdownlist> {
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          widget.controller.text =
+                          widget.controller!.text =
                               value; // Update the controller text
                           _isDropdownVisible =
                               false; // Hide dropdown after selection
