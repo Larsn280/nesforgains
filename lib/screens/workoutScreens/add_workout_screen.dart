@@ -10,6 +10,7 @@ import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
+import 'package:nesforgains/widgets/custom_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -34,7 +35,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   late WorkoutService workoutService;
 
-  final List<String> _workoutList = ['Chest', 'Legs', 'Back'];
+  final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
+
+  final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
 
   @override
   void initState() {
@@ -153,66 +156,79 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                         children: [
                           const SizedBox(height: 16.0),
                           // Date Picker
-                          Row(
-                            children: [
-                              // Text and Date Picker Icon are grouped together
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      _selectedDate == null
-                                          ? 'Select Date'
-                                          : DateFormat('y-MMM-d')
-                                              .format(_selectedDate!),
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                    IconButton(
-                                      icon: const Icon(Icons.calendar_today,
-                                          color: Colors.white),
-                                      onPressed: () async {
-                                        DateTime? pickedDate =
-                                            await showDatePicker(
-                                          context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime(2000),
-                                          lastDate: DateTime(2101),
-                                        );
-                                        if (pickedDate != null) {
-                                          setState(() {
-                                            _selectedDate = pickedDate;
-                                          });
-                                        }
-                                      },
-                                    ),
-                                  ],
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
+                            ),
+                            child: Row(
+                              children: [
+                                // Text and Date Picker Icon are grouped together
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        _selectedDate == null
+                                            ? 'Select Date'
+                                            : DateFormat('y-MMM-d')
+                                                .format(_selectedDate!),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.calendar_today,
+                                            color: Colors.white),
+                                        onPressed: () async {
+                                          DateTime? pickedDate =
+                                              await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2101),
+                                          );
+                                          if (pickedDate != null) {
+                                            setState(() {
+                                              _selectedDate = pickedDate;
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              // Checkmark Icon, visible only when a date is selected
-                              if (_selectedDate != null)
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green, // Green checkmark
-                                ),
-                            ],
+                                // Checkmark Icon, visible only when a date is selected
+                                if (_selectedDate != null)
+                                  const Icon(
+                                    Icons.check_circle,
+                                    color: Colors.green, // Green checkmark
+                                  ),
+                              ],
+                            ),
                           ),
-                          _buildFormDropdownList(
-                              controller: _workoutController,
-                              defultText: 'Select Workout Type',
-                              selectList: _workoutList),
-
+                          CustomDropdownlist(
+                            defaultText: 'Select Workout Type',
+                            controller: _workoutController,
+                            selectList: _workoutList,
+                            multiselectList: false,
+                          ),
+                          CustomDropdownlist(
+                            defaultText: 'Select Exercise',
+                            controller: _exerciseController,
+                            selectList: _exerciseList,
+                            multiselectList: true,
+                          ),
                           // _buildFormTextFormField(
                           //     controller: _workoutController,
                           //     lable: 'Workout (eg: Chest, Legs, Bak)',
                           //     validatorText:
                           //         'Please enter workout eg: Legs...'),
 
-                          _buildFormTextFormField(
-                              controller: _exerciseController,
-                              lable:
-                                  'Exercises eg: (Benchpress, comma separated)',
-                              validatorText:
-                                  'Please enter exercise eg: Benchpress...'),
+                          // _buildFormTextFormField(
+                          //     controller: _exerciseController,
+                          //     lable:
+                          //         'Exercises eg: (Benchpress, comma separated)',
+                          //     validatorText:
+                          //         'Please enter exercise eg: Benchpress...'),
                           _buildFormTextFormField(
                               controller: _weightController,
                               lable: '(Kg, comma separated)',
@@ -257,28 +273,41 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   Widget _buildFormDropdownList({
     required TextEditingController controller,
-    required String defultText,
+    required String defaultText,
     required List<String> selectList,
   }) {
-    return Row(
-      children: [
-        Text(
-          _workoutController.text.isEmpty
-              ? defultText
-              : _workoutController.text,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      decoration: BoxDecoration(
+        color: Colors.black54, // Background color
+        borderRadius: BorderRadius.circular(8.0), // Rounded corners
+        border: Border.all(color: Colors.white, width: 2.0), // Border color
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: controller.text.isEmpty ? null : controller.text,
+          hint: Text(
+            controller.text.isEmpty ? defaultText : controller.text,
+            style: const TextStyle(color: Colors.white),
+          ),
+          dropdownColor: Colors.black87, // Dropdown background color
+          icon: controller.text.isEmpty
+              ? const Icon(Icons.arrow_drop_down, color: Colors.white)
+              : const Icon(Icons.check_circle, color: Colors.green),
           style: const TextStyle(color: Colors.white),
+          onChanged: (String? newValue) {
+            if (newValue != null) {
+              controller.text = newValue; // Update the controller text
+            }
+          },
+          items: selectList.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
         ),
-        const Spacer(),
-        controller.text.isEmpty
-            ? IconButton(
-                onPressed: () => {},
-                icon: const Icon(Icons.arrow_drop_down, color: Colors.white),
-              )
-            : const Icon(
-                Icons.check_circle,
-                color: Colors.green,
-              ),
-      ],
+      ),
     );
   }
 
