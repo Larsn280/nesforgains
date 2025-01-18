@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/models/selected_exercise.dart';
 
-class CustomDropdownlist extends StatefulWidget {
+class SingleSelectDropdown extends StatefulWidget {
   final String defaultText;
   TextEditingController? controller;
   List<SelectedExercise>? exerciseList;
   bool multiselectList;
   final List<String> selectList;
 
-  CustomDropdownlist({
+  SingleSelectDropdown({
     super.key,
     required this.defaultText,
     this.controller,
@@ -18,10 +18,10 @@ class CustomDropdownlist extends StatefulWidget {
   });
 
   @override
-  _CustomDropdownlistState createState() => _CustomDropdownlistState();
+  _SingleSelectDropdownState createState() => _SingleSelectDropdownState();
 }
 
-class _CustomDropdownlistState extends State<CustomDropdownlist> {
+class _SingleSelectDropdownState extends State<SingleSelectDropdown> {
   bool _isDropdownVisible = false; // Flag to control dropdown visibility
 
   @override

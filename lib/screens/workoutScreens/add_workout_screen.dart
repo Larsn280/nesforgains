@@ -11,7 +11,8 @@ import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
-import 'package:nesforgains/widgets/custom_dropdownlist.dart';
+import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
+import 'package:nesforgains/widgets/custom_multiselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -33,7 +34,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   late WorkoutService workoutService;
 
-  late List<SelectedExercise> selectedExercises;
+  late List<SelectedExercise> selectedExercises = [];
 
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
@@ -181,17 +182,15 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               ],
                             ),
                           ),
-                          CustomDropdownlist(
+                          SingleSelectDropdown(
                             defaultText: 'Select Workout Type',
                             controller: _workoutController,
                             selectList: _workoutList,
                             multiselectList: false,
                           ),
-                          CustomDropdownlist(
+                          MultiSelectDropdown(
                             defaultText: 'Select Exercise',
-                            exerciseList: selectedExercises,
-                            selectList: _exerciseList,
-                            multiselectList: true,
+                            itemsList: _exerciseList,
                           ),
                           // _buildFormTextFormField(
                           //     controller: _workoutController,
@@ -245,6 +244,32 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildFormMultiSelectDropdownList({required String defaultText}) {
+    bool _isDropdownShowing = false;
+
+    return GestureDetector(
+        onTap: () => {
+              setState(() {
+                _isDropdownShowing = !_isDropdownShowing;
+              }),
+            },
+        child: _isDropdownShowing == false
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                decoration: const BoxDecoration(color: Colors.black54),
+                child: Text(defaultText),
+              )
+            : Container(
+                width: MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+                decoration: const BoxDecoration(color: Colors.black54),
+                child: const Text(' Is showing'),
+              ));
   }
 
   Widget _buildFormDropdownList({
