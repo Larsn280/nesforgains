@@ -89,13 +89,15 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
             width: MediaQuery.of(context).size.width,
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white, width: 1.0),
               color: Colors.black87,
             ),
             child: Column(
               children: [
                 Row(
                   children: [
+                    const Icon(Icons.check_circle),
                     const Spacer(),
                     Text(
                       'Input for $_selectedItem',
@@ -120,8 +122,11 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
                         Icons.cancel,
                         color: Colors.red,
                       ),
-                    ),
+                    )
                   ],
+                ),
+                const SizedBox(
+                  height: 16.0,
                 ),
                 _buildRepsSetsWeightDropdown(
                     reps: repsRange, sets: setsRange, weigth: weigthRange),
@@ -160,6 +165,7 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
                           color: Colors.white,
                         ),
                       ),
+                      const Spacer(),
                       const Icon(
                         Icons.arrow_drop_down,
                         color: Colors.white,
@@ -228,6 +234,7 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
                           color: Colors.white,
                         ),
                       ),
+                      const Spacer(),
                       const Icon(
                         Icons.arrow_drop_down,
                         color: Colors.white,
@@ -291,11 +298,12 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
                   child: Row(
                     children: [
                       Text(
-                        'Weight: ${_selectedInput['weigth']}',
+                        'Weight: ${_selectedInput['weigth']}kg',
                         style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
+                      const Spacer(),
                       const Icon(
                         Icons.arrow_drop_down,
                         color: Colors.white,
@@ -339,6 +347,9 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
                   ),
                 ),
               ),
+        const SizedBox(
+          height: 25.0,
+        ),
       ],
     );
   }

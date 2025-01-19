@@ -11,6 +11,7 @@ import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
+import 'package:nesforgains/widgets/custom_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_multiselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -39,6 +40,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
   final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
+  final bool closedropdowns = false;
 
   @override
   void initState() {
@@ -134,7 +136,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                           const SizedBox(height: 16.0),
                           // Date Picker
                           Padding(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 12.0,
                               vertical: 4.0,
                             ),
@@ -188,9 +190,15 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                             selectList: _workoutList,
                             multiselectList: false,
                           ),
-                          MultiSelectDropdown(
-                            defaultText: 'Select Exercise',
-                            itemsList: _exerciseList,
+                          const SizedBox(
+                            height: 16.0,
+                          ),
+                          CustomDropdownlist(
+                              closedropdowns: closedropdowns,
+                              dropdownitems: _exerciseList,
+                              defaultdropdowntext: 'Select Exercise'),
+                          const SizedBox(
+                            height: 16.0,
                           ),
                           // _buildFormTextFormField(
                           //     controller: _workoutController,
