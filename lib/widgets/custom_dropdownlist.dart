@@ -61,11 +61,15 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
                               _isdropdownshowing = false;
                             });
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            child: Text(
-                              item.toString(),
-                              style: const TextStyle(color: Colors.white),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 4.0),
+                              child: Text(
+                                item.toString(),
+                                style: const TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         );
