@@ -134,176 +134,206 @@ class MultiSelectDropdownState extends State<MultiSelectDropdown> {
       {required List<int> reps,
       required List<int> sets,
       required List<int> weigth}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Reps Dropdown
-        _isInputDropdownShowing['reps'] == false
-            ? GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isInputDropdownShowing['reps'] =
-                        !(_isInputDropdownShowing['reps'] ?? false);
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.black54,
-                  child: Row(
-                    children: [
-                      Text(
-                        'Reps: ${_selectedInput['reps']}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            :
-            // If dropdown is visible for reps
-            Container(
-                height: 200,
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.black87,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: reps.map<Widget>((item) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedInput['reps'] = item;
-                            _isInputDropdownShowing['reps'] = false;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            item.toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Reps Dropdown
+          _isInputDropdownShowing['reps'] == false
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isInputDropdownShowing['sets'] = false;
+                      _isInputDropdownShowing['weigth'] = false;
+                      _isInputDropdownShowing['reps'] =
+                          !(_isInputDropdownShowing['reps'] ?? false);
+                    });
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        color: Colors.black54,
+                        border: Border.all(color: Colors.white, width: 1.0)),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Reps: ${_selectedInput['reps']}',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10.0),
                         ),
-                      );
-                    }).toList(),
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              :
+              // If dropdown is visible for reps
+              Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  decoration: BoxDecoration(
+                      color: Colors.black87,
+                      border: Border.all(color: Colors.white, width: 1.0)),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: reps.map<Widget>((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedInput['reps'] = item;
+                              _isInputDropdownShowing['reps'] = false;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                              item.toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
-        const Spacer(),
+          const Spacer(),
 
-        // Sets Dropdown
-        _isInputDropdownShowing['sets'] == false
-            ? GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isInputDropdownShowing['sets'] =
-                        !(_isInputDropdownShowing['sets'] ?? false);
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.black54,
-                  child: Row(
-                    children: [
-                      Text(
-                        'Sets: ${_selectedInput['sets']}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            :
-            // If dropdown is visible for sets
-            Container(
-                height: 200,
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.black87,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: sets.map<Widget>((item) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedInput['sets'] = item;
-                            _isInputDropdownShowing['sets'] = false;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            item.toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
+          // Sets Dropdown
+          _isInputDropdownShowing['sets'] == false
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isInputDropdownShowing['reps'] = false;
+                      _isInputDropdownShowing['weigth'] = false;
+                      _isInputDropdownShowing['sets'] =
+                          !(_isInputDropdownShowing['sets'] ?? false);
+                    });
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    decoration: BoxDecoration(
+                        color: Colors.black54,
+                        border: Border.all(color: Colors.white, width: 1.0)),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Sets: ${_selectedInput['sets']}',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10.0),
                         ),
-                      );
-                    }).toList(),
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              :
+              // If dropdown is visible for sets
+              Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  decoration: BoxDecoration(
+                      color: Colors.black87,
+                      border: Border.all(color: Colors.white, width: 1.0)),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: sets.map<Widget>((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedInput['sets'] = item;
+                              _isInputDropdownShowing['sets'] = false;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                              item.toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
-        const Spacer(),
+          const Spacer(),
 
-        // Weight Dropdown
-        _isInputDropdownShowing['weigth'] == false
-            ? GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isInputDropdownShowing['weigth'] =
-                        !(_isInputDropdownShowing['weigth'] ?? false);
-                  });
-                },
-                child: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.black54,
-                  child: Row(
-                    children: [
-                      Text(
-                        'Weight: ${_selectedInput['weigth']}',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            :
-            // If dropdown is visible for weight
-            Container(
-                height: 200,
-                padding: const EdgeInsets.all(8.0),
-                color: Colors.black87,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: weigth.map<Widget>((item) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedInput['weigth'] = item;
-                            _isInputDropdownShowing['weigth'] = false;
-                          });
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            item.toString(),
-                            style: const TextStyle(color: Colors.white),
-                          ),
+          // Weight Dropdown
+          _isInputDropdownShowing['weigth'] == false
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isInputDropdownShowing['reps'] = false;
+                      _isInputDropdownShowing['sets'] = false;
+                      _isInputDropdownShowing['weigth'] =
+                          !(_isInputDropdownShowing['weigth'] ?? false);
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black54,
+                        border: Border.all(color: Colors.white, width: 1.0)),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Weight: ${_selectedInput['weigth']}',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10.0),
                         ),
-                      );
-                    }).toList(),
+                        const Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              :
+              // If dropdown is visible for weight
+              Container(
+                  height: 200,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  decoration: BoxDecoration(
+                      color: Colors.black87,
+                      border: Border.all(color: Colors.white, width: 1.0)),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: weigth.map<Widget>((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedInput['weigth'] = item;
+                              _isInputDropdownShowing['weigth'] = false;
+                            });
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0),
+                            child: Text(
+                              item.toString(),
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 }
