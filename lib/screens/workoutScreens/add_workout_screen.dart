@@ -40,6 +40,20 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
   final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
+  final Map<String, Map<String, dynamic>> _inputfields = {
+    'Reps': {
+      'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
+      'isSelected': false, // Add a boolean flag
+    },
+    'Sets': {
+      'values': List.generate(20, (index) => index + 1),
+      'isSelected': false,
+    },
+    'Weight': {
+      'values': List.generate(200, (index) => index + 1),
+      'isSelected': false,
+    },
+  };
   final bool closedropdowns = false;
 
   @override
@@ -112,140 +126,148 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
     return CustomBackNavigation.customBackNavigation(
       context: context,
       child: Scaffold(
-        body: SizedBox.expand(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AppConstants.appbackgroundimage),
-                  fit: BoxFit.cover),
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const CustomAppbar(
-                    title: 'Log Workout',
-                  ),
-                  const SizedBox(height: 40.0),
-                  CustomCards.buildFormCard(
-                    context: context,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(height: 16.0),
-                          // Date Picker
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12.0,
-                              vertical: 4.0,
-                            ),
-                            child: Row(
-                              children: [
-                                // Text and Date Picker Icon are grouped together
-                                Expanded(
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        _selectedDate == null
-                                            ? 'Select Date'
-                                            : DateFormat('y-MMM-d')
-                                                .format(_selectedDate!),
-                                        style: const TextStyle(
-                                            color: Colors.white),
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.calendar_today,
-                                            color: Colors.white),
-                                        onPressed: () async {
-                                          DateTime? pickedDate =
-                                              await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2101),
-                                          );
-                                          if (pickedDate != null) {
-                                            setState(() {
-                                              _selectedDate = pickedDate;
-                                            });
-                                          }
-                                        },
-                                      ),
-                                    ],
+        body: GestureDetector(
+          onTap: () {
+            setState(() {});
+          },
+          child: SizedBox.expand(
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage(AppConstants.appbackgroundimage),
+                    fit: BoxFit.cover),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const CustomAppbar(
+                      title: 'Log Workout',
+                    ),
+                    const SizedBox(height: 40.0),
+                    CustomCards.buildFormCard(
+                      context: context,
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const SizedBox(height: 16.0),
+                            // Date Picker
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 4.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  // Text and Date Picker Icon are grouped together
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          _selectedDate == null
+                                              ? 'Select Date'
+                                              : DateFormat('y-MMM-d')
+                                                  .format(_selectedDate!),
+                                          style: const TextStyle(
+                                              color: Colors.white),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.calendar_today,
+                                              color: Colors.white),
+                                          onPressed: () async {
+                                            DateTime? pickedDate =
+                                                await showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(2000),
+                                              lastDate: DateTime(2101),
+                                            );
+                                            if (pickedDate != null) {
+                                              setState(() {
+                                                _selectedDate = pickedDate;
+                                              });
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                // Checkmark Icon, visible only when a date is selected
-                                if (_selectedDate != null)
-                                  const Icon(
-                                    Icons.check_circle,
-                                    color: Colors.green, // Green checkmark
-                                  ),
-                              ],
+                                  // Checkmark Icon, visible only when a date is selected
+                                  if (_selectedDate != null)
+                                    const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green, // Green checkmark
+                                    ),
+                                ],
+                              ),
                             ),
-                          ),
-                          SingleSelectDropdown(
-                            defaultText: 'Select Workout Type',
-                            controller: _workoutController,
-                            selectList: _workoutList,
-                            multiselectList: false,
-                          ),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          CustomDropdownlist(
+                            SingleSelectDropdown(
+                              defaultText: 'Select Workout Type',
+                              controller: _workoutController,
+                              selectList: _workoutList,
+                              multiselectList: false,
+                            ),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            CustomDropdownlist(
                               closedropdowns: closedropdowns,
                               dropdownitems: _exerciseList,
-                              defaultdropdowntext: 'Select Exercise'),
-                          const SizedBox(
-                            height: 16.0,
-                          ),
-                          // _buildFormTextFormField(
-                          //     controller: _workoutController,
-                          //     lable: 'Workout (eg: Chest, Legs, Bak)',
-                          //     validatorText:
-                          //         'Please enter workout eg: Legs...'),
+                              defaultdropdowntext: 'Select Exercise',
+                              inputboxitems: _inputfields,
+                            ),
 
-                          // _buildFormTextFormField(
-                          //     controller: _exerciseController,
-                          //     lable:
-                          //         'Exercises eg: (Benchpress, comma separated)',
-                          //     validatorText:
-                          //         'Please enter exercise eg: Benchpress...'),
-                          // _buildFormTextFormField(
-                          //     controller: _weightController,
-                          //     lable: '(Kg, comma separated)',
-                          //     validatorText: 'Please enter weight in kg...'),
+                            const SizedBox(
+                              height: 16.0,
+                            ),
+                            // _buildFormTextFormField(
+                            //     controller: _workoutController,
+                            //     lable: 'Workout (eg: Chest, Legs, Bak)',
+                            //     validatorText:
+                            //         'Please enter workout eg: Legs...'),
 
-                          // _buildFormTextFormField(
-                          //     controller: _repsController,
-                          //     lable: 'Reps (comma separated)',
-                          //     validatorText:
-                          //         'Please enter reps (comma separated)...'),
+                            // _buildFormTextFormField(
+                            //     controller: _exerciseController,
+                            //     lable:
+                            //         'Exercises eg: (Benchpress, comma separated)',
+                            //     validatorText:
+                            //         'Please enter exercise eg: Benchpress...'),
+                            // _buildFormTextFormField(
+                            //     controller: _weightController,
+                            //     lable: '(Kg, comma separated)',
+                            //     validatorText: 'Please enter weight in kg...'),
 
-                          // _buildFormTextFormField(
-                          //     controller: _setsController,
-                          //     lable: 'Sets (comma separated)',
-                          //     validatorText:
-                          //         'Please enter sets (comma separated)'),
-                        ],
+                            // _buildFormTextFormField(
+                            //     controller: _repsController,
+                            //     lable: 'Reps (comma separated)',
+                            //     validatorText:
+                            //         'Please enter reps (comma separated)...'),
+
+                            // _buildFormTextFormField(
+                            //     controller: _setsController,
+                            //     lable: 'Sets (comma separated)',
+                            //     validatorText:
+                            //         'Please enter sets (comma separated)'),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
 
-                  const SizedBox(height: 8.0),
-                  // Submit button
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: _saveTrainingData,
-                      text: 'Save Workout'),
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      text: 'Back')
-                ],
+                    const SizedBox(height: 8.0),
+                    // Submit button
+                    CustomButtons.buildElevatedFunctionButton(
+                        context: context,
+                        onPressed: _saveTrainingData,
+                        text: 'Save Workout'),
+                    CustomButtons.buildElevatedFunctionButton(
+                        context: context,
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        text: 'Back')
+                  ],
+                ),
               ),
             ),
           ),
