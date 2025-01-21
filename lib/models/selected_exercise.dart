@@ -10,4 +10,9 @@ class SelectedExercise {
     required this.sets,
     required this.weight,
   });
+
+  @override
+  String toString() {
+    return 'name: $name, reps: $reps, sets: $sets, weight: ${weight.toStringAsFixed(2)} kg';
+  }
 }

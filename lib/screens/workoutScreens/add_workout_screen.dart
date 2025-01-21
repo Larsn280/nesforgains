@@ -35,11 +35,14 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   late WorkoutService workoutService;
 
-  late List<SelectedExercise> selectedExercises = [];
+  final List<SelectedExercise> selectedExercises = [];
+  final SelectedExercise selectedExercise =
+      SelectedExercise(name: '', reps: '', sets: '', weight: 0);
 
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
   final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
+  final Map<String, Map<String, String>> completeexercises = {};
   final Map<String, Map<String, dynamic>> _inputfields = {
     'Reps': {
       'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
@@ -216,6 +219,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               dropdownitems: _exerciseList,
                               defaultdropdowntext: 'Select Exercise',
                               inputboxitems: _inputfields,
+                              completeexercise: completeexercises,
                             ),
 
                             const SizedBox(
@@ -277,15 +281,15 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   }
 
   Widget _buildFormMultiSelectDropdownList({required String defaultText}) {
-    bool _isDropdownShowing = false;
+    bool isDropdownShowing = false;
 
     return GestureDetector(
         onTap: () => {
               setState(() {
-                _isDropdownShowing = !_isDropdownShowing;
+                isDropdownShowing = !isDropdownShowing;
               }),
             },
-        child: _isDropdownShowing == false
+        child: isDropdownShowing == false
             ? Container(
                 width: MediaQuery.of(context).size.width,
                 padding:

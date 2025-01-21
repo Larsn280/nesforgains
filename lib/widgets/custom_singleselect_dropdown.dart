@@ -35,7 +35,7 @@ class _SingleSelectDropdownState extends State<SingleSelectDropdown> {
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black54, // Background color
         ),
         child: Column(
@@ -63,7 +63,7 @@ class _SingleSelectDropdownState extends State<SingleSelectDropdown> {
             if (_isDropdownVisible) // Show dropdown only when the flag is true
               Container(
                 width: double.infinity, // Make the dropdown take up full width
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black87, // Dropdown background color
                   // border: Border.all(color: Colors.white),
                   // borderRadius: BorderRadius.circular(8.0), // Rounded corners

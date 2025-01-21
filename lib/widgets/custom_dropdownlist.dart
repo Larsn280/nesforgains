@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:nesforgains/models/selected_exercise.dart';
+import 'package:isar/isar.dart';
+import 'package:nesforgains/widgets/custom_buttons.dart';
 
-class CustomDropdownlist<T> extends StatefulWidget {
+class CustomDropdownlist extends StatefulWidget {
   final bool closedropdowns;
-  final List<T> dropdownitems;
+  final List<String> dropdownitems;
   final Map<String, Map<String, dynamic>> inputboxitems;
+  final Map<String, Map<String, String>> completeexercise;
   final String defaultdropdowntext;
 
-  const CustomDropdownlist(
-      {super.key,
-      required this.closedropdowns,
-      required this.dropdownitems,
-      required this.inputboxitems,
-      required this.defaultdropdowntext});
+  const CustomDropdownlist({
+    super.key,
+    required this.closedropdowns,
+    required this.dropdownitems,
+    required this.inputboxitems,
+    required this.completeexercise,
+    required this.defaultdropdowntext,
+  });
 
   @override
   CustomDropdownlistState createState() => CustomDropdownlistState();
@@ -22,6 +26,7 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
   bool _isdropdownshowing = false;
   String _selecteditem = '';
   List<String> allValues = [];
+  late String storedmapkey = '';
 
   void _changedropdownstate(String isdropdownshowing) {
     setState(() {
@@ -79,6 +84,8 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
                     setState(() {
                       _selecteditem = item.toString();
                       _isdropdownshowing = false;
+                      widget.completeexercise[item.toString()] = {};
+                      storedmapkey = widget.completeexercise.keys.first;
                     });
                   },
                   child: SizedBox(
@@ -100,9 +107,6 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
   }
 
   Widget _buildInputBox() {
-    if (allValues.isEmpty) {
-      allValues.add(_selecteditem);
-    }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
       decoration: BoxDecoration(
@@ -142,29 +146,44 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
             height: 12.0,
           ),
           Column(
-            children: widget.inputboxitems.entries.map((entry) {
+            children: widget.inputboxitems.entries
+                .toList()
+                .asMap()
+                .entries
+                .map((mapEntry) {
+              final int index = mapEntry.key + 1; // The index of the entry
+              final MapEntry<String, Map<String, dynamic>> entry =
+                  mapEntry.value;
               return GestureDetector(
                 onTap: () {
                   _changedropdownstate(entry.key);
                 },
                 child: _buildInputBoxDropdown(
+                    dropdownboxnumber: index,
                     boxitem: entry.key,
                     isdropdownshowing: entry.value['isSelected']),
               );
             }).toList(),
           ),
           const SizedBox(
-            height: 40.0,
+            height: 20.0,
+          ),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context, onPressed: () => {}, text: 'Add Exercise'),
+          const SizedBox(
+            height: 20.0,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildInputBoxDropdown(
-      {required String boxitem, required bool isdropdownshowing}) {
+  Widget _buildInputBoxDropdown({
+    required String boxitem,
+    required bool isdropdownshowing,
+    required int dropdownboxnumber,
+  }) {
     final List<int>? values = widget.inputboxitems[boxitem]?['values'];
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
       decoration: BoxDecoration(
@@ -192,9 +211,11 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
                 children: values.map<Widget>((value) {
                   return GestureDetector(
                     onTap: () {
-                      allValues.add(value.toString());
+                      setState(() {
+                        widget.completeexercise[storedmapkey]![boxitem] =
+                            value.toString();
+                      });
                       _changedropdownstate(boxitem);
-                      print(allValues);
                     },
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width,
