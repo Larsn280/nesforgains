@@ -40,6 +40,23 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
     super.initState();
   }
 
+  void _saveTrainingData() async {
+    try {
+      if (widget.completeexercise.isNotEmpty) {
+        // Process the selected exercises
+        widget.completeexercise.forEach((exercise, details) {
+          print('Exercise: $exercise, Details: $details');
+        });
+
+        // Save to the database or perform other actions
+      } else {
+        print('No exercises selected.');
+      }
+    } catch (e) {
+      print('Error saving data: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -132,6 +149,7 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
                       allValues = [];
                       _selecteditem = '';
                       _isdropdownshowing = false;
+                      widget.completeexercise.clear();
                     },
                   );
                 },
@@ -169,7 +187,9 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
             height: 20.0,
           ),
           CustomButtons.buildElevatedFunctionButton(
-              context: context, onPressed: () => {}, text: 'Add Exercise'),
+              context: context,
+              onPressed: () => {_saveTrainingData()},
+              text: 'Add Exercise'),
           const SizedBox(
             height: 20.0,
           ),
@@ -195,7 +215,11 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(boxitem),
+              widget.completeexercise[storedmapkey]![boxitem] != null
+                  ? Text(
+                      '$boxitem: ${widget.completeexercise[storedmapkey]![boxitem]}'
+                          .toString())
+                  : Text(boxitem),
               const Icon(
                 Icons.arrow_drop_down,
                 color: Colors.white,
@@ -218,12 +242,9 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
                       _changedropdownstate(boxitem);
                     },
                     child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          children: [
-                            Text(value.toString()),
-                          ],
-                        )),
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(value.toString()),
+                    ),
                   );
                 }).toList(),
               )),
