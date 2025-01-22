@@ -103,7 +103,10 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   void _saveTrainingData() async {
     try {
       final List<Exercise> exerciseList = [];
-      if (_formKey.currentState!.validate() && _selectedDate != null) {
+      if (_formKey.currentState!.validate() &&
+          _selectedDate != null &&
+          allcompleteexercise.isNotEmpty) {
+        print(allcompleteexercise);
         final workoutValue = _workoutController.text.toString();
 
         final userIdValue = AuthProvider.of(context).id;
@@ -114,7 +117,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
             date: _selectedDate.toString(),
             userId: userIdValue);
 
-        for (var exercise in selectedExercises) {
+        for (var exercise in allcompleteexercise) {
           final newExercise = Exercise(
             name: exercise.name.trim(),
             kg: exercise.weight,
