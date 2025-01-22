@@ -13,7 +13,6 @@ import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
-import 'package:nesforgains/widgets/custom_multiselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -42,7 +41,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
   final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
-  final Map<String, Map<String, String>> completeexercises = {};
+  final Map<String, Map<String, String>> completeexercise = {};
+  final List<SelectedExercise> allcompleteexercise = [];
   final Map<String, Map<String, dynamic>> _inputfields = {
     'Reps': {
       'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
@@ -57,6 +57,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       'isSelected': false,
     },
   };
+
   final bool closedropdowns = false;
 
   @override
@@ -69,6 +70,34 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   void dispose() {
     _workoutController.dispose();
     super.dispose();
+  }
+
+  void _storeaddedexercises(Map<String, Map<String, String>> completeexercise) {
+    late SelectedExercise exercise;
+
+    if (completeexercise.isNotEmpty) {
+      // Iterate over the map to process each exercise
+      completeexercise.forEach((name, details) {
+        // Extract the values for reps, sets, and weight
+        final reps = details['Reps'] ?? '0'; // Default to '0' if not found
+        final sets = details['Sets'] ?? '0'; // Default to '0' if not found
+        final weight = details['Weight'] ?? '0'; // Default to '0' if not found
+
+        // Create the SelectedExercise object
+        exercise = SelectedExercise(
+          name: name,
+          reps: reps,
+          sets: sets,
+          weight: double.parse(weight),
+        );
+        allcompleteexercise.add(exercise);
+        // Do something with the exercise (e.g., add it to a list, print it, etc.)
+        print('Created exercise: $allcompleteexercise');
+        setState(() {});
+      });
+    } else {
+      print('No exercises to store.');
+    }
   }
 
   void _saveTrainingData() async {
@@ -205,12 +234,84 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                 ],
                               ),
                             ),
+
                             SingleSelectDropdown(
                               defaultText: 'Select Workout Type',
                               controller: _workoutController,
                               selectList: _workoutList,
                               multiselectList: false,
                             ),
+                            if (allcompleteexercise.isNotEmpty)
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 8.0,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 4.0,
+                                    ),
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Wrap(
+                                      spacing:
+                                          8.0, // Horizontal spacing between items
+                                      runSpacing:
+                                          8.0, // Vertical spacing between rows
+                                      alignment: WrapAlignment.center,
+                                      children:
+                                          allcompleteexercise.map((exercise) {
+                                        return SizedBox(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(4.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black87,
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize
+                                                  .min, // Shrink the Row to fit content
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    exercise.name,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize:
+                                                          12.0, // Compact font size
+                                                    ),
+                                                    overflow: TextOverflow
+                                                        .ellipsis, // Truncate long text
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                    width:
+                                                        2.0), // Minimal space between text and icon
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      allcompleteexercise
+                                                          .remove(exercise);
+                                                    });
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.cancel,
+                                                    color: Colors.white,
+                                                    size:
+                                                        12.0, // Compact icon size
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
                             const SizedBox(
                               height: 16.0,
                             ),
@@ -219,7 +320,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               dropdownitems: _exerciseList,
                               defaultdropdowntext: 'Select Exercise',
                               inputboxitems: _inputfields,
-                              completeexercise: completeexercises,
+                              completeexercise: completeexercise,
+                              onStoreAddedExercises: _storeaddedexercises,
                             ),
 
                             const SizedBox(

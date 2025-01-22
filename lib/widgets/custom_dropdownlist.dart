@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:isar/isar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_snackbar.dart';
 
 class CustomDropdownlist extends StatefulWidget {
   final bool closedropdowns;
   final List<String> dropdownitems;
   final Map<String, Map<String, dynamic>> inputboxitems;
   final Map<String, Map<String, String>> completeexercise;
+  final Function(Map<String, Map<String, String>>) onStoreAddedExercises;
   final String defaultdropdowntext;
 
   const CustomDropdownlist({
@@ -16,6 +17,7 @@ class CustomDropdownlist extends StatefulWidget {
     required this.inputboxitems,
     required this.completeexercise,
     required this.defaultdropdowntext,
+    required this.onStoreAddedExercises,
   });
 
   @override
@@ -35,6 +37,14 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
     });
   }
 
+  void _clearandcloseinputbox() {
+    setState(() {
+      widget.completeexercise.clear();
+      _selecteditem = '';
+      print(widget.completeexercise);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -42,13 +52,42 @@ class CustomDropdownlistState extends State<CustomDropdownlist> {
 
   void _saveTrainingData() async {
     try {
+      // Check if the number of keys in completeexercise matches the keys in inputboxitems
+      bool hasInvalidField =
+          widget.completeexercise.values.any((exerciseDetails) {
+        // Check if all the required subkeys ('Reps', 'Sets', 'Weight') exist and are valid
+        return widget.inputboxitems.keys.any((key) {
+          // Check if the subkey exists in the exercise details
+          if (!exerciseDetails.containsKey(key)) {
+            return true; // If the subkey doesn't exist, it's invalid
+          }
+
+          // Get the value for the subkey
+          var value = exerciseDetails[key];
+
+          // Check if the value is '0' (string) or 0 (integer)
+          if (value == '0') {
+            return true; // If the value is '0', it's invalid
+          }
+
+          return false;
+        });
+      });
+
+      // If there's an invalid field, prevent saving and show an error message
+      if (hasInvalidField) {
+        CustomSnackbar.showSnackBar(message: 'Please select all fields!');
+        // Optionally show an error message to the user
+        return;
+      }
+
+      // If there are no invalid fields, continue with the save process
       if (widget.completeexercise.isNotEmpty) {
         // Process the selected exercises
-        widget.completeexercise.forEach((exercise, details) {
-          print('Exercise: $exercise, Details: $details');
-        });
-
+        widget.onStoreAddedExercises(widget.completeexercise);
         // Save to the database or perform other actions
+        print(widget.completeexercise);
+        _clearandcloseinputbox();
       } else {
         print('No exercises selected.');
       }
