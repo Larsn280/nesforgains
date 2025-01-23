@@ -12,6 +12,7 @@ import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_dropdownlist.dart';
+import 'package:nesforgains/widgets/custom_search_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
@@ -40,7 +41,11 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
 
-  final List<String> _exerciseList = ['Benchpress', 'Squats', 'Deadlift'];
+  final List<String> _exerciseList = [
+    'Benchpress',
+    'Squats',
+    'Deadlift',
+  ];
   final Map<String, Map<String, String>> completeexercise = {};
   final List<SelectedExercise> allcompleteexercise = [];
   final Map<String, Map<String, dynamic>> _inputfields = {
@@ -238,12 +243,16 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               ),
                             ),
 
-                            SingleSelectDropdown(
-                              defaultText: 'Select Workout Type',
-                              controller: _workoutController,
-                              selectList: _workoutList,
-                              multiselectList: false,
-                            ),
+                            // SingleSelectDropdown(
+                            //   defaultText: 'Select Workout Type',
+                            //   controller: _workoutController,
+                            //   selectList: _workoutList,
+                            //   multiselectList: false,
+                            // ),
+                            CustomSearchDropdownlist(
+                                controller: _workoutController,
+                                defaulttext: 'Enter workout',
+                                listitems: _workoutList),
                             if (allcompleteexercise.isNotEmpty)
                               Column(
                                 children: [
