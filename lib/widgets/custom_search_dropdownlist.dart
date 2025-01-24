@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomSearchDropdownlist extends StatefulWidget {
   final TextEditingController controller;
+  final bool hasboarder;
   final String defaulttext;
   final List<String> listitems;
 
   const CustomSearchDropdownlist({
     super.key,
     required this.controller,
+    required this.hasboarder,
     required this.defaulttext,
     required this.listitems,
   });
@@ -18,21 +20,20 @@ class CustomSearchDropdownlist extends StatefulWidget {
 }
 
 class CustCustomSearchDropdownlist extends State<CustomSearchDropdownlist> {
-  final _formKey = GlobalKey<FormState>();
-  List<String> filteredItems = [];
+  final _controller = TextEditingController();
+  List<String> _filteredItems = [];
   final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    filteredItems = widget.listitems;
+    _filteredItems = widget.listitems;
 
-    widget.controller.addListener(() {
+    _controller.addListener(() {
       setState(() {
-        filteredItems = widget.listitems
-            .where((item) => item
-                .toLowerCase()
-                .contains(widget.controller.text.toLowerCase()))
+        _filteredItems = widget.listitems
+            .where((item) =>
+                item.toLowerCase().contains(_controller.text.toLowerCase()))
             .toList();
       });
     });
@@ -49,11 +50,22 @@ class CustCustomSearchDropdownlist extends State<CustomSearchDropdownlist> {
   }
 
   Color _toggleCheckCircleColor() {
-    if (_focusNode.hasFocus || widget.controller.text.isEmpty) {
+    if (_focusNode.hasFocus || _controller.text.isEmpty) {
       return Colors.transparent;
     }
-
+    setState(() {
+      widget.controller.text = _controller.text;
+    });
     return Colors.green;
+  }
+
+  BoxDecoration _isboardershowing() {
+    if (widget.hasboarder == true) {
+      return BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.white, width: 1.0));
+    }
+    return const BoxDecoration(color: Colors.black);
   }
 
   @override
@@ -61,54 +73,64 @@ class CustCustomSearchDropdownlist extends State<CustomSearchDropdownlist> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.only(left: 12.0),
-      decoration: const BoxDecoration(color: Colors.black),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              controller: widget.controller,
-              focusNode: _focusNode,
-              onChanged: (value) {
-                widget.controller.text = value;
-              },
-              decoration: InputDecoration(
-                hintText: widget.defaulttext,
-                hintStyle: const TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.white,
-                ),
-                suffixIcon: Icon(
-                  Icons.check_circle,
-                  color: _toggleCheckCircleColor(),
-                ),
-                border: InputBorder.none,
-                enabledBorder:
-                    InputBorder.none, // Removes the underline when not focused
-                focusedBorder:
-                    InputBorder.none, // Removes the underline when focused
-              ),
-              style: const TextStyle(
+      decoration: _isboardershowing(),
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _controller,
+            focusNode: _focusNode,
+            onChanged: (value) {
+              _controller.text = value;
+            },
+            decoration: InputDecoration(
+              hintText: widget.defaulttext,
+              hintStyle: const TextStyle(
                 fontSize: 13.0,
+                color: Colors.grey,
               ),
+              suffixIcon: Icon(
+                Icons.check_circle,
+                size: 23.0,
+                color: _toggleCheckCircleColor(),
+              ),
+              border: InputBorder.none,
+              enabledBorder:
+                  InputBorder.none, // Removes the underline when not focused
+              focusedBorder:
+                  InputBorder.none, // Removes the underline when focused
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
             ),
-            if (widget.controller.text.isNotEmpty && _focusNode.hasFocus)
-              Column(
-                children: filteredItems.map<Widget>((item) {
-                  return GestureDetector(
-                    onTap: () {
-                      widget.controller.text = item.toString();
-                      _focusNode.unfocus();
-                    },
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(item),
-                    ),
-                  );
-                }).toList(),
+            style: const TextStyle(
+              fontSize: 13.0,
+              color: Colors.white,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+          ),
+          if (_controller.text.isNotEmpty && _focusNode.hasFocus)
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 100, // Set the maximum height here
               ),
-          ],
-        ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: _filteredItems.map<Widget>((item) {
+                    return GestureDetector(
+                      onTap: () {
+                        _controller.text = item.toString();
+                        _focusNode.unfocus();
+                      },
+                      child: SizedBox(
+                        height: 25,
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(item),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            )
+        ],
       ),
     );
   }

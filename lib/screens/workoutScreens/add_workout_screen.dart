@@ -12,6 +12,7 @@ import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_dropdownlist.dart';
+import 'package:nesforgains/widgets/custom_dropdownlistnew.dart';
 import 'package:nesforgains/widgets/custom_search_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -29,6 +30,10 @@ class AddWorkoutScreen extends StatefulWidget {
 class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final _formKey = GlobalKey<FormState>();
   final _workoutController = TextEditingController();
+  final _exerciseController = TextEditingController();
+  final _repsController = TextEditingController();
+  final _setsController = TextEditingController();
+  final _weigthController = TextEditingController();
 
   DateTime? _selectedDate;
   late String responseMessage;
@@ -39,7 +44,11 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final SelectedExercise selectedExercise =
       SelectedExercise(name: '', reps: '', sets: '', weight: 0);
 
-  final List<String> _workoutList = ['Chest', 'Legs', 'Bak'];
+  final List<String> _workoutList = [
+    'Chest',
+    'Legs',
+    'Bak',
+  ];
 
   final List<String> _exerciseList = [
     'Benchpress',
@@ -48,20 +57,23 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   ];
   final Map<String, Map<String, String>> completeexercise = {};
   final List<SelectedExercise> allcompleteexercise = [];
-  final Map<String, Map<String, dynamic>> _inputfields = {
-    'Reps': {
-      'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
-      'isSelected': false, // Add a boolean flag
-    },
-    'Sets': {
-      'values': List.generate(20, (index) => index + 1),
-      'isSelected': false,
-    },
-    'Weight': {
-      'values': List.generate(200, (index) => index + 1),
-      'isSelected': false,
-    },
-  };
+  final List<String> _selectsvalues =
+      List.generate(20, (index) => (index + 1).toString());
+
+  // final Map<String, Map<String, dynamic>> _inputfields = {
+  //   'Reps': {
+  //     'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
+  //     'isSelected': false, // Add a boolean flag
+  //   },
+  //   'Sets': {
+  //     'values': List.generate(20, (index) => index + 1),
+  //     'isSelected': false,
+  //   },
+  //   'Weight': {
+  //     'values': List.generate(200, (index) => index + 1),
+  //     'isSelected': false,
+  //   },
+  // };
 
   final bool closedropdowns = false;
 
@@ -77,40 +89,41 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
     super.dispose();
   }
 
-  void _storeaddedexercises(Map<String, Map<String, String>> completeexercise) {
-    late SelectedExercise exercise;
+  // void _storeaddedexercises(Map<String, Map<String, String>> completeexercise) {
+  //   late SelectedExercise exercise;
 
-    if (completeexercise.isNotEmpty) {
-      // Iterate over the map to process each exercise
-      completeexercise.forEach((name, details) {
-        // Extract the values for reps, sets, and weight
-        final reps = details['Reps'] ?? '0'; // Default to '0' if not found
-        final sets = details['Sets'] ?? '0'; // Default to '0' if not found
-        final weight = details['Weight'] ?? '0'; // Default to '0' if not found
+  //   if (completeexercise.isNotEmpty) {
+  //     // Iterate over the map to process each exercise
+  //     completeexercise.forEach((name, details) {
+  //       // Extract the values for reps, sets, and weight
+  //       final reps = details['Reps'] ?? '0'; // Default to '0' if not found
+  //       final sets = details['Sets'] ?? '0'; // Default to '0' if not found
+  //       final weight = details['Weight'] ?? '0'; // Default to '0' if not found
 
-        // Create the SelectedExercise object
-        exercise = SelectedExercise(
-          name: name,
-          reps: reps,
-          sets: sets,
-          weight: double.parse(weight),
-        );
-        allcompleteexercise.add(exercise);
-        // Do something with the exercise (e.g., add it to a list, print it, etc.)
-        print('Created exercise: $allcompleteexercise');
-        setState(() {});
-      });
-    } else {
-      print('No exercises to store.');
-    }
-  }
+  //       // Create the SelectedExercise object
+  //       exercise = SelectedExercise(
+  //         name: name,
+  //         reps: reps,
+  //         sets: sets,
+  //         weight: double.parse(weight),
+  //       );
+  //       allcompleteexercise.add(exercise);
+  //       // Do something with the exercise (e.g., add it to a list, print it, etc.)
+  //       print('Created exercise: $allcompleteexercise');
+  //       setState(() {});
+  //     });
+  //   } else {
+  //     print('No exercises to store.');
+  //   }
+  // }
 
   void _saveTrainingData() async {
     try {
       final List<Exercise> exerciseList = [];
       if (_formKey.currentState!.validate() &&
           _selectedDate != null &&
-          allcompleteexercise.isNotEmpty) {
+          allcompleteexercise.isNotEmpty &&
+          _workoutController.text.isNotEmpty) {
         print(allcompleteexercise);
         final workoutValue = _workoutController.text.toString();
 
@@ -242,16 +255,10 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                 ],
                               ),
                             ),
-
-                            // SingleSelectDropdown(
-                            //   defaultText: 'Select Workout Type',
-                            //   controller: _workoutController,
-                            //   selectList: _workoutList,
-                            //   multiselectList: false,
-                            // ),
                             CustomSearchDropdownlist(
                                 controller: _workoutController,
-                                defaulttext: 'Enter workout',
+                                hasboarder: true,
+                                defaulttext: 'Enter Workout',
                                 listitems: _workoutList),
                             if (allcompleteexercise.isNotEmpty)
                               Column(
@@ -327,46 +334,102 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                             const SizedBox(
                               height: 16.0,
                             ),
-                            CustomDropdownlist(
-                              closedropdowns: closedropdowns,
-                              dropdownitems: _exerciseList,
-                              defaultdropdowntext: 'Select Exercise',
-                              inputboxitems: _inputfields,
-                              completeexercise: completeexercise,
-                              onStoreAddedExercises: _storeaddedexercises,
-                            ),
-
+                            _exerciseController.text.isEmpty
+                                ? CustomSearchDropdownlist(
+                                    hasboarder: true,
+                                    controller: _exerciseController,
+                                    defaulttext: 'Enter Exercise',
+                                    listitems: _exerciseList)
+                                : Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 20.0),
+                                    decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        border: Border.all(
+                                            color: Colors.white, width: 1.0),
+                                        borderRadius:
+                                            BorderRadius.circular(20.0)),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Text(
+                                              'Cancle',
+                                              style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.transparent),
+                                            ),
+                                            Text(
+                                              'Input for ${_exerciseController.text}',
+                                              style: const TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                setState(() {
+                                                  _exerciseController.clear();
+                                                  _setsController.clear();
+                                                  _repsController.clear();
+                                                  _weigthController.clear();
+                                                });
+                                              },
+                                              child: const Text(
+                                                'Cancle',
+                                                style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 16.0,
+                                        ),
+                                        CustomDropdownlistnew(
+                                            hasboarder: true,
+                                            controller: _repsController,
+                                            defaulttext: 'Select Reps',
+                                            listitems: _selectsvalues),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        CustomDropdownlistnew(
+                                          hasboarder: true,
+                                          controller: _setsController,
+                                          defaulttext: 'Select Sets',
+                                          listitems: _selectsvalues,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        CustomSearchDropdownlist(
+                                            hasboarder: true,
+                                            controller: _weigthController,
+                                            defaulttext: 'Enter Weigth',
+                                            listitems: const []),
+                                        const SizedBox(
+                                          height: 10.0,
+                                        ),
+                                        GestureDetector(
+                                            onTap: () {},
+                                            child: const Text(
+                                              'Add',
+                                              style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                      ],
+                                    ),
+                                  ),
                             const SizedBox(
                               height: 16.0,
                             ),
-                            // _buildFormTextFormField(
-                            //     controller: _workoutController,
-                            //     lable: 'Workout (eg: Chest, Legs, Bak)',
-                            //     validatorText:
-                            //         'Please enter workout eg: Legs...'),
-
-                            // _buildFormTextFormField(
-                            //     controller: _exerciseController,
-                            //     lable:
-                            //         'Exercises eg: (Benchpress, comma separated)',
-                            //     validatorText:
-                            //         'Please enter exercise eg: Benchpress...'),
-                            // _buildFormTextFormField(
-                            //     controller: _weightController,
-                            //     lable: '(Kg, comma separated)',
-                            //     validatorText: 'Please enter weight in kg...'),
-
-                            // _buildFormTextFormField(
-                            //     controller: _repsController,
-                            //     lable: 'Reps (comma separated)',
-                            //     validatorText:
-                            //         'Please enter reps (comma separated)...'),
-
-                            // _buildFormTextFormField(
-                            //     controller: _setsController,
-                            //     lable: 'Sets (comma separated)',
-                            //     validatorText:
-                            //         'Please enter sets (comma separated)'),
                           ],
                         ),
                       ),
