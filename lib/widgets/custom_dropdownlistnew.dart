@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomDropdownlistnew extends StatefulWidget {
+  final String? errormessage;
   final TextEditingController controller;
   final bool hasboarder;
   final String defaulttext;
@@ -8,6 +9,7 @@ class CustomDropdownlistnew extends StatefulWidget {
 
   const CustomDropdownlistnew({
     super.key,
+    required this.errormessage,
     required this.controller,
     required this.hasboarder,
     required this.defaulttext,
@@ -38,70 +40,85 @@ class CustomDropdownlistnewState extends State<CustomDropdownlistnew> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      decoration: _isboardershowing(),
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              _toggledropdown();
-            },
-            child: Container(
-                color: Colors.transparent,
-                padding: const EdgeInsets.symmetric(vertical: 13.0),
-                width: MediaQuery.of(context).size.width,
-                child: widget.controller.text.isEmpty
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.defaulttext,
-                            style: const TextStyle(color: Colors.grey),
+    print(widget.errormessage);
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          decoration: _isboardershowing(),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _toggledropdown();
+                },
+                child: Container(
+                    color: Colors.transparent,
+                    padding: const EdgeInsets.symmetric(vertical: 13.0),
+                    width: MediaQuery.of(context).size.width,
+                    child: widget.controller.text.isEmpty
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                widget.defaulttext,
+                                style: const TextStyle(color: Colors.grey),
+                              ),
+                              const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
+                              )
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(widget.controller.text),
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                              )
+                            ],
+                          )),
+              ),
+              if (isdropdiwnshowing)
+                ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 100, // Set the maximum height here
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: widget.listitems.map<Widget>((item) {
+                        return GestureDetector(
+                          onTap: () {
+                            widget.controller.text = item;
+                            _toggledropdown();
+                          },
+                          child: SizedBox(
+                            height: 25,
+                            width: MediaQuery.of(context).size.width,
+                            child: Text(item),
                           ),
-                          const Icon(
-                            Icons.arrow_drop_down,
-                            color: Colors.white,
-                          )
-                        ],
-                      )
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(widget.controller.text),
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                          )
-                        ],
-                      )),
-          ),
-          if (isdropdiwnshowing)
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 100, // Set the maximum height here
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: widget.listitems.map<Widget>((item) {
-                    return GestureDetector(
-                      onTap: () {
-                        widget.controller.text = item;
-                        _toggledropdown();
-                      },
-                      child: SizedBox(
-                        height: 25,
-                        width: MediaQuery.of(context).size.width,
-                        child: Text(item),
-                      ),
-                    );
-                  }).toList(),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
-              ),
+            ],
+          ),
+        ),
+        if (widget.controller.text.isEmpty &&
+            widget.errormessage != null &&
+            !isdropdiwnshowing)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              widget.errormessage!,
+              style: const TextStyle(color: Colors.red, fontSize: 12.0),
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }

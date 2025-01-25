@@ -34,6 +34,11 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final _repsController = TextEditingController();
   final _setsController = TextEditingController();
   final _weigthController = TextEditingController();
+  String? _workoutError;
+  String? _exerciseError;
+  String? _repsError;
+  String? _setsError;
+  String? _weightError;
 
   DateTime? _selectedDate;
   late String responseMessage;
@@ -60,21 +65,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final List<String> _selectsvalues =
       List.generate(20, (index) => (index + 1).toString());
 
-  // final Map<String, Map<String, dynamic>> _inputfields = {
-  //   'Reps': {
-  //     'values': List.generate(20, (index) => index + 1), // [1, 2, ..., 20]
-  //     'isSelected': false, // Add a boolean flag
-  //   },
-  //   'Sets': {
-  //     'values': List.generate(20, (index) => index + 1),
-  //     'isSelected': false,
-  //   },
-  //   'Weight': {
-  //     'values': List.generate(200, (index) => index + 1),
-  //     'isSelected': false,
-  //   },
-  // };
-
   final bool closedropdowns = false;
 
   @override
@@ -89,33 +79,31 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
     super.dispose();
   }
 
-  // void _storeaddedexercises(Map<String, Map<String, String>> completeexercise) {
-  //   late SelectedExercise exercise;
+  void _validateExerciseInput() {
+    setState(() {
+      _workoutError =
+          _repsController.text.isEmpty ? 'Please input workout.' : null;
 
-  //   if (completeexercise.isNotEmpty) {
-  //     // Iterate over the map to process each exercise
-  //     completeexercise.forEach((name, details) {
-  //       // Extract the values for reps, sets, and weight
-  //       final reps = details['Reps'] ?? '0'; // Default to '0' if not found
-  //       final sets = details['Sets'] ?? '0'; // Default to '0' if not found
-  //       final weight = details['Weight'] ?? '0'; // Default to '0' if not found
+      _exerciseError =
+          _repsController.text.isEmpty ? 'Please input exercise.' : null;
 
-  //       // Create the SelectedExercise object
-  //       exercise = SelectedExercise(
-  //         name: name,
-  //         reps: reps,
-  //         sets: sets,
-  //         weight: double.parse(weight),
-  //       );
-  //       allcompleteexercise.add(exercise);
-  //       // Do something with the exercise (e.g., add it to a list, print it, etc.)
-  //       print('Created exercise: $allcompleteexercise');
-  //       setState(() {});
-  //     });
-  //   } else {
-  //     print('No exercises to store.');
-  //   }
-  // }
+      _repsError = _repsController.text.isEmpty
+          ? 'Please select the number of reps.'
+          : null;
+
+      _setsError = _setsController.text.isEmpty
+          ? 'Please select the number of sets.'
+          : null;
+
+      _weightError = _weigthController.text.isEmpty ||
+              double.tryParse(_weigthController.text) == null
+          ? 'Please enter a valid weight.'
+          : null;
+    });
+
+    // Return true if all fields are valid
+    // return _repsError == null && _setsError == null && _weightError == null;
+  }
 
   void _saveTrainingData() async {
     try {
@@ -256,6 +244,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               ),
                             ),
                             CustomSearchDropdownlist(
+                                isnumeric: false,
+                                errormessage: _workoutError,
                                 controller: _workoutController,
                                 hasboarder: true,
                                 defaulttext: 'Enter Workout',
@@ -336,6 +326,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                             ),
                             _exerciseController.text.isEmpty
                                 ? CustomSearchDropdownlist(
+                                    isnumeric: false,
+                                    errormessage: _exerciseError,
                                     hasboarder: true,
                                     controller: _exerciseController,
                                     defaulttext: 'Enter Exercise',
@@ -392,6 +384,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           height: 16.0,
                                         ),
                                         CustomDropdownlistnew(
+                                            errormessage: _repsError,
                                             hasboarder: true,
                                             controller: _repsController,
                                             defaulttext: 'Select Reps',
@@ -400,6 +393,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           height: 5.0,
                                         ),
                                         CustomDropdownlistnew(
+                                          errormessage: _setsError,
                                           hasboarder: true,
                                           controller: _setsController,
                                           defaulttext: 'Select Sets',
@@ -409,6 +403,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           height: 5.0,
                                         ),
                                         CustomSearchDropdownlist(
+                                            isnumeric: true,
+                                            errormessage: _weightError,
                                             hasboarder: true,
                                             controller: _weigthController,
                                             defaulttext: 'Enter Weigth',
@@ -417,7 +413,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           height: 10.0,
                                         ),
                                         GestureDetector(
-                                            onTap: () {},
+                                            onTap: () {
+                                              _validateExerciseInput();
+                                            },
                                             child: const Text(
                                               'Add',
                                               style: TextStyle(
