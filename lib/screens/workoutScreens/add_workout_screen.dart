@@ -48,15 +48,15 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       SelectedExercise(name: '', reps: '', sets: '', weight: 0);
 
   final List<String> _workoutList = [
-    'Chest',
-    'Legs',
-    'Bak',
+    'Bröst',
+    'Ben',
+    'Rygg',
   ];
 
   final List<String> _exerciseList = [
-    'Benchpress',
-    'Squats',
-    'Deadlift',
+    'Bänkpress',
+    'Knäböj',
+    'Marklyft',
   ];
   final Map<String, Map<String, String>> completeexercise = {};
   final List<SelectedExercise> allcompleteexercise = [];
