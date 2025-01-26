@@ -11,10 +11,8 @@ import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
-import 'package:nesforgains/widgets/custom_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_dropdownlistnew.dart';
 import 'package:nesforgains/widgets/custom_search_dropdownlist.dart';
-import 'package:nesforgains/widgets/custom_singleselect_dropdown.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -81,12 +79,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   bool _validateExerciseInput() {
     setState(() {
-      // _workoutError =
-      //     _repsController.text.isEmpty ? 'Please input workout.' : null;
-
-      // _exerciseError =
-      //     _repsController.text.isEmpty ? 'Please input exercise.' : null;
-
       _repsError = _repsController.text.isEmpty
           ? 'Please select the number of reps.'
           : null;
@@ -123,7 +115,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       if (_formKey.currentState!.validate() &&
           _selectedDate != null &&
           _validateWorkoutInput() == true) {
-        print(allcompleteexercise);
         final workoutValue = _workoutController.text.toString();
 
         final userIdValue = AuthProvider.of(context).id;
@@ -301,7 +292,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           child: Container(
                                             padding: const EdgeInsets.all(4.0),
                                             decoration: BoxDecoration(
-                                              color: Colors.black87,
+                                              color: Colors.green,
                                               borderRadius:
                                                   BorderRadius.circular(8.0),
                                             ),
@@ -349,7 +340,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               ),
 
                             const SizedBox(
-                              height: 16.0,
+                              height: 10.0,
                             ),
                             _exerciseController.text.isEmpty &&
                                     _exerciseController.text.length < 2
@@ -478,38 +469,39 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                         const SizedBox(
                                           height: 10.0,
                                         ),
-                                        GestureDetector(
-                                            onTap: () {
-                                              if (_validateExerciseInput() ==
-                                                  true) {
-                                                selectedExercise.name =
-                                                    _exerciseController.text;
-                                                selectedExercise.reps =
-                                                    _repsController.text;
-                                                selectedExercise.sets =
-                                                    _setsController.text;
-                                                selectedExercise.weight =
-                                                    double.tryParse(
-                                                            _weigthController
-                                                                .text) ??
-                                                        0;
-                                                0;
+                                        CustomButtons.buildSmallElevatedButton(
+                                          onPressed: () {
+                                            if (_validateExerciseInput() ==
+                                                true) {
+                                              setState(() {
+                                                // Create a new instance of SelectedExercise
+                                                final newExercise =
+                                                    SelectedExercise(
+                                                  name:
+                                                      _exerciseController.text,
+                                                  reps: _repsController.text,
+                                                  sets: _setsController.text,
+                                                  weight: double.tryParse(
+                                                          _weigthController
+                                                              .text) ??
+                                                      0,
+                                                );
+
+                                                // Add the new instance to the list
                                                 selectedExercises
-                                                    .add(selectedExercise);
-                                                setState(() {
-                                                  _exerciseController.clear();
-                                                  _repsController.clear();
-                                                  _setsController.clear();
-                                                  _weigthController.clear();
-                                                });
-                                              }
-                                            },
-                                            child: const Text(
-                                              'Add',
-                                              style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.bold),
-                                            )),
+                                                    .add(newExercise);
+
+                                                // Clear the input fields
+                                                _exerciseController.clear();
+                                                _repsController.clear();
+                                                _setsController.clear();
+                                                _weigthController.clear();
+                                              });
+                                            }
+                                          },
+                                          text: 'Add',
+                                          context: context,
+                                        ),
                                       ],
                                     ),
                                   ),
