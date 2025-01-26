@@ -150,6 +150,7 @@ class _CustomSearchDropdownListState extends State<CustomSearchDropdownList> {
                     return GestureDetector(
                       onTap: () {
                         _searchController.text = item;
+                        widget.onErrorChanged?.call(null);
                         _focusNode.unfocus();
                       },
                       child: SizedBox(

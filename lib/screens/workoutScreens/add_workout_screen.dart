@@ -127,7 +127,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
         for (var exercise in selectedExercises) {
           final newExercise = Exercise(
-            name: exercise.name.trim(),
+            name: exercise.name.trim().toLowerCase() == 'bänkpress'
+                ? 'Benchpress'
+                : exercise.name.trim(),
             kg: exercise.weight,
             rep: int.tryParse(exercise.reps.trim()),
             set: int.tryParse(exercise.sets.trim()),
