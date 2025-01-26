@@ -209,8 +209,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                       children: [
                                         Text(
                                           _selectedDate == null
-                                              ? 'Välj Datum'
-                                              : DateFormat('y-MMM-d')
+                                              ? 'Välj datum'
+                                              : DateFormat(
+                                                      'yyyy-MM-dd', 'sv_SE')
                                                   .format(_selectedDate!),
                                           style: const TextStyle(
                                               color: Colors.white),
@@ -225,6 +226,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime(2000),
                                               lastDate: DateTime(2101),
+                                              locale: const Locale('sv',
+                                                  'SE'), // Ställ in språk till svenska
                                             );
                                             if (pickedDate != null) {
                                               setState(() {

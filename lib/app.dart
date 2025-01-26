@@ -15,6 +15,7 @@ import 'package:nesforgains/service/secure_storage_service.dart'; // Import Secu
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class App extends StatelessWidget {
   final Database sqflite;
@@ -31,6 +32,16 @@ class App extends StatelessWidget {
       child: MaterialApp(
         scaffoldMessengerKey: scaffoldMessengerKey,
         title: 'NESForGains',
+        locale: const Locale('sv', 'SE'), // Ställ in svenska som standard
+        supportedLocales: const [
+          Locale('en', 'US'), // Engelska (USA)
+          Locale('sv', 'SE'), // Svenska (Sverige)
+        ],
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         theme: AppConstants.themeData,
         initialRoute: '/',
         routes: {
