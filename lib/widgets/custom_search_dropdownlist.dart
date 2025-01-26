@@ -98,9 +98,12 @@ class _CustomSearchDropdownListState extends State<CustomSearchDropdownList> {
 
   void _validateInput() {
     if (widget.isNumeric && _parseInputToDouble() == 0.0) {
-      widget.onErrorChanged?.call('Please enter a valid number');
+      widget.onErrorChanged?.call('Vänligen ange giltigt vikt');
     } else if (!widget.isNumeric && _searchController.text.length < 2) {
-      widget.onErrorChanged?.call('Please enter atleast two chars');
+      widget.onErrorChanged?.call('Vänligen ange mins två tecken');
+    } else if (widget.isNumeric && _parseInputToDouble() != 0.0) {
+      widget.controller.text = _searchController.text;
+      widget.onErrorChanged?.call(null);
     } else {
       widget.onErrorChanged?.call(null);
     }

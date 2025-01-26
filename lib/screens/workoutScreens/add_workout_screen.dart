@@ -79,30 +79,25 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   bool _validateExerciseInput() {
     setState(() {
-      _repsError = _repsController.text.isEmpty
-          ? 'Please select the number of reps.'
-          : null;
+      _repsError = _repsController.text.isEmpty ? 'Vänligen ange reps.' : null;
 
-      _setsError = _setsController.text.isEmpty
-          ? 'Please select the number of sets.'
-          : null;
+      _setsError = _setsController.text.isEmpty ? 'Vänligen ange sets.' : null;
 
-      _weightError = _weigthController.text.isEmpty
-          ? 'Please enter a valid weight.'
-          : null;
+      _weightError =
+          _weigthController.text.isEmpty ? 'Vänligen skriv en vikt.' : null;
     });
-
     // Return true if all fields are valid
     return _repsError == null && _setsError == null && _weightError == null;
   }
 
   bool _validateWorkoutInput() {
     setState(() {
-      _workoutError =
-          _workoutController.text.isEmpty ? 'Please input workout.' : null;
+      _workoutError = _workoutController.text.isEmpty
+          ? 'Vänligen skriv träningspass.'
+          : null;
 
       _exerciseError =
-          selectedExercises.isEmpty ? 'Please input exercise.' : null;
+          selectedExercises.isEmpty ? 'Vänligen skriv övning.' : null;
     });
 
     // Return true if all fields are valid
