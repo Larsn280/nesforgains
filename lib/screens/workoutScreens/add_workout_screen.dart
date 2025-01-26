@@ -32,6 +32,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   final _repsController = TextEditingController();
   final _setsController = TextEditingController();
   final _weigthController = TextEditingController();
+  String? _dateError;
   String? _workoutError;
   String? _exerciseError;
   String? _repsError;
@@ -95,11 +96,11 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       _workoutError = _workoutController.text.isEmpty
           ? 'Vänligen skriv träningspass.'
           : null;
+      _dateError = _selectedDate == null ? 'Vänligen välj ett datum.' : null;
 
       _exerciseError =
           selectedExercises.isEmpty ? 'Vänligen skriv övning.' : null;
     });
-
     // Return true if all fields are valid
     return _weightError == null && _exerciseError == null;
   }
@@ -107,9 +108,9 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   void _saveTrainingData() async {
     try {
       final List<Exercise> exerciseList = [];
-      if (_formKey.currentState!.validate() &&
+      if (_validateWorkoutInput() == true &&
           _selectedDate != null &&
-          _validateWorkoutInput() == true) {
+          _formKey.currentState!.validate()) {
         final workoutValue = _workoutController.text.toString();
 
         final userIdValue = AuthProvider.of(context).id;
@@ -147,11 +148,12 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
         CustomSnackbar.showSnackBar(message: responseMessage);
       } else {
-        setState(() {
-          responseMessage = 'Please fill in all fields';
-        });
+        // setState(() {
+        return;
+        // responseMessage = 'Please fill in all fields';
+        // });
 
-        CustomSnackbar.showSnackBar(message: responseMessage);
+        // CustomSnackbar.showSnackBar(message: responseMessage);
       }
     } catch (e) {
       logger.e('Error adding workout', error: e);
@@ -229,6 +231,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                             if (pickedDate != null) {
                                               setState(() {
                                                 _selectedDate = pickedDate;
+                                                _dateError = null;
                                               });
                                             }
                                           },
@@ -244,6 +247,19 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                     ),
                                 ],
                               ),
+                            ),
+                            if (_dateError != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Text(
+                                  _dateError!,
+                                  style: const TextStyle(
+                                      color: Colors.red, fontSize: 12.0),
+                                ),
+                              ),
+                            const SizedBox(
+                              height: 8.0,
                             ),
                             CustomSearchDropdownList(
                               isNumeric: false,
