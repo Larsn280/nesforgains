@@ -194,7 +194,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const CustomAppbar(
-                title: 'Workouts',
+                title: 'Träningspass',
               ),
               const SizedBox(
                 height: 40.0,
@@ -224,13 +224,13 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
                   onPressed: () {
                     _navigateToAddWorkout();
                   },
-                  text: 'Add'),
+                  text: 'Lägg till'),
               CustomButtons.buildElevatedFunctionButton(
                   context: context,
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },
-                  text: 'Home'),
+                  text: 'Hem'),
               const SizedBox(height: 20.0),
             ],
           ),

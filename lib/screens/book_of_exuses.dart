@@ -27,7 +27,7 @@ class _BookOfExusesScreenState extends State<BookOfExuses> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const CustomAppbar(title: 'Book of Exuses!'),
+                  const CustomAppbar(title: 'Ursäkternas bok!'),
                   const SizedBox(height: 40.0),
                   Card(
                     color: Colors.black54,
@@ -102,7 +102,7 @@ class _BookOfExusesScreenState extends State<BookOfExuses> {
                       onPressed: () {
                         Navigator.pushReplacementNamed(context, '/');
                       },
-                      text: 'Home'),
+                      text: 'Hem'),
                   const SizedBox(height: 8.0)
                 ],
               ),

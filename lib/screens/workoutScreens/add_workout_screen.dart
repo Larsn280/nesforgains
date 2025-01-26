@@ -184,7 +184,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                 child: Column(
                   children: [
                     const CustomAppbar(
-                      title: 'Log Workout',
+                      title: 'Logga Träningspass',
                     ),
                     const SizedBox(height: 40.0),
                     CustomCards.buildFormCard(
@@ -209,7 +209,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                       children: [
                                         Text(
                                           _selectedDate == null
-                                              ? 'Select Date'
+                                              ? 'Välj Datum'
                                               : DateFormat('y-MMM-d')
                                                   .format(_selectedDate!),
                                           style: const TextStyle(
@@ -250,7 +250,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                               errorMessage: _workoutError,
                               controller: _workoutController,
                               hasBorder: true,
-                              defaultText: 'Enter Workout',
+                              defaultText: 'Träningspass',
                               listItems: _workoutList,
                               onErrorChanged: (newError) {
                                 setState(() {
@@ -351,7 +351,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                         errorMessage: _exerciseError,
                                         hasBorder: true,
                                         controller: _exerciseController,
-                                        defaultText: 'Enter Exercise',
+                                        defaultText: 'Övning',
                                         listItems: _exerciseList,
                                         onErrorChanged: (newError) {
                                           setState(() {
@@ -389,7 +389,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Text(
-                                              'Cancle',
+                                              'Avbryt',
                                               style: TextStyle(
                                                   fontSize: 16.0,
                                                   fontWeight: FontWeight.bold,
@@ -411,7 +411,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                                 });
                                               },
                                               child: const Text(
-                                                'Cancle',
+                                                'Avbryt',
                                                 style: TextStyle(
                                                     fontSize: 16.0,
                                                     fontWeight:
@@ -427,7 +427,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                             errormessage: _repsError,
                                             hasboarder: true,
                                             controller: _repsController,
-                                            defaulttext: 'Select Reps',
+                                            defaulttext: 'Välj Reps',
                                             listitems: _selectsvalues),
                                         const SizedBox(
                                           height: 5.0,
@@ -436,7 +436,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           errormessage: _setsError,
                                           hasboarder: true,
                                           controller: _setsController,
-                                          defaulttext: 'Select Sets',
+                                          defaulttext: 'Välj Sets',
                                           listitems: _selectsvalues,
                                         ),
                                         const SizedBox(
@@ -447,7 +447,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           errorMessage: _weightError,
                                           hasBorder: true,
                                           controller: _weigthController,
-                                          defaultText: 'Enter Weigth',
+                                          defaultText: 'Skriv vikt',
                                           listItems: const [],
                                           onErrorChanged: (newError) {
                                             setState(() {
@@ -499,7 +499,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                               });
                                             }
                                           },
-                                          text: 'Add',
+                                          text: 'Lägg till',
                                           context: context,
                                         ),
                                       ],
@@ -518,13 +518,13 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                     CustomButtons.buildElevatedFunctionButton(
                         context: context,
                         onPressed: _saveTrainingData,
-                        text: 'Save Workout'),
+                        text: 'Spara'),
                     CustomButtons.buildElevatedFunctionButton(
                         context: context,
                         onPressed: () {
                           Navigator.pop(context, true);
                         },
-                        text: 'Back')
+                        text: 'Tillbaka')
                   ],
                 ),
               ),

@@ -154,7 +154,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
               child: Column(
                 children: [
                   const CustomAppbar(
-                    title: 'Edit Workout',
+                    title: 'Editera Träningspass',
                   ),
                   const SizedBox(
                     height: 40.0,
@@ -167,19 +167,19 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                         children: [
                           const SizedBox(height: 16.0),
                           _buildFormTextFormField(
-                              'Workout (eg: Chest, Legs, Bak)',
+                              'Träningspass (eg: Bröst, Ben, Rygg)',
                               _workoutController),
                           _buildFormTextFormField(
-                              'Exercises eg: (Benchpress, comma separated)',
+                              'Övning eg: (Bänkpress, comma separerad)',
                               _exerciseController),
                           _buildFormTextFormField(
-                              'Date (YYYY-MM-DD)', _dateController),
+                              'Datum (YYYY-MM-DD)', _dateController),
                           _buildFormTextFormField(
-                              '(Reps, comma separated)', _repsController),
+                              '(Reps, comma separerad)', _repsController),
                           _buildFormTextFormField(
-                              '(Sets, comma separated)', _setsController),
+                              '(Sets, comma separerad)', _setsController),
                           _buildFormTextFormField(
-                              '(Kg, comma separated)', _kgController),
+                              '(Kg, comma separerad)', _kgController),
                         ],
                       ),
                     ),
@@ -188,13 +188,13 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
                   CustomButtons.buildElevatedFunctionButton(
                       context: context,
                       onPressed: _handleEditWorkout,
-                      text: 'Save'),
+                      text: 'Spara'),
                   CustomButtons.buildElevatedFunctionButton(
                       context: context,
                       onPressed: () {
                         Navigator.pop(context, true);
                       },
-                      text: 'Back'),
+                      text: 'Tillbaka'),
                 ],
               ),
             ),

@@ -89,7 +89,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
             child: Column(
               children: [
                 const CustomAppbar(
-                  title: 'Scoreboard',
+                  title: 'Resultattavla',
                 ),
                 const SizedBox(
                   height: 40.0,
@@ -119,7 +119,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
                     onPressed: () {
                       Navigator.pushReplacementNamed(context, '/');
                     },
-                    text: 'Home'),
+                    text: 'Hem'),
                 const SizedBox(
                   height: 20.0,
                 )

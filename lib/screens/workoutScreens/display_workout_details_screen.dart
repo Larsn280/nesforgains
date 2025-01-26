@@ -104,7 +104,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
             child: Column(
               children: [
                 const CustomAppbar(
-                  title: 'Workout Details',
+                  title: 'Träningspass',
                 ),
                 const SizedBox(
                   height: 40.0,
@@ -119,7 +119,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
                     onPressed: () {
                       Navigator.pop(context, true);
                     },
-                    text: 'Go back'),
+                    text: 'Tillbaka'),
               ],
             ),
           ),
@@ -163,7 +163,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            'Date: ${workout.date}',
+            'Datum: ${workout.date}',
             style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16.0,
@@ -174,7 +174,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
         const Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            'Exercises',
+            'Övningar',
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,

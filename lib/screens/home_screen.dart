@@ -131,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                         const SizedBox(height: 20.0),
-                        const Text('Welcome to NESForGains!',
+                        const Text('Välkommen till NESForGains!',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8.0),
                         const Text(
@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Navigate to Terms of Service page
                       },
                       child: const Text(
-                        'Terms of Service',
+                        'Användarvillkor',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -172,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // Navigate to Privacy Policy page
                       },
                       child: const Text(
-                        'Privacy Policy',
+                        ' Integritetspolicy',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

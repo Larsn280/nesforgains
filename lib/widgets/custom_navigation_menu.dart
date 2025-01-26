@@ -77,7 +77,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                         children: [
                           buildMenuOption(
                             icon: Icons.home,
-                            label: 'Home',
+                            label: 'Hem',
                             onPressed: () {
                               Navigator.pushReplacementNamed(context, '/');
                               _removeOverlay();
@@ -85,7 +85,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                           ),
                           buildMenuOption(
                             icon: Icons.dining,
-                            label: 'Nutrition',
+                            label: 'Näringsöversikt',
                             onPressed: () => _toggleSubmenu('nutrition'),
                             hasSubcategories: true,
                             isOpen: _submenuOpen['nutrition']!,
@@ -96,7 +96,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                               children: [
                                 buildMenuOption(
                                   icon: Icons.calculate,
-                                  label: 'Nutrition Calculator',
+                                  label: 'Näringskalkylator',
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                         context, '/nutritionScreen');
@@ -106,7 +106,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                                 ),
                                 buildMenuOption(
                                     icon: Icons.list,
-                                    label: 'Display Nutrition',
+                                    label: 'Näringsinformation',
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
                                           context, '/displaynutritionScreen');
@@ -117,7 +117,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                             ),
                           buildMenuOption(
                             icon: Icons.bar_chart,
-                            label: 'Workouts',
+                            label: 'Träning',
                             onPressed: () => _toggleSubmenu('workout'),
                             hasSubcategories: true,
                             isOpen: _submenuOpen['workout']!,
@@ -128,7 +128,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                               children: [
                                 buildMenuOption(
                                   icon: Icons.list,
-                                  label: 'Display Workouts',
+                                  label: 'Träningspass',
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                         context, '/displayworkoutScreen');
@@ -138,7 +138,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                                 ),
                                 buildMenuOption(
                                   icon: Icons.list,
-                                  label: 'Scoreboard',
+                                  label: 'Resultattavla',
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                         context, '/displayscoreboardScreen');
@@ -150,7 +150,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                             ),
                           buildMenuOption(
                             icon: Icons.receipt,
-                            label: 'Recipes',
+                            label: 'Recept',
                             onPressed: () => _toggleSubmenu('recipe'),
                             hasSubcategories: true,
                             isOpen: _submenuOpen['recipe']!,
@@ -161,7 +161,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                               children: [
                                 buildMenuOption(
                                     icon: Icons.list,
-                                    label: 'Recipelist',
+                                    label: 'Receptlista',
                                     onPressed: () {
                                       Navigator.pushReplacementNamed(
                                           context, '/displayrecipeScreen');
@@ -172,7 +172,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                             ),
                           buildMenuOption(
                             icon: Icons.book_sharp,
-                            label: 'Book of Exuses',
+                            label: 'Ursäkternas bok',
                             onPressed: () {
                               Navigator.pushReplacementNamed(
                                   context, '/bookofexusesScreen');
@@ -193,7 +193,7 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'Logout',
+                                      'Logga ut',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
