@@ -1,8 +1,8 @@
 class SelectedExercise {
-  final String name;
-  final String reps;
-  final String sets;
-  final double weight;
+  String name;
+  String reps;
+  String sets;
+  double weight;
 
   SelectedExercise({
     required this.name,

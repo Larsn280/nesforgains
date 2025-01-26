@@ -1,186 +1,169 @@
 import 'package:flutter/material.dart';
 
-class CustomSearchDropdownlist extends StatefulWidget {
-  final String? errormessage;
-  final bool isnumeric;
+class CustomSearchDropdownList extends StatefulWidget {
+  final String? errorMessage;
+  final bool isNumeric;
   final TextEditingController controller;
-  final bool hasboarder;
-  final String defaulttext;
-  final List<String> listitems;
+  final bool hasBorder;
+  final String defaultText;
+  final List<String> listItems;
+  final ValueChanged<String?>? onErrorChanged;
 
-  const CustomSearchDropdownlist({
+  const CustomSearchDropdownList({
     super.key,
-    required this.errormessage,
-    required this.isnumeric,
+    required this.errorMessage,
+    required this.isNumeric,
     required this.controller,
-    required this.hasboarder,
-    required this.defaulttext,
-    required this.listitems,
+    required this.hasBorder,
+    required this.defaultText,
+    required this.listItems,
+    this.onErrorChanged,
   });
 
   @override
-  State<CustomSearchDropdownlist> createState() =>
-      CustCustomSearchDropdownlist();
+  State<CustomSearchDropdownList> createState() =>
+      _CustomSearchDropdownListState();
 }
 
-class CustCustomSearchDropdownlist extends State<CustomSearchDropdownlist> {
-  final _controller = TextEditingController();
-  List<String> _filteredItems = [];
+class _CustomSearchDropdownListState extends State<CustomSearchDropdownList> {
+  final TextEditingController _searchController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  late List<String> _filteredItems;
 
   @override
   void initState() {
     super.initState();
-    _filteredItems = widget.listitems;
+    _filteredItems = widget.listItems;
 
-    _controller.addListener(() {
+    _searchController.addListener(() {
       setState(() {
-        _filteredItems = widget.listitems
-            .where((item) =>
-                item.toLowerCase().contains(_controller.text.toLowerCase()))
+        _filteredItems = widget.listItems
+            .where((item) => item
+                .toLowerCase()
+                .contains(_searchController.text.toLowerCase()))
             .toList();
       });
     });
 
     _focusNode.addListener(() {
-      setState(() {}); // Rebuild UI when focus changes
+      setState(() {}); // Trigger rebuild when focus changes
     });
   }
 
   @override
   void dispose() {
-    _focusNode.dispose(); // Dispose the FocusNode
+    _focusNode.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
-  double _checkIfDouble() {
-    String input = _controller.text;
+  double _parseInputToDouble() {
+    final input = _searchController.text;
+    final doubleValue = double.tryParse(input);
+    final intValue = int.tryParse(input);
 
-    double? doublevalue = double.tryParse(input) ?? 0;
-    int? intvalue = int.tryParse(input) ?? 0;
-    double? finalvalue = 0.0;
-
-    if (doublevalue != 0) {
-      finalvalue = doublevalue;
+    if (doubleValue != null) {
+      return doubleValue;
     }
-    if (intvalue != 0) {
-      finalvalue = double.tryParse('$intvalue.${0}');
+    if (intValue != null) {
+      return intValue.toDouble();
     }
-
-    return finalvalue!;
+    return 0.0;
   }
 
-  Color _toggleCheckCircleColor() {
-    if (_focusNode.hasFocus || _controller.text.isEmpty) {
+  Color _getCheckCircleColor() {
+    if (_focusNode.hasFocus || _searchController.text.isEmpty) {
       return Colors.transparent;
     }
-    if (widget.isnumeric && _checkIfDouble() == 0) {
+    if (widget.isNumeric && _parseInputToDouble() == 0) {
       return Colors.transparent;
     }
-    setState(() {
-      widget.controller.text = _controller.text;
-    });
+    if (!widget.isNumeric && _searchController.text.length < 2) {
+      return Colors.transparent;
+    }
+    widget.controller.text = _searchController.text;
+
     return Colors.green;
   }
 
-  BoxDecoration _isboardershowing() {
-    if (widget.hasboarder == true) {
+  BoxDecoration _getBorderDecoration() {
+    if (widget.hasBorder) {
       return BoxDecoration(
-          color: Colors.black,
-          border: Border.all(color: Colors.white, width: 1.0));
+        color: Colors.black,
+        border: Border.all(color: Colors.white, width: 1.0),
+      );
     }
     return const BoxDecoration(color: Colors.black);
   }
 
+  void _validateInput() {
+    if (widget.isNumeric && _parseInputToDouble() == 0.0) {
+      widget.onErrorChanged?.call('Please enter a valid number');
+    } else if (!widget.isNumeric && _searchController.text.length < 2) {
+      widget.onErrorChanged?.call('Please enter atleast two chars');
+    } else {
+      widget.onErrorChanged?.call(null);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 12.0),
-          decoration: _isboardershowing(),
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _controller,
-                focusNode: _focusNode,
-                onChanged: (value) {
-                  _controller.text = value;
-                },
-                decoration: InputDecoration(
-                  hintText: widget.defaulttext,
-                  hintStyle: const TextStyle(
-                    fontSize: 13.0,
-                    color: Colors.grey,
-                  ),
-                  suffixIcon: Icon(
-                    Icons.check_circle,
-                    size: 23.0,
-                    color: _toggleCheckCircleColor(),
-                  ),
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder
-                      .none, // Removes the underline when not focused
-                  focusedBorder:
-                      InputBorder.none, // Removes the underline when focused
-                  isDense: true,
-                  contentPadding: EdgeInsets.zero,
-                ),
-                style: const TextStyle(
-                  fontSize: 13.0,
-                  color: Colors.white,
-                ),
-                textAlignVertical: TextAlignVertical.center,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(left: 12.0),
+      decoration: _getBorderDecoration(),
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _searchController,
+            focusNode: _focusNode,
+            onChanged: (_) => _validateInput(),
+            decoration: InputDecoration(
+              hintText: widget.defaultText,
+              hintStyle: const TextStyle(
+                fontSize: 13.0,
+                color: Colors.grey,
               ),
-              if (_controller.text.isNotEmpty && _focusNode.hasFocus)
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 100, // Set the maximum height here
-                  ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: _filteredItems.map<Widget>((item) {
-                        return GestureDetector(
-                          onTap: () {
-                            _controller.text = item.toString();
-                            _focusNode.unfocus();
-                          },
-                          child: SizedBox(
-                            height: 25,
-                            width: MediaQuery.of(context).size.width,
-                            child: Text(item),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                )
-            ],
-          ),
-        ),
-        if (widget.isnumeric &&
-            _checkIfDouble() == 0.0 &&
-            widget.errormessage != null &&
-            !_focusNode.hasFocus)
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              widget.errormessage!,
-              style: const TextStyle(color: Colors.red, fontSize: 12.0),
+              suffixIcon: Icon(
+                Icons.check_circle,
+                size: 23.0,
+                color: _getCheckCircleColor(),
+              ),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              isDense: true,
+              contentPadding: EdgeInsets.zero,
             ),
-          ),
-        if (!widget.isnumeric &&
-            widget.controller.text.isEmpty &&
-            widget.errormessage != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0),
-            child: Text(
-              widget.errormessage!,
-              style: const TextStyle(color: Colors.red, fontSize: 12.0),
+            style: const TextStyle(
+              fontSize: 13.0,
+              color: Colors.white,
             ),
+            textAlignVertical: TextAlignVertical.center,
           ),
-      ],
+          if (_searchController.text.isNotEmpty && _focusNode.hasFocus)
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 100),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: _filteredItems.map((item) {
+                    return GestureDetector(
+                      onTap: () {
+                        _searchController.text = item;
+                        _focusNode.unfocus();
+                      },
+                      child: SizedBox(
+                        height: 25,
+                        width: MediaQuery.of(context).size.width,
+                        child: Text(item),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

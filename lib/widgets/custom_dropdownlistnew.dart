@@ -38,6 +38,19 @@ class CustomDropdownlistnewState extends State<CustomDropdownlistnew> {
     });
   }
 
+  Icon _toggleCheckIcon() {
+    if (isdropdiwnshowing) {
+      return const Icon(
+        Icons.check_circle,
+        color: Colors.transparent,
+      );
+    }
+    return const Icon(
+      Icons.check_circle,
+      color: Colors.green,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     print(widget.errormessage);
@@ -75,10 +88,7 @@ class CustomDropdownlistnewState extends State<CustomDropdownlistnew> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(widget.controller.text),
-                              const Icon(
-                                Icons.check_circle,
-                                color: Colors.green,
-                              )
+                              _toggleCheckIcon(),
                             ],
                           )),
               ),
@@ -92,8 +102,14 @@ class CustomDropdownlistnewState extends State<CustomDropdownlistnew> {
                       children: widget.listitems.map<Widget>((item) {
                         return GestureDetector(
                           onTap: () {
-                            widget.controller.text = item;
+                            setState(() {
+                              widget.controller.text = item;
+                            });
                             _toggledropdown();
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                            );
                           },
                           child: SizedBox(
                             height: 25,

@@ -46,7 +46,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
   late WorkoutService workoutService;
 
   final List<SelectedExercise> selectedExercises = [];
-  final SelectedExercise selectedExercise =
+  SelectedExercise selectedExercise =
       SelectedExercise(name: '', reps: '', sets: '', weight: 0);
 
   final List<String> _workoutList = [
@@ -79,13 +79,13 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
     super.dispose();
   }
 
-  void _validateExerciseInput() {
+  bool _validateExerciseInput() {
     setState(() {
-      _workoutError =
-          _repsController.text.isEmpty ? 'Please input workout.' : null;
+      // _workoutError =
+      //     _repsController.text.isEmpty ? 'Please input workout.' : null;
 
-      _exerciseError =
-          _repsController.text.isEmpty ? 'Please input exercise.' : null;
+      // _exerciseError =
+      //     _repsController.text.isEmpty ? 'Please input exercise.' : null;
 
       _repsError = _repsController.text.isEmpty
           ? 'Please select the number of reps.'
@@ -95,14 +95,26 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
           ? 'Please select the number of sets.'
           : null;
 
-      _weightError = _weigthController.text.isEmpty ||
-              double.tryParse(_weigthController.text) == null
+      _weightError = _weigthController.text.isEmpty
           ? 'Please enter a valid weight.'
           : null;
     });
 
     // Return true if all fields are valid
-    // return _repsError == null && _setsError == null && _weightError == null;
+    return _repsError == null && _setsError == null && _weightError == null;
+  }
+
+  bool _validateWorkoutInput() {
+    setState(() {
+      _workoutError =
+          _workoutController.text.isEmpty ? 'Please input workout.' : null;
+
+      _exerciseError =
+          selectedExercises.isEmpty ? 'Please input exercise.' : null;
+    });
+
+    // Return true if all fields are valid
+    return _weightError == null && _exerciseError == null;
   }
 
   void _saveTrainingData() async {
@@ -110,8 +122,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
       final List<Exercise> exerciseList = [];
       if (_formKey.currentState!.validate() &&
           _selectedDate != null &&
-          allcompleteexercise.isNotEmpty &&
-          _workoutController.text.isNotEmpty) {
+          _validateWorkoutInput() == true) {
         print(allcompleteexercise);
         final workoutValue = _workoutController.text.toString();
 
@@ -123,7 +134,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
             date: _selectedDate.toString(),
             userId: userIdValue);
 
-        for (var exercise in allcompleteexercise) {
+        for (var exercise in selectedExercises) {
           final newExercise = Exercise(
             name: exercise.name.trim(),
             kg: exercise.weight,
@@ -243,14 +254,30 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                 ],
                               ),
                             ),
-                            CustomSearchDropdownlist(
-                                isnumeric: false,
-                                errormessage: _workoutError,
-                                controller: _workoutController,
-                                hasboarder: true,
-                                defaulttext: 'Enter Workout',
-                                listitems: _workoutList),
-                            if (allcompleteexercise.isNotEmpty)
+                            CustomSearchDropdownList(
+                              isNumeric: false,
+                              errorMessage: _workoutError,
+                              controller: _workoutController,
+                              hasBorder: true,
+                              defaultText: 'Enter Workout',
+                              listItems: _workoutList,
+                              onErrorChanged: (newError) {
+                                setState(() {
+                                  _workoutError = newError;
+                                });
+                              },
+                            ),
+                            if (_workoutError != null)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 4.0),
+                                child: Text(
+                                  _workoutError!,
+                                  style: const TextStyle(
+                                      color: Colors.red, fontSize: 12.0),
+                                ),
+                              ),
+                            if (selectedExercises.isNotEmpty)
                               Column(
                                 children: [
                                   const SizedBox(
@@ -269,7 +296,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                           8.0, // Vertical spacing between rows
                                       alignment: WrapAlignment.center,
                                       children:
-                                          allcompleteexercise.map((exercise) {
+                                          selectedExercises.map((exercise) {
                                         return SizedBox(
                                           child: Container(
                                             padding: const EdgeInsets.all(4.0),
@@ -300,7 +327,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                                 GestureDetector(
                                                   onTap: () {
                                                     setState(() {
-                                                      allcompleteexercise
+                                                      selectedExercises
                                                           .remove(exercise);
                                                     });
                                                   },
@@ -324,14 +351,36 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                             const SizedBox(
                               height: 16.0,
                             ),
-                            _exerciseController.text.isEmpty
-                                ? CustomSearchDropdownlist(
-                                    isnumeric: false,
-                                    errormessage: _exerciseError,
-                                    hasboarder: true,
-                                    controller: _exerciseController,
-                                    defaulttext: 'Enter Exercise',
-                                    listitems: _exerciseList)
+                            _exerciseController.text.isEmpty &&
+                                    _exerciseController.text.length < 2
+                                ? Column(
+                                    children: [
+                                      CustomSearchDropdownList(
+                                        isNumeric: false,
+                                        errorMessage: _exerciseError,
+                                        hasBorder: true,
+                                        controller: _exerciseController,
+                                        defaultText: 'Enter Exercise',
+                                        listItems: _exerciseList,
+                                        onErrorChanged: (newError) {
+                                          setState(() {
+                                            _exerciseError = newError;
+                                          });
+                                        },
+                                      ),
+                                      if (_exerciseError != null)
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 4.0),
+                                          child: Text(
+                                            _exerciseError!,
+                                            style: const TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12.0),
+                                          ),
+                                        ),
+                                    ],
+                                  )
                                 : Container(
                                     width: MediaQuery.of(context).size.width,
                                     padding: const EdgeInsets.symmetric(
@@ -402,19 +451,58 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                         const SizedBox(
                                           height: 5.0,
                                         ),
-                                        CustomSearchDropdownlist(
-                                            isnumeric: true,
-                                            errormessage: _weightError,
-                                            hasboarder: true,
-                                            controller: _weigthController,
-                                            defaulttext: 'Enter Weigth',
-                                            listitems: const []),
+                                        CustomSearchDropdownList(
+                                          isNumeric: true,
+                                          errorMessage: _weightError,
+                                          hasBorder: true,
+                                          controller: _weigthController,
+                                          defaultText: 'Enter Weigth',
+                                          listItems: const [],
+                                          onErrorChanged: (newError) {
+                                            setState(() {
+                                              _weightError = newError;
+                                            });
+                                          },
+                                        ),
+                                        if (_weightError != null)
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0),
+                                            child: Text(
+                                              _weightError!,
+                                              style: const TextStyle(
+                                                  color: Colors.red,
+                                                  fontSize: 12.0),
+                                            ),
+                                          ),
                                         const SizedBox(
                                           height: 10.0,
                                         ),
                                         GestureDetector(
                                             onTap: () {
-                                              _validateExerciseInput();
+                                              if (_validateExerciseInput() ==
+                                                  true) {
+                                                selectedExercise.name =
+                                                    _exerciseController.text;
+                                                selectedExercise.reps =
+                                                    _repsController.text;
+                                                selectedExercise.sets =
+                                                    _setsController.text;
+                                                selectedExercise.weight =
+                                                    double.tryParse(
+                                                            _weigthController
+                                                                .text) ??
+                                                        0;
+                                                0;
+                                                selectedExercises
+                                                    .add(selectedExercise);
+                                                setState(() {
+                                                  _exerciseController.clear();
+                                                  _repsController.clear();
+                                                  _setsController.clear();
+                                                  _weigthController.clear();
+                                                });
+                                              }
                                             },
                                             child: const Text(
                                               'Add',
