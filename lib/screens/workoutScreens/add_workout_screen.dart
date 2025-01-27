@@ -11,7 +11,7 @@ import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
-import 'package:nesforgains/widgets/custom_dropdownlistnew.dart';
+import 'package:nesforgains/widgets/custom_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_search_dropdownlist.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';

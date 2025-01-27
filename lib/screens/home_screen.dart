@@ -135,16 +135,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                         const SizedBox(height: 8.0),
                         const Text(
-                          '🎅 Träning i juletid: För att kunna lyfta både granen och alla godsaker! 🎄\n'
-                          'När snön faller och julens alla smaker lockar, är det lätt att fastna i soffan med en kopp glögg. '
-                          'Men vi vet alla att julen handlar om mer än bara julbord och ledighet – det handlar om att hålla igång '
-                          'så att du kan njuta av allt det goda utan att känna dig som en julaftons-dekadens!\n\n'
-                          '🎁 Kasta in några rejäla pass: Förbered dig på att bära hem alla julklappar utan att behöva be om hjälp – '
-                          'en stark kropp gör att du orkar mer än bara att öppna paket.\n'
-                          '🍪 Balans är nyckeln: Sätt upp målet att kunna njuta av pepparkakor och glögg utan att behöva ångra dig dagen efter. '
-                          'Det handlar inte om att säga nej till allt, utan att hitta en balans som funkar för dig.\n'
-                          '🎅 Upptäck nya recept: Fyll på med måltider som får dig att känna dig både stark och nöjd – för ja, du kan äta både gott och nyttigt samtidigt!\n\n'
-                          'Så, när julen rullar in, kör på med träning, god mat och ett hälsosamt sinne. För vi vet att det är möjligt att vara både stark och julglad – ett lyft, en tallrik och en dag i taget! 💪🎄',
+                          '❄️ Vinterträning: För att inte förvandlas till en soffpotatis i köldchock! ⛄\n'
+                          'Snön vräker ner, termometern hånskrattar åt dig, och soffan försöker viska söta lögner om att du inte behöver röra dig. '
+                          'Men låt oss vara ärliga – om du inte tar dig i kragen nu, kommer vintern att äta dig levande, en lussekatt i taget.\n\n'
+                          '💪 Skärp dig och lyft något: Gymmet väntar, och nej, det räcker inte att lyfta fjärrkontrollen. Om du ska överleva halkan och skotta uppfarten utan att bryta ihop, '
+                          'behöver du muskler – stora, arga muskler som skrattar åt snöskyffeln.\n'
+                          '☃️ Balans, eller något åt det hållet: Ja, du kan dricka varm choklad, men bara om du också lyfter tungt nog för att förbränna den. '
+                          'Annars blir du snart en del av vinterlandskapet – som en snögubbe med dubbelhaka.\n'
+                          '❄️ Motivation? Tänk på skidsäsongen: Ingen vill vara den som flåsar som en blåsbälg i första backen. '
+                          'Rör på dig nu, så slipper du se ut som en säl på hal is när det väl gäller.\n\n'
+                          'Så, dra på dig träningskläderna, sluta gnälla och gör jobbet. Vintern är hård, men det ska du också vara – en svettpöl och ett skrikande pass i taget! 🏋️‍♂️❄️',
                           textAlign: TextAlign.center,
                         )
                       ],
