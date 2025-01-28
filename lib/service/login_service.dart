@@ -10,7 +10,22 @@ class LoginService {
 
   Future<UserData> loginUser(String usernameOrEmail, String password) async {
     try {
-      final List<Map<String, dynamic>> results = await _sqflite.query(
+      final List<Map<String, dynamic>> userResult = await _sqflite.query(
+        'AppUser',
+        where: 'username = ? OR email = ?',
+        whereArgs: [
+          usernameOrEmail.toLowerCase(),
+          usernameOrEmail.toLowerCase(),
+        ],
+      );
+
+      final List<Map<String, dynamic>> passwordResult = await _sqflite.query(
+        'AppUser',
+        where: 'password = ?',
+        whereArgs: [password],
+      );
+
+      final List<Map<String, dynamic>> finalResult = await _sqflite.query(
         'AppUser',
         where: '(username = ? OR email = ?) AND password = ?',
         whereArgs: [
@@ -20,11 +35,14 @@ class LoginService {
         ],
       );
 
-      if (results.isEmpty) {
-        throw Exception('Invalid username/email or password.');
+      if (userResult.isEmpty && password.isNotEmpty) {
+        return UserData(
+            id: 'errorOne', username: 'Fel användarnamn eller email.');
+      } else if (passwordResult.isEmpty && userResult.isNotEmpty) {
+        return UserData(id: 'errorTwo', username: 'Fel lösenord.');
       }
 
-      final user = results.first;
+      final user = finalResult.first;
       final userData = UserData(
         id: user['id'] as String,
         username: user['username'] as String,

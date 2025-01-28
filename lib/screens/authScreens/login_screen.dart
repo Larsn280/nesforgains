@@ -19,7 +19,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  String usernameError = '';
+  String passwordError = '';
 
   late LoginService loginService;
   static const _storage = FlutterSecureStorage();
@@ -49,21 +50,42 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Handle user login
   void _loginUser() async {
     try {
-      if (_formKey.currentState!.validate()) {
+      setState(() {
+        usernameError = _usernameController.text.isEmpty
+            ? 'Vänligen ange ett användarnamn eller email.'
+            : '';
+        passwordError = _passwordController.text.isEmpty
+            ? 'Vänligen ange ett löenord.'
+            : '';
+      });
+
+      if (usernameError == '' && passwordError == '') {
         final response = await loginService.loginUser(
           _usernameController.text.trim(),
           _passwordController.text.trim(),
         );
-        if (response.username.isNotEmpty && mounted) {
-          AuthProvider.of(context)
-              .login(response.id, response.username.toString());
-          Navigator.pushReplacementNamed(context, '/homeScreen');
+        if (response.id == 'errorOne') {
+          setState(() {
+            usernameError = response.username;
+          });
+        } else if (response.id == 'errorTwo') {
+          setState(() {
+            passwordError = response.username;
+          });
+        } else {
+          if (mounted) {
+            AuthProvider.of(context)
+                .login(response.id, response.username.toString());
+            Navigator.pushReplacementNamed(context, '/homeScreen');
+          }
         }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: ${e.toString()}')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login failed: ${e.toString()}')),
+        );
+      }
     }
   }
 
@@ -86,77 +108,108 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 40.0),
               CustomCards.buildFormCard(
                 context: context,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Login Screen',
-                        style: AppConstants.headingStyle,
-                      ),
-                      const SizedBox(height: 16.0),
-                      TextFormField(
-                        key: const ValueKey('username'),
-                        controller: _usernameController,
-                        decoration: const InputDecoration(
-                          labelText: 'Username',
-                          hintText: 'example@example.com',
-                          filled: true,
-                          fillColor: Colors.black45,
-                          prefixIcon: Icon(Icons.person, color: Colors.white),
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a valid username.';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(height: 16.0),
-                      TextFormField(
-                        key: const ValueKey('password'),
-                        controller: _passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                          hintText: 'password',
-                          filled: true,
-                          fillColor: Colors.black45,
-                          prefixIcon: Icon(Icons.lock, color: Colors.white),
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password.';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Logga in',
+                      style: AppConstants.headingStyle,
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildTextFormField(
+                      controller: _usernameController,
+                      hintText: 'Användarnamn/Email',
+                      textInputType: TextInputType.text,
+                      icon: const Icon(Icons.person, color: Colors.white),
+                      errorMessage: usernameError,
+                      hasBorder: true,
+                    ),
+                    const SizedBox(height: 8.0),
+                    _buildTextFormField(
+                      controller: _passwordController,
+                      hintText: 'Lösenord',
+                      textInputType: TextInputType.text,
+                      icon: const Icon(Icons.lock, color: Colors.white),
+                      errorMessage: passwordError,
+                      hasBorder: true,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 32.0),
               CustomButtons.buildElevatedFunctionButton(
                 context: context,
                 onPressed: _loginUser,
-                text: 'Login',
+                text: 'Logga in',
               ),
               CustomButtons.buildElevatedFunctionButton(
                 context: context,
                 onPressed: () {
                   Navigator.pushNamed(context, '/registerScreen');
                 },
-                text: 'Register',
+                text: 'Registrera',
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String hintText,
+    required TextInputType textInputType,
+    required Icon icon,
+    required String errorMessage,
+    required bool hasBorder,
+  }) {
+    BoxDecoration getBorderDecoration() {
+      if (hasBorder) {
+        return BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.white, width: 1.0),
+        );
+      }
+      return const BoxDecoration(color: Colors.black);
+    }
+
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.only(left: 12.0),
+          decoration: getBorderDecoration(),
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                fontSize: 13.0,
+                color: Colors.grey,
+              ),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+              isDense: true,
+              filled: true,
+              fillColor: Colors.black,
+              prefixIcon: icon,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            keyboardType: textInputType,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        if (errorMessage != '')
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.red, fontSize: 12.0),
+            ),
+          ),
+      ],
     );
   }
 }
