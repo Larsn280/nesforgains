@@ -23,7 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String passwordError = '';
 
   late LoginService loginService;
-  static const _storage = FlutterSecureStorage();
 
   @override
   void initState() {
