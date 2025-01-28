@@ -8,41 +8,41 @@ class LoginService {
 
   LoginService(this._sqflite);
 
-  Future<UserData> loginUser(String usernameOrEmail, String password) async {
+  Future<Map<String, dynamic>> loginUser(
+      String usernameOrEmail, String password) async {
     try {
-      final List<Map<String, dynamic>> userResult = await _sqflite.query(
-        'AppUser',
-        where: 'username = ? OR email = ?',
-        whereArgs: [
-          usernameOrEmail.toLowerCase(),
-          usernameOrEmail.toLowerCase(),
-        ],
-      );
-
-      final List<Map<String, dynamic>> passwordResult = await _sqflite.query(
-        'AppUser',
-        where: 'password = ?',
-        whereArgs: [password],
-      );
-
-      final List<Map<String, dynamic>> finalResult = await _sqflite.query(
+      // Query the database for the user with the provided username/email and password
+      final List<Map<String, dynamic>> results = await _sqflite.query(
         'AppUser',
         where: '(username = ? OR email = ?) AND password = ?',
         whereArgs: [
           usernameOrEmail.toLowerCase(),
           usernameOrEmail.toLowerCase(),
-          password
+          password,
         ],
       );
 
-      if (userResult.isEmpty && password.isNotEmpty) {
-        return UserData(
-            id: 'errorOne', username: 'Fel användarnamn eller email.');
-      } else if (passwordResult.isEmpty && userResult.isNotEmpty) {
-        return UserData(id: 'errorTwo', username: 'Fel lösenord.');
+      // If no matching user is found
+      if (results.isEmpty) {
+        // Check if username/email exists
+        final List<Map<String, dynamic>> userCheck = await _sqflite.query(
+          'AppUser',
+          where: '(username = ? OR email = ?)',
+          whereArgs: [
+            usernameOrEmail.toLowerCase(),
+            usernameOrEmail.toLowerCase(),
+          ],
+        );
+
+        if (userCheck.isEmpty) {
+          return {'success': false, 'error': 'Fel användarnamn eller email.'};
+        } else {
+          return {'success': false, 'error': 'Fel lösenord.'};
+        }
       }
 
-      final user = finalResult.first;
+      // User found, return success and user data
+      final user = results.first;
       final userData = UserData(
         id: user['id'] as String,
         username: user['username'] as String,
@@ -52,7 +52,7 @@ class LoginService {
       await _storage.write(key: 'user_id', value: userData.id);
       await _storage.write(key: 'username', value: userData.username);
 
-      return userData;
+      return {'success': true, 'user': userData};
     } catch (e) {
       throw Exception('Error logging in user: $e');
     }

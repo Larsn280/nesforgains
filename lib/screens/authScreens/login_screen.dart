@@ -49,35 +49,44 @@ class _LoginScreenState extends State<LoginScreen> {
   /// Handle user login
   void _loginUser() async {
     try {
+      // Reset error messages before validation
       setState(() {
         usernameError = _usernameController.text.isEmpty
             ? 'Vänligen ange ett användarnamn eller email.'
             : '';
         passwordError = _passwordController.text.isEmpty
-            ? 'Vänligen ange ett löenord.'
+            ? 'Vänligen ange ett lösenord.'
             : '';
       });
 
-      if (usernameError == '' && passwordError == '') {
+      // Proceed only if there are no input validation errors
+      if (usernameError.isEmpty && passwordError.isEmpty) {
         final response = await loginService.loginUser(
           _usernameController.text.trim(),
           _passwordController.text.trim(),
         );
-        if (response.id == 'errorOne') {
-          setState(() {
-            usernameError = response.username;
-          });
-        } else if (response.id == 'errorTwo') {
-          setState(() {
-            passwordError = response.username;
-          });
-        } else {
-          if (mounted) {
-            AuthProvider.of(context)
-                .login(response.id, response.username.toString());
+
+        // Handle error cases based on response
+        setState(() {
+          if (response['success'] == false) {
+            final error = response['error'];
+            if (error == 'Fel användarnamn eller email.') {
+              usernameError = error;
+            } else if (error == 'Fel lösenord.') {
+              passwordError = error;
+            } else if (error.contains(',')) {
+              // Handle both errors case
+              final errors = error.split(',');
+              usernameError = errors[0].trim();
+              passwordError = errors[1].trim();
+            }
+          } else if (response['success'] == true) {
+            // Login successful
+            final user = response['user'];
+            AuthProvider.of(context).login(user.id, user.username);
             Navigator.pushReplacementNamed(context, '/homeScreen');
           }
-        }
+        });
       }
     } catch (e) {
       if (mounted) {
