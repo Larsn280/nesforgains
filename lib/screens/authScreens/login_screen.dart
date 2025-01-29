@@ -132,7 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       errorMessage: usernameError,
                       hasBorder: true,
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 16.0),
                     _buildTextFormField(
                       controller: _passwordController,
                       hintText: 'Lösenord',
@@ -144,7 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 32.0),
+              const SizedBox(height: 8.0),
               CustomButtons.buildElevatedFunctionButton(
                 context: context,
                 onPressed: _loginUser,
@@ -152,8 +152,24 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               CustomButtons.buildElevatedFunctionButton(
                 context: context,
-                onPressed: () {
-                  Navigator.pushNamed(context, '/registerScreen');
+                onPressed: () async {
+                  final result =
+                      await Navigator.pushNamed(context, '/registerScreen');
+
+                  if (result != null && result is String) {
+                    List<String> credentials = result
+                        .toString()
+                        .split(',')
+                        .map((e) => e.trim())
+                        .toList();
+
+                    if (credentials.length == 2) {
+                      setState(() {
+                        _usernameController.text = credentials[0]; // Email
+                        _passwordController.text = credentials[1]; // Password
+                      });
+                    }
+                  }
                 },
                 text: 'Registrera',
               ),

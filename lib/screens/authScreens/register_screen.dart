@@ -19,7 +19,8 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  String emailError = '';
+  String passwordError = '';
 
   late RegisterService registerService;
 
@@ -38,21 +39,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _createNewUser() async {
     try {
-      if (_formKey.currentState!.validate()) {
-        String response = await registerService.createNewUser(
-            _emailController.text.toString(),
-            _passwordController.text.toString());
+      setState(() {
+        emailError =
+            _emailController.text.isEmpty ? 'Vänligen ange en email.' : '';
+        passwordError = _passwordController.text.isEmpty
+            ? 'Vänligen ange ett lösenord'
+            : '';
+      });
+
+      if (emailError.isEmpty && passwordError.isEmpty) {
+        final response = await registerService.createNewUser(
+            _emailController.text.trim(), _passwordController.text.trim());
         logger.i(response);
         logger.i('Username: ${_emailController.text}');
         logger.i('Password: ${_passwordController.text}');
 
-        CustomSnackbar.showSnackBar(
-            message: '${_emailController.text.toString()} was registered.');
-        if (response != '') {
-          if (mounted) {
-            Navigator.pop(context);
+        // Handle error cases based on response
+        setState(() {
+          if (response['success'] == false) {
+            final error = response['error'];
+            if (error == 'Ogiltig emailadress: ${_emailController.text}') {
+              emailError = error;
+            } else if (error ==
+                'Användaren med email: ${_emailController.text} finns redan!') {
+              emailError = error;
+            }
+          } else if (response['success'] == true) {
+            // Login successful
+            CustomSnackbar.showSnackBar(
+                message: '${_emailController.text.toString()} was registered.');
+            if (mounted) {
+              Navigator.pop(context,
+                  '${_emailController.text}, ${_passwordController.text}');
+            }
           }
-        }
+        });
       }
     } catch (e) {
       logger.w('Error creating user', error: e);
@@ -79,79 +100,108 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
               CustomCards.buildFormCard(
                 context: context,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Register Screen',
-                        style: AppConstants.headingStyle,
-                      ),
-                      const SizedBox(height: 16.0),
-                      TextFormField(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Ny användare',
+                      style: AppConstants.headingStyle,
+                    ),
+                    const SizedBox(height: 16.0),
+                    _buildTextFormField(
                         controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'example@examplesson.com',
-                          filled: true,
-                          fillColor: Colors.black54,
-                          prefixIcon: Icon(Icons.mail, color: Colors.white),
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter valid email';
-                          }
-                          if (!value.contains('@') || !value.contains('.')) {
-                            return 'Please enter valid email';
-                          }
-                          return null;
-                        },
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                      TextFormField(
+                        hintText: 'Email',
+                        textInputType: TextInputType.text,
+                        icon: const Icon(Icons.mail, color: Colors.white),
+                        errorMessage: emailError,
+                        hasBorder: true),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    _buildTextFormField(
                         controller: _passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                          hintText: 'Enter yout password',
-                          filled: true,
-                          fillColor: Colors.black54,
-                          prefixIcon: Icon(Icons.lock, color: Colors.white),
-                        ),
-                        keyboardType: TextInputType.text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a password';
-                          }
-                          return null;
-                        },
-                      ),
-                    ],
-                  ),
+                        hintText: 'Lösenord',
+                        textInputType: TextInputType.text,
+                        icon: const Icon(Icons.lock, color: Colors.white),
+                        errorMessage: passwordError,
+                        hasBorder: true),
+                  ],
                 ),
               ),
               const SizedBox(
-                height: 32.0,
+                height: 8.0,
               ),
               CustomButtons.buildElevatedFunctionButton(
                   context: context,
                   onPressed: _createNewUser,
-                  text: 'Register'),
+                  text: 'Registrera'),
               CustomButtons.buildElevatedFunctionButton(
                   context: context,
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  text: 'Go back'),
+                  text: 'Tillbaka'),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String hintText,
+    required TextInputType textInputType,
+    required Icon icon,
+    required String errorMessage,
+    required bool hasBorder,
+  }) {
+    BoxDecoration getBorderDecoration() {
+      if (hasBorder) {
+        return BoxDecoration(
+          color: Colors.black,
+          border: Border.all(color: Colors.white, width: 1.0),
+        );
+      }
+      return const BoxDecoration(color: Colors.black);
+    }
+
+    return Column(
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.only(left: 12.0),
+          decoration: getBorderDecoration(),
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: const TextStyle(
+                fontSize: 13.0,
+                color: Colors.grey,
+              ),
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+              isDense: true,
+              filled: true,
+              fillColor: Colors.black,
+              prefixIcon: icon,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            keyboardType: textInputType,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+        if (errorMessage != '')
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: Text(
+              errorMessage,
+              style: const TextStyle(color: Colors.red, fontSize: 12.0),
+            ),
+          ),
+      ],
     );
   }
 }
