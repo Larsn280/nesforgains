@@ -193,7 +193,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(height: 16.0),
                             // Date Picker
                             Padding(
                               padding: const EdgeInsets.symmetric(

@@ -27,7 +27,7 @@ class CustomCards {
       color: color,
       elevation: 4,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+          // borderRadius: BorderRadius.circular(10.0),
           side: const BorderSide(color: Colors.white, width: 1.0)),
       child: Padding(padding: const EdgeInsets.all(8.0), child: child),
     );

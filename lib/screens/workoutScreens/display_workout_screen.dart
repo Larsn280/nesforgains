@@ -245,7 +245,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
       child: Row(
         children: [
           _buildTrainingColumnHeader(
-              title: 'Workout/Exercise', widthFactor: 0.60),
+              title: 'Träningpass/Övning', widthFactor: 0.60),
           !areAllWorkoutsMarked
               ? Flexible(
                   child: Row(
@@ -277,7 +277,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
   }
 
   Widget _buildTrainingRow(Workout log) {
-    Color color = Colors.black54;
+    Color color = Colors.black;
 
     if (log.markedColor != null) {
       if (log.markedColor == 'green') {
