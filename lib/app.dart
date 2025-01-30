@@ -10,6 +10,7 @@ import 'package:nesforgains/screens/nutritionScreens/display_daily_nutrition_scr
 import 'package:nesforgains/screens/nutritionScreens/nutrition_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
+import 'package:nesforgains/screens/workoutScreens/volume_tracker_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/secure_storage_service.dart'; // Import SecureStorageService
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -72,6 +73,8 @@ class App extends StatelessWidget {
               DisplayDailyNutritionScreen(sqflite: sqflite),
           '/displayworkoutScreen': (context) =>
               DisplayWorkoutScreen(sqflite: sqflite),
+          '/volumtrackerScreen': (context) =>
+              VolumeTrackerScreen(sqflite: sqflite),
           '/displayrecipeScreen': (context) =>
               DisplayRecipeScreen(sqflite: sqflite),
           '/displayscoreboardScreen': (context) =>

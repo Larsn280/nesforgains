@@ -138,6 +138,16 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                                 ),
                                 buildMenuOption(
                                   icon: Icons.list,
+                                  label: 'Volym Spårare',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, '/volumtrackerScreen');
+                                    _removeOverlay();
+                                  },
+                                  color: subColor,
+                                ),
+                                buildMenuOption(
+                                  icon: Icons.list,
                                   label: 'Resultattavla',
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(

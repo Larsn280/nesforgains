@@ -21,6 +21,8 @@ dependencies:
   isar: ^3.1.0+1
   path: ^1.9.0
   logger: ^2.3.0
+  # Graphfunction
+  fl_chart: ^0.70.2
   flutter_localization: ^0.3.1
   flutter_secure_storage: ^9.2.4
   # For DateTimeFormatInFrontend

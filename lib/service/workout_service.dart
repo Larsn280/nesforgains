@@ -328,6 +328,25 @@ class WorkoutService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchWorkoutVolume() async {
+    try {
+      final List<Map<String, dynamic>> results = await _sqflite.rawQuery('''
+      SELECT strftime('%Y-%m-%d', w.date) AS day, 
+             SUM(e.sets * e.reps * e.kg) AS totalVolume
+      FROM Exercise e
+      JOIN Workout w ON e.workoutId = w.id
+      WHERE w.date >= date('now', '-1 month')
+      GROUP BY day
+      ORDER BY day
+    ''');
+
+      return results;
+    } catch (e) {
+      logger.e('Error fetching workout volume: $e');
+      return [];
+    }
+  }
+
   String capitalizeFirstLetter(String str) {
     if (str.isEmpty) return str; // Check for empty string
     return str[0].toUpperCase() + str.substring(1).toLowerCase();
