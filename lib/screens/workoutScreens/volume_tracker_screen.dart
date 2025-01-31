@@ -130,26 +130,31 @@ class _VolumeTrackerScreen extends State<VolumeTrackerScreen> {
                                     ),
                                     axisNameSize: 32,
                                     sideTitles: SideTitles(
-                                        showTitles: true,
-                                        reservedSize:
-                                            50, // Use reservedSize for spacing
+                                      showTitles: true,
+                                      reservedSize:
+                                          50, // Use reservedSize for spacing
 
-                                        getTitlesWidget:
-                                            (value, TitleMeta meta) {
-                                          if (value == 0) {
-                                            return Container(); // Don't show the zero value
-                                          }
+                                      getTitlesWidget: (value, TitleMeta meta) {
+                                        // Check if the value exists in workoutData
+                                        bool hasValue = workoutData
+                                            .any((spot) => spot.y == value);
 
-                                          // Format values with "T" for trillion
-                                          String formattedValue = value >= 1000
-                                              ? (value / 1000)
-                                                      .toStringAsFixed(0) +
-                                                  'T' // Format for T (trillion)
-                                              : value.toStringAsFixed(
-                                                  0); // For values below 1000, show normally
+                                        if (!hasValue) {
+                                          return Container(); // Hide values that are not in the dataset
+                                        }
 
-                                          return Text(formattedValue);
-                                        }),
+                                        // Format values with "T" for trillion
+                                        String formattedValue = value >= 1000
+                                            ? '${(value / 1000).toStringAsFixed(0)}T' // Using string interpolation
+                                            : value.toStringAsFixed(0);
+
+                                        return Text(
+                                          formattedValue,
+                                          style:
+                                              const TextStyle(fontSize: 10.0),
+                                        );
+                                      },
+                                    ),
                                   ),
                                   bottomTitles: AxisTitles(
                                     axisNameWidget: const Text('Datum'),
@@ -168,8 +173,11 @@ class _VolumeTrackerScreen extends State<VolumeTrackerScreen> {
                                         // Get the actual date from the dayIndex
                                         DateTime date = DateTime.now()
                                             .add(Duration(days: value.toInt()));
-                                        return Text(DateFormat('dd/MM')
-                                            .format(date)); // Format as dd/MM
+                                        return Text(
+                                          DateFormat('dd/MM').format(date),
+                                          style:
+                                              const TextStyle(fontSize: 10.0),
+                                        ); // Format as dd/MM
                                       },
                                     ),
                                   ),
