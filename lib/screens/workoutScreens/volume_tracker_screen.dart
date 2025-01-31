@@ -189,7 +189,21 @@ class _VolumeTrackerScreen extends State<VolumeTrackerScreen> {
                                     sideTitles: SideTitles(
                                         showTitles: false), // Hide right titles
                                   ),
+                                  // Enable zooming and panning here
                                 ),
+                                lineTouchData: LineTouchData(
+                                  touchTooltipData:
+                                      const LineTouchTooltipData(),
+                                  touchCallback: (FlTouchEvent event,
+                                      LineTouchResponse? touchResponse) {
+                                    // You can add extra logic here if needed
+                                  },
+                                  handleBuiltInTouches: true,
+                                ),
+
+                                // Configure zooming & panning
+                                extraLinesData: const ExtraLinesData(),
+                                clipData: const FlClipData.all(), //
                               ),
                             ),
                           ),
