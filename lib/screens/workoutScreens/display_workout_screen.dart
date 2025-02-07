@@ -8,7 +8,7 @@ import 'package:nesforgains/screens/workoutScreens/display_workout_details_scree
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_appbar.dart';
+
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';

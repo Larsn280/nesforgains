@@ -6,7 +6,7 @@ import 'package:nesforgains/service/aws_bucket_service.dart';
 import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/viewModels/userscore_viewmodel.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_appbar.dart';
+
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -47,23 +47,6 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
           await scoreboardService.fetchHighestMaxliftForBenchpress(userId);
       await awsBucketService.syncBenchpressToS3(userId, username, maxlift);
       final response = await awsBucketService.fetchUserscoreDirectlyFromS3();
-      return response;
-    } catch (e) {
-      logger.e('Error fetching scores', error: e);
-      CustomSnackbar.showSnackBar(
-          message:
-              'An error occurred while fetching the scores. Please try again.');
-
-      return [];
-    }
-  }
-
-  Future<List<UserscoreViewmodel>> _fetchAllScores() async {
-    try {
-      await scoreboardService.syncS3ToDatabase();
-      await scoreboardService.updateUserScoresWithMaxLifts(username);
-      final response =
-          await scoreboardService.getBenchpressScoresInDescendingOrder();
       return response;
     } catch (e) {
       logger.e('Error fetching scores', error: e);

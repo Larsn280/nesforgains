@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nesforgains/constants.dart';
+
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/exercise.dart';
 import 'package:nesforgains/models/selected_exercise.dart';
@@ -8,7 +8,7 @@ import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_appbar.dart';
+
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -520,97 +520,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildFormMultiSelectDropdownList({required String defaultText}) {
-    bool isDropdownShowing = false;
-
-    return GestureDetector(
-        onTap: () => {
-              setState(() {
-                isDropdownShowing = !isDropdownShowing;
-              }),
-            },
-        child: isDropdownShowing == false
-            ? Container(
-                width: MediaQuery.of(context).size.width,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                decoration: const BoxDecoration(color: Colors.black54),
-                child: Text(defaultText),
-              )
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
-                decoration: const BoxDecoration(color: Colors.black54),
-                child: const Text(' Is showing'),
-              ));
-  }
-
-  Widget _buildFormDropdownList({
-    required TextEditingController controller,
-    required String defaultText,
-    required List<String> selectList,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      decoration: BoxDecoration(
-        color: Colors.black54, // Background color
-        borderRadius: BorderRadius.circular(8.0), // Rounded corners
-        border: Border.all(color: Colors.white, width: 2.0), // Border color
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: controller.text.isEmpty ? null : controller.text,
-          hint: Text(
-            controller.text.isEmpty ? defaultText : controller.text,
-            style: const TextStyle(color: Colors.white),
-          ),
-          dropdownColor: Colors.black87, // Dropdown background color
-          icon: controller.text.isEmpty
-              ? const Icon(Icons.arrow_drop_down, color: Colors.white)
-              : const Icon(Icons.check_circle, color: Colors.green),
-          style: const TextStyle(color: Colors.white),
-          onChanged: (String? newValue) {
-            if (newValue != null) {
-              controller.text = newValue; // Update the controller text
-            }
-          },
-          items: selectList.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFormTextFormField({
-    required TextEditingController controller,
-    required String lable,
-    required String validatorText,
-    bool isNumeric = false,
-  }) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: lable,
-        filled: true,
-        fillColor: Colors.black54,
-      ),
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return validatorText;
-        }
-        if (isNumeric && int.tryParse(value) == null) {
-          return 'Please enter a valid number';
-        }
-        return null;
-      },
     );
   }
 }
