@@ -124,18 +124,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           icon: const Icon(Icons.lock, color: Colors.white),
                           errorMessage: passwordError,
                           hasBorder: true),
+                      const SizedBox(
+                        height: 8.0,
+                      ),
+                      Wrap(
+                        spacing: 40,
+                        children: [
+                          CustomButton(
+                            onPressed: _createNewUser,
+                            text: 'Registrera',
+                            width: 120,
+                          ),
+                          CustomButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            text: 'Tillbaka',
+                            width: 120,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                CustomButton(onPressed: _createNewUser, text: 'Registrera'),
-                CustomButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    text: 'Tillbaka'),
               ],
             ),
           ),

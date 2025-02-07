@@ -139,35 +139,44 @@ class _LoginScreenState extends State<LoginScreen> {
                         errorMessage: passwordError,
                         hasBorder: true,
                       ),
+                      const SizedBox(height: 8.0),
+                      Wrap(
+                        spacing: 40,
+                        children: [
+                          CustomButton(
+                            onPressed: _loginUser,
+                            text: 'Logga in',
+                            width: 120,
+                          ),
+                          CustomButton(
+                            onPressed: () async {
+                              final result = await Navigator.pushNamed(
+                                  context, '/registerScreen');
+
+                              if (result != null && result is String) {
+                                List<String> credentials = result
+                                    .toString()
+                                    .split(',')
+                                    .map((e) => e.trim())
+                                    .toList();
+
+                                if (credentials.length == 2) {
+                                  setState(() {
+                                    _usernameController.text =
+                                        credentials[0]; // Email
+                                    _passwordController.text =
+                                        credentials[1]; // Password
+                                  });
+                                }
+                              }
+                            },
+                            text: 'Registrera',
+                            width: 120,
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 8.0),
-                CustomButton(
-                  onPressed: _loginUser,
-                  text: 'Logga in',
-                ),
-                CustomButton(
-                  onPressed: () async {
-                    final result =
-                        await Navigator.pushNamed(context, '/registerScreen');
-
-                    if (result != null && result is String) {
-                      List<String> credentials = result
-                          .toString()
-                          .split(',')
-                          .map((e) => e.trim())
-                          .toList();
-
-                      if (credentials.length == 2) {
-                        setState(() {
-                          _usernameController.text = credentials[0]; // Email
-                          _passwordController.text = credentials[1]; // Password
-                        });
-                      }
-                    }
-                  },
-                  text: 'Registrera',
                 ),
               ],
             ),

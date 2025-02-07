@@ -86,13 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  Wrap(
+                    spacing: 40,
+                    alignment: WrapAlignment.center,
                     children: [
-                      CustomButton(onPressed: _launchTrello, text: 'Trello'),
-                      const SizedBox(width: 60.0),
                       CustomButton(
-                          onPressed: _launchKalkylator, text: 'Kalkylator')
+                        onPressed: _launchTrello,
+                        text: 'Trello',
+                        width: 110,
+                      ),
+                      CustomButton(
+                        onPressed: _launchKalkylator,
+                        text: 'Kalkylator',
+                        width: 110,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20.0),
