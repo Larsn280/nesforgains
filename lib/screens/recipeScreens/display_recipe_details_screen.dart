@@ -4,6 +4,7 @@ import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/recipe.dart';
 import 'package:nesforgains/screens/recipeScreens/edit_recipe_screen.dart';
 import 'package:nesforgains/service/recipe_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -83,37 +84,26 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover),
+    return CustomAppContainer(
+      titleText: 'Recept Detaljer',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(title: 'Recipe Details'),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                CustomCards.buildListCard(
-                    context: context,
-                    child: SingleChildScrollView(
-                      child: _buildRecipeDetails(recipe),
-                    )),
-                const SizedBox(height: 8.0),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    text: 'Back'),
-              ],
-            ),
-          ),
-        ),
+          CustomCards.buildListCard(
+              context: context,
+              child: SingleChildScrollView(
+                child: _buildRecipeDetails(recipe),
+              )),
+          const SizedBox(height: 8.0),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              text: 'Back'),
+        ],
       ),
     );
   }

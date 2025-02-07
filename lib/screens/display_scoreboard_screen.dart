@@ -5,6 +5,7 @@ import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/aws_bucket_service.dart';
 import 'package:nesforgains/service/scoreboard_service.dart';
 import 'package:nesforgains/viewModels/userscore_viewmodel.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
@@ -78,54 +79,44 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
   Widget build(BuildContext context) {
     return CustomBackNavigation.customBackNavigation(
       context: context,
-      child: Scaffold(
-        body: SizedBox.expand(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AppConstants.appbackgroundimage),
-                  fit: BoxFit.cover),
+      child: CustomAppContainer(
+        titleText: 'Resultattavla',
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 40.0,
             ),
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Resultattavla',
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                Expanded(
-                  child: FutureBuilder<List<UserscoreViewmodel>>(
-                    future: _futureScores,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return _buildScoreboardList([], 'Indicator');
-                      } else if (snapshot.hasError) {
-                        return _buildScoreboardList([], 'Error loading scores');
-                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return _buildScoreboardList([], 'No scores available');
-                      }
+            Container(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: FutureBuilder<List<UserscoreViewmodel>>(
+                future: _futureScores,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return _buildScoreboardList([], 'Indicator');
+                  } else if (snapshot.hasError) {
+                    return _buildScoreboardList([], 'Error loading scores');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return _buildScoreboardList([], 'No scores available');
+                  }
 
-                      final scores = snapshot.data!;
-                      return _buildScoreboardList(scores, '');
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/');
-                    },
-                    text: 'Hem'),
-                const SizedBox(
-                  height: 20.0,
-                )
-              ],
+                  final scores = snapshot.data!;
+                  return _buildScoreboardList(scores, '');
+                },
+              ),
             ),
-          ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context,
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                text: 'Hem'),
+            const SizedBox(
+              height: 20.0,
+            )
+          ],
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/screens/workoutScreens/edit_workout_screen.dart';
 import 'package:nesforgains/service/workout_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
@@ -92,37 +93,25 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
   Widget build(BuildContext context) {
     return CustomBackNavigation.customBackNavigation(
       context: context,
-      child: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppConstants.appbackgroundimage),
-              fit: BoxFit.cover,
+      child: CustomAppContainer(
+        titleText: 'Träningspass',
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 40.0,
             ),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Träningspass',
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                CustomCards.buildListCard(
-                  context: context,
-                  child: _buildWorkoutDetails(workout),
-                ),
-                const SizedBox(height: 8.0),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    text: 'Tillbaka'),
-              ],
+            CustomCards.buildListCard(
+              context: context,
+              child: _buildWorkoutDetails(workout),
             ),
-          ),
+            const SizedBox(height: 8.0),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context,
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                text: 'Tillbaka'),
+          ],
         ),
       ),
     );

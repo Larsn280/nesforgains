@@ -5,6 +5,7 @@ import 'package:nesforgains/models/nutrition.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/service/nutrition_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -45,54 +46,43 @@ class _DisplayDailyNutritionScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppConstants.appbackgroundimage),
-            fit: BoxFit.cover,
+    return CustomAppContainer(
+      titleText: 'Näringslista',
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 40.0,
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CustomAppbar(
-              title: 'Daily Nutrition List',
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            Expanded(
-              child: FutureBuilder<List<Nutrition>>(
-                future: _fetchDailyNutritionItems(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildDailyNutritionList([], 'Indicator');
-                  } else if (snapshot.hasError) {
-                    return _buildDailyNutritionList(
-                        [], 'Error loading daily nutrition');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildDailyNutritionList(
-                        [], 'No daily nutrition available');
-                  }
+          Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: FutureBuilder<List<Nutrition>>(
+              future: _fetchDailyNutritionItems(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildDailyNutritionList([], 'Indicator');
+                } else if (snapshot.hasError) {
+                  return _buildDailyNutritionList(
+                      [], 'Error loading daily nutrition');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildDailyNutritionList(
+                      [], 'No daily nutrition available');
+                }
 
-                  final dailyNutrition = snapshot.data!;
-                  return _buildDailyNutritionList(dailyNutrition, '');
-                },
-              ),
+                final dailyNutrition = snapshot.data!;
+                return _buildDailyNutritionList(dailyNutrition, '');
+              },
             ),
-            const SizedBox(height: 8.0),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-                text: 'Home'),
-            const SizedBox(height: 8.0),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8.0),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              text: 'Home'),
+          const SizedBox(height: 8.0),
+        ],
       ),
     );
   }

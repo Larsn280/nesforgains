@@ -5,6 +5,7 @@ import 'package:nesforgains/models/ingredient.dart';
 import 'package:nesforgains/models/recipe.dart';
 import 'package:nesforgains/models/stage.dart';
 import 'package:nesforgains/service/recipe_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -102,91 +103,77 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover),
+    return CustomAppContainer(
+      titleText: 'Add new recipe',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Add new recipe',
-                ),
-                const SizedBox(
-                  height: 40.0,
-                ),
-                CustomCards.buildFormCard(
-                  context: context,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 16.0),
-                        // Title Input
-                        _buildTextFormField(
-                            controller: _titleController,
-                            labelText: 'Title',
-                            validatorMessage: 'Please enter the recipe title'),
+          CustomCards.buildFormCard(
+            context: context,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 16.0),
+                  // Title Input
+                  _buildTextFormField(
+                      controller: _titleController,
+                      labelText: 'Title',
+                      validatorMessage: 'Please enter the recipe title'),
 
-                        // Description Input
-                        _buildTextFormField(
-                            controller: _descriptionController,
-                            labelText: 'Description',
-                            validatorMessage: 'Please enter a description'),
+                  // Description Input
+                  _buildTextFormField(
+                      controller: _descriptionController,
+                      labelText: 'Description',
+                      validatorMessage: 'Please enter a description'),
 
-                        // Duration Input
-                        _buildTextFormField(
-                          controller: _durationController,
-                          labelText: 'Duration (in minutes)',
-                          validatorMessage: 'Please enter the duration',
-                          keyboardType: TextInputType.number,
-                          isNumeric: true,
-                        ),
-
-                        // Difficulty Input
-                        _buildTextFormField(
-                            controller: _difficultyController,
-                            labelText: 'Difficulty',
-                            validatorMessage: 'Please enter the difficulty'),
-
-                        // Ingredients Input
-                        _buildTextFormField(
-                            controller: _ingredientsController,
-                            labelText: 'Ingredients (comma separated)',
-                            validatorMessage:
-                                'Please enter at least one ingredient'),
-
-                        // Steps Input
-                        _buildTextFormField(
-                            controller: _stepsController,
-                            labelText: 'Steps (period separated)',
-                            validatorMessage: 'Please enter the steps'),
-                      ],
-                    ),
+                  // Duration Input
+                  _buildTextFormField(
+                    controller: _durationController,
+                    labelText: 'Duration (in minutes)',
+                    validatorMessage: 'Please enter the duration',
+                    keyboardType: TextInputType.number,
+                    isNumeric: true,
                   ),
-                ),
 
-                // Save Button
-                const SizedBox(height: 8.0),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: _handleSaveRecipe,
-                    text: 'Save Recipe'),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    },
-                    text: 'Back')
-              ],
+                  // Difficulty Input
+                  _buildTextFormField(
+                      controller: _difficultyController,
+                      labelText: 'Difficulty',
+                      validatorMessage: 'Please enter the difficulty'),
+
+                  // Ingredients Input
+                  _buildTextFormField(
+                      controller: _ingredientsController,
+                      labelText: 'Ingredients (comma separated)',
+                      validatorMessage: 'Please enter at least one ingredient'),
+
+                  // Steps Input
+                  _buildTextFormField(
+                      controller: _stepsController,
+                      labelText: 'Steps (period separated)',
+                      validatorMessage: 'Please enter the steps'),
+                ],
+              ),
             ),
           ),
-        ),
+
+          // Save Button
+          const SizedBox(height: 8.0),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: _handleSaveRecipe,
+              text: 'Save Recipe'),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              text: 'Back')
+        ],
       ),
     );
   }

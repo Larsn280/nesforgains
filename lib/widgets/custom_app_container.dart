@@ -3,13 +3,13 @@ import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/widgets/custom_navigation_menu.dart';
 
 class CustomAppContainer extends StatelessWidget {
-  final Widget child;
   final String titleText;
+  final Widget child;
 
   const CustomAppContainer({
     super.key,
-    required this.child,
     required this.titleText,
+    required this.child,
   });
 
   @override
@@ -27,13 +27,15 @@ class CustomAppContainer extends StatelessWidget {
         ),
         title: Text(
           titleText,
-          style: const TextStyle(color: Colors.white),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         leading: const CustomNavigationMenu(),
       ),
       body: SizedBox.expand(
         child: Container(
+          padding: const EdgeInsets.all(8.0),
           decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(AppConstants.appbackgroundimage),

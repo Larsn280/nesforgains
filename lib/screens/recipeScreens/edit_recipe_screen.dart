@@ -5,6 +5,7 @@ import 'package:nesforgains/models/ingredient.dart';
 import 'package:nesforgains/models/recipe.dart';
 import 'package:nesforgains/models/stage.dart';
 import 'package:nesforgains/service/recipe_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -128,75 +129,59 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Edit Recipe',
-                ),
-                const SizedBox(height: 40),
-                CustomCards.buildFormCard(
-                  context: context,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 16.0),
-                        _buildTextFormField(
-                            controller: _titleController,
-                            labelText: 'Title',
-                            validatorMessage: 'Please enter title'),
-                        _buildTextFormField(
-                            controller: _descriptionController,
-                            labelText: 'Description',
-                            validatorMessage: 'Please enter description'),
-                        _buildTextFormField(
-                          controller: _durationController,
-                          labelText: 'Duration (mins)',
-                          validatorMessage: 'Please enter duration',
-                          isNumeric: true,
-                          keyboardType: TextInputType.number,
-                        ),
-                        _buildTextFormField(
-                            controller: _difficultyController,
-                            labelText: 'Difficulty',
-                            validatorMessage: 'Please enter difficulty'),
-                        _buildTextFormField(
-                            controller: _ingredientsController,
-                            labelText: 'Ingredients (comma separated)',
-                            validatorMessage:
-                                'Please enter atleast one ingredient'),
-                        _buildTextFormField(
-                            controller: _stagesController,
-                            labelText: 'Steps (period separated)',
-                            validatorMessage: 'Please enter stages'),
-                      ],
-                    ),
+    return CustomAppContainer(
+      titleText: 'Ändra Recept',
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+          CustomCards.buildFormCard(
+            context: context,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 16.0),
+                  _buildTextFormField(
+                      controller: _titleController,
+                      labelText: 'Title',
+                      validatorMessage: 'Please enter title'),
+                  _buildTextFormField(
+                      controller: _descriptionController,
+                      labelText: 'Description',
+                      validatorMessage: 'Please enter description'),
+                  _buildTextFormField(
+                    controller: _durationController,
+                    labelText: 'Duration (mins)',
+                    validatorMessage: 'Please enter duration',
+                    isNumeric: true,
+                    keyboardType: TextInputType.number,
                   ),
-                ),
-                const SizedBox(height: 30.0),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: _handleEditRecipe,
-                    text: 'Save'),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    text: 'Cancle'),
-              ],
+                  _buildTextFormField(
+                      controller: _difficultyController,
+                      labelText: 'Difficulty',
+                      validatorMessage: 'Please enter difficulty'),
+                  _buildTextFormField(
+                      controller: _ingredientsController,
+                      labelText: 'Ingredients (comma separated)',
+                      validatorMessage: 'Please enter atleast one ingredient'),
+                  _buildTextFormField(
+                      controller: _stagesController,
+                      labelText: 'Steps (period separated)',
+                      validatorMessage: 'Please enter stages'),
+                ],
+              ),
             ),
           ),
-        ),
+          const SizedBox(height: 30.0),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context, onPressed: _handleEditRecipe, text: 'Save'),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              text: 'Cancle'),
+        ],
       ),
     );
   }

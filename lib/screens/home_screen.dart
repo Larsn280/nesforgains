@@ -46,10 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       titleText: 'NESForGains',
       child: Column(
         children: [
-          const SizedBox(
-            height: 12.0,
-          ),
-          const SizedBox(height: 28.0),
+          const SizedBox(height: 40.0),
           Card(
             color: Colors.black54,
             elevation: 4,

@@ -5,6 +5,7 @@ import 'package:nesforgains/models/exercise.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
@@ -141,64 +142,48 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
   Widget build(BuildContext context) {
     return CustomBackNavigation.customBackNavigation(
       context: context,
-      child: Scaffold(
-        body: SizedBox.expand(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover,
+      child: CustomAppContainer(
+        titleText: 'Editera Träningspass',
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 40.0,
+            ),
+            CustomCards.buildFormCard(
+              context: context,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16.0),
+                    _buildFormTextFormField(
+                        'Träningspass (eg: Bröst, Ben, Rygg)',
+                        _workoutController),
+                    _buildFormTextFormField(
+                        'Övning eg: (Bänkpress, comma separerad)',
+                        _exerciseController),
+                    _buildFormTextFormField(
+                        'Datum (YYYY-MM-DD)', _dateController),
+                    _buildFormTextFormField(
+                        '(Reps, comma separerad)', _repsController),
+                    _buildFormTextFormField(
+                        '(Sets, comma separerad)', _setsController),
+                    _buildFormTextFormField(
+                        '(Kg, comma separerad)', _kgController),
+                  ],
+                ),
               ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const CustomAppbar(
-                    title: 'Editera Träningspass',
-                  ),
-                  const SizedBox(
-                    height: 40.0,
-                  ),
-                  CustomCards.buildFormCard(
-                    context: context,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 16.0),
-                          _buildFormTextFormField(
-                              'Träningspass (eg: Bröst, Ben, Rygg)',
-                              _workoutController),
-                          _buildFormTextFormField(
-                              'Övning eg: (Bänkpress, comma separerad)',
-                              _exerciseController),
-                          _buildFormTextFormField(
-                              'Datum (YYYY-MM-DD)', _dateController),
-                          _buildFormTextFormField(
-                              '(Reps, comma separerad)', _repsController),
-                          _buildFormTextFormField(
-                              '(Sets, comma separerad)', _setsController),
-                          _buildFormTextFormField(
-                              '(Kg, comma separerad)', _kgController),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 30.0),
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: _handleEditWorkout,
-                      text: 'Spara'),
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      text: 'Tillbaka'),
-                ],
-              ),
-            ),
-          ),
+            const SizedBox(height: 8.0),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context, onPressed: _handleEditWorkout, text: 'Spara'),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context,
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                text: 'Tillbaka'),
+          ],
         ),
       ),
     );

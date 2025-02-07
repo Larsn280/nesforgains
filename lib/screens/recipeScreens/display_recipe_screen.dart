@@ -5,6 +5,7 @@ import 'package:nesforgains/models/recipe.dart';
 import 'package:nesforgains/screens/recipeScreens/add_recipe_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_details_screen.dart';
 import 'package:nesforgains/service/recipe_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -74,60 +75,49 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover),
+    return CustomAppContainer(
+      titleText: 'Recept',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
           ),
-          child: Column(
-            children: [
-              const CustomAppbar(
-                title: 'Recipes',
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              const SizedBox(height: 16.0),
-              Expanded(
-                child: FutureBuilder<List<Recipe>>(
-                  future: _fetchAllRecipes(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return _buildRecipeList([], 'Indicator');
-                    } else if (snapshot.hasError) {
-                      return _buildRecipeList([], 'Error fetching recipes.');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return _buildRecipeList([], 'No recipes found.');
-                    } else {
-                      final recipes = snapshot.data!;
+          Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: FutureBuilder<List<Recipe>>(
+              future: _fetchAllRecipes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildRecipeList([], 'Indicator');
+                } else if (snapshot.hasError) {
+                  return _buildRecipeList([], 'Error fetching recipes.');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildRecipeList([], 'No recipes found.');
+                } else {
+                  final recipes = snapshot.data!;
 
-                      return _buildRecipeList(recipes, '');
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(height: 8.0),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
-                  onPressed: () {
-                    _navigateToAddRecipe();
-                  },
-                  text: 'Add'),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  text: 'Home'),
-              const SizedBox(
-                height: 20.0,
-              )
-            ],
+                  return _buildRecipeList(recipes, '');
+                }
+              },
+            ),
           ),
-        ),
+          const SizedBox(height: 8.0),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                _navigateToAddRecipe();
+              },
+              text: 'Add'),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              text: 'Home'),
+          const SizedBox(
+            height: 20.0,
+          )
+        ],
       ),
     );
   }

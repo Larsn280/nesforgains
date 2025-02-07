@@ -5,6 +5,7 @@ import 'package:nesforgains/screens/dishScreens/display_dishes_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/service/nutrition_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -146,116 +147,100 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(AppConstants.appbackgroundimage),
-              fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
-          child: Stack(
+    return CustomAppContainer(
+      titleText: 'Näring',
+      child: Stack(
+        children: [
+          Column(
             children: [
-              Column(
-                children: [
-                  const CustomAppbar(
-                    title: 'Nutrition Screen',
-                  ),
-                  const SizedBox(
-                    height: 40.0,
-                  ),
-                  CustomCards.buildFormCard(
-                    context: context,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(
+                height: 40.0,
+              ),
+              CustomCards.buildFormCard(
+                context: context,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 15.0),
+                    Text('Total calories today: $calories g',
+                        style: AppConstants.subheadingStyle),
+                    const SizedBox(height: 10),
+                    Text('Protein: $proteine g',
+                        style: AppConstants.subheadingStyle),
+                    Text('Carbohydrates: $carbohydrates g',
+                        style: AppConstants.subheadingStyle),
+                    Text('Fat: $fat g', style: AppConstants.subheadingStyle),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
+                    TextField(
+                      controller: _searchController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter dish',
+                        contentPadding: EdgeInsets.symmetric(horizontal: 6.0),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const SizedBox(height: 15.0),
-                        Text('Total calories today: $calories g',
-                            style: AppConstants.subheadingStyle),
-                        const SizedBox(height: 10),
-                        Text('Protein: $proteine g',
-                            style: AppConstants.subheadingStyle),
-                        Text('Carbohydrates: $carbohydrates g',
-                            style: AppConstants.subheadingStyle),
-                        Text('Fat: $fat g',
-                            style: AppConstants.subheadingStyle),
-                        const SizedBox(
-                          height: 16.0,
-                        ),
-                        TextField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            hintText: 'Enter dish',
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 6.0),
+                        SizedBox(
+                          width: 45.0,
+                          height: 45.0,
+                          child: FloatingActionButton(
+                            heroTag: 'floatButtonOne',
+                            onPressed: () {
+                              // Define the action to be taken when the button is pressed
+                              _postDailyDish(_searchController.text);
+                            },
+                            backgroundColor: Colors.green,
+                            foregroundColor: Colors.black,
+                            child: const Icon(Icons.add),
                           ),
                         ),
-                        const SizedBox(
-                          height: 12.0,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 45.0,
-                              height: 45.0,
-                              child: FloatingActionButton(
-                                heroTag: 'floatButtonOne',
-                                onPressed: () {
-                                  // Define the action to be taken when the button is pressed
-                                  _postDailyDish(_searchController.text);
-                                },
-                                backgroundColor: Colors.green,
-                                foregroundColor: Colors.black,
-                                child: const Icon(Icons.add),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 45.0,
-                              height: 45.0,
-                              child: FloatingActionButton(
-                                heroTag: 'floatButtonTwo',
-                                onPressed: () {
-                                  _putDailyDish(_searchController.text);
-                                },
-                                backgroundColor: Colors.red,
-                                foregroundColor: Colors.black,
-                                child: const Icon(Icons.remove),
-                              ),
-                            ),
-                          ],
+                        SizedBox(
+                          width: 45.0,
+                          height: 45.0,
+                          child: FloatingActionButton(
+                            heroTag: 'floatButtonTwo',
+                            onPressed: () {
+                              _putDailyDish(_searchController.text);
+                            },
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.black,
+                            child: const Icon(Icons.remove),
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 30.0),
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: () {
-                        _navigatetodishlist();
-                      },
-                      text: 'Dishlist'),
-                  CustomButtons.buildElevatedFunctionButton(
-                      context: context,
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
-                      },
-                      text: 'Home')
-                ],
-              ),
-              if (_filteredDishes.isNotEmpty)
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  top: 320, // Adjust this value based on your layout
-                  child:
-                      _searchdropdown(_filteredDishes, _setsearchcontollertext),
+                  ],
                 ),
+              ),
+              const SizedBox(height: 30.0),
+              CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: () {
+                    _navigatetodishlist();
+                  },
+                  text: 'Dishlist'),
+              CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                  text: 'Home')
             ],
           ),
-        ),
+          if (_filteredDishes.isNotEmpty)
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 320, // Adjust this value based on your layout
+              child: _searchdropdown(_filteredDishes, _setsearchcontollertext),
+            ),
+        ],
       ),
     );
   }

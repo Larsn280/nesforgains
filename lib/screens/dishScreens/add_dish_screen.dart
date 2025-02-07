@@ -4,6 +4,7 @@ import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/dish.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -87,82 +88,67 @@ class _AddDishScreenState extends State<AddDishScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SizedBox.expand(
-        child: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(AppConstants.appbackgroundimage),
-                fit: BoxFit.cover),
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const CustomAppbar(
-                  title: 'Add dish',
-                ),
-                const SizedBox(height: 40.0),
-                CustomCards.buildFormCard(
-                  context: context,
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 16.0),
-                        _buildFormTextFormField(
-                            controller: _nameController,
-                            lable: 'Dish',
-                            hint: 'Dish',
-                            validatorText: 'Please enter a dish name'),
-                        _buildFormTextFormField(
-                          controller: _caloriesController,
-                          lable: 'Calories',
-                          hint: 'Calories',
-                          validatorText: 'Please enter calories',
-                          isNumeric: true,
-                        ),
-                        _buildFormTextFormField(
-                            controller: _proteinController,
-                            lable: 'Protein',
-                            hint: 'Protein',
-                            validatorText: 'Please enter protein',
-                            isNumeric: true),
-                        _buildFormTextFormField(
-                          controller: _carbsController,
-                          lable: 'Carbohydrates:',
-                          hint: 'Carbohydrates:',
-                          validatorText: 'Please enter carbohydrates',
-                          isNumeric: true,
-                        ),
-                        _buildFormTextFormField(
-                          controller: _fatController,
-                          lable: 'Fat',
-                          hint: 'Fat',
-                          validatorText: 'Please enter fat',
-                          isNumeric: true,
-                        ),
-                      ],
-                    ),
+    return CustomAppContainer(
+      titleText: 'Lägg till Maträtt',
+      child: Column(
+        children: [
+          const SizedBox(height: 40.0),
+          CustomCards.buildFormCard(
+            context: context,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 16.0),
+                  _buildFormTextFormField(
+                      controller: _nameController,
+                      lable: 'Dish',
+                      hint: 'Dish',
+                      validatorText: 'Please enter a dish name'),
+                  _buildFormTextFormField(
+                    controller: _caloriesController,
+                    lable: 'Calories',
+                    hint: 'Calories',
+                    validatorText: 'Please enter calories',
+                    isNumeric: true,
                   ),
-                ),
-                const SizedBox(
-                  height: 30.0,
-                ),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: _submitNewDish,
-                    text: 'Save Dish'),
-                CustomButtons.buildElevatedFunctionButton(
-                    context: context,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    text: 'Go back'),
-              ],
+                  _buildFormTextFormField(
+                      controller: _proteinController,
+                      lable: 'Protein',
+                      hint: 'Protein',
+                      validatorText: 'Please enter protein',
+                      isNumeric: true),
+                  _buildFormTextFormField(
+                    controller: _carbsController,
+                    lable: 'Carbohydrates:',
+                    hint: 'Carbohydrates:',
+                    validatorText: 'Please enter carbohydrates',
+                    isNumeric: true,
+                  ),
+                  _buildFormTextFormField(
+                    controller: _fatController,
+                    lable: 'Fat',
+                    hint: 'Fat',
+                    validatorText: 'Please enter fat',
+                    isNumeric: true,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context, onPressed: _submitNewDish, text: 'Spara'),
+          CustomButtons.buildElevatedFunctionButton(
+              context: context,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              text: 'Tillbaka'),
+        ],
       ),
     );
   }

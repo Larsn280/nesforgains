@@ -7,6 +7,7 @@ import 'package:nesforgains/screens/workoutScreens/add_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_details_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
@@ -180,60 +181,48 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
   Widget build(BuildContext context) {
     return CustomBackNavigation.customBackNavigation(
       context: context,
-      child: Scaffold(
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(AppConstants.appbackgroundimage),
-              fit: BoxFit.cover,
+      child: CustomAppContainer(
+        titleText: 'Träningspass',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 40.0,
             ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CustomAppbar(
-                title: 'Träningspass',
-              ),
-              const SizedBox(
-                height: 40.0,
-              ),
-              const SizedBox(height: 16.0),
-              Expanded(
-                child: FutureBuilder<List<Workout>>(
-                  future: _futureWorkouts,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return _buildTrainingList([], 'Indicator');
-                    } else if (snapshot.hasError) {
-                      return _buildTrainingList([], 'Error loading logs');
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return _buildTrainingList(
-                          [], 'No training logs available');
-                    }
+            Container(
+              constraints: const BoxConstraints(maxHeight: 600),
+              child: FutureBuilder<List<Workout>>(
+                future: _futureWorkouts,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return _buildTrainingList([], 'Indicator');
+                  } else if (snapshot.hasError) {
+                    return _buildTrainingList([], 'Error loading logs');
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return _buildTrainingList(
+                        [], 'Inga träningspass tillgängliga');
+                  }
 
-                    final logs = snapshot.data!;
-                    return _buildTrainingList(logs, '');
-                  },
-                ),
+                  final logs = snapshot.data!;
+                  return _buildTrainingList(logs, '');
+                },
               ),
-              const SizedBox(height: 8.0),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
-                  onPressed: () {
-                    _navigateToAddWorkout();
-                  },
-                  text: 'Lägg till'),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  text: 'Hem'),
-              const SizedBox(height: 20.0),
-            ],
-          ),
+            ),
+            const SizedBox(height: 8.0),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context,
+                onPressed: () {
+                  _navigateToAddWorkout();
+                },
+                text: 'Lägg till'),
+            CustomButtons.buildElevatedFunctionButton(
+                context: context,
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, '/');
+                },
+                text: 'Hem'),
+            const SizedBox(height: 20.0),
+          ],
         ),
       ),
     );

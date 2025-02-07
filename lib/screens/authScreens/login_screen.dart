@@ -99,80 +99,80 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(16.0),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppConstants.appbackgroundimage),
-            fit: BoxFit.cover,
+      body: SizedBox.expand(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(AppConstants.appbackgroundimage),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 40.0),
-              CustomCards.buildFormCard(
-                context: context,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Logga in',
-                      style: AppConstants.headingStyle,
-                    ),
-                    const SizedBox(height: 16.0),
-                    _buildTextFormField(
-                      controller: _usernameController,
-                      hintText: 'Användarnamn/Email',
-                      textInputType: TextInputType.text,
-                      icon: const Icon(Icons.person, color: Colors.white),
-                      errorMessage: usernameError,
-                      hasBorder: true,
-                    ),
-                    const SizedBox(height: 16.0),
-                    _buildTextFormField(
-                      controller: _passwordController,
-                      hintText: 'Lösenord',
-                      textInputType: TextInputType.text,
-                      icon: const Icon(Icons.lock, color: Colors.white),
-                      errorMessage: passwordError,
-                      hasBorder: true,
-                    ),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(height: 100.0),
+                CustomCards.buildFormCard(
+                  context: context,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Logga in',
+                        style: AppConstants.headingStyle,
+                      ),
+                      const SizedBox(height: 16.0),
+                      _buildTextFormField(
+                        controller: _usernameController,
+                        hintText: 'Användarnamn/Email',
+                        textInputType: TextInputType.text,
+                        icon: const Icon(Icons.person, color: Colors.white),
+                        errorMessage: usernameError,
+                        hasBorder: true,
+                      ),
+                      const SizedBox(height: 16.0),
+                      _buildTextFormField(
+                        controller: _passwordController,
+                        hintText: 'Lösenord',
+                        textInputType: TextInputType.text,
+                        icon: const Icon(Icons.lock, color: Colors.white),
+                        errorMessage: passwordError,
+                        hasBorder: true,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8.0),
-              CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: _loginUser,
-                text: 'Logga in',
-              ),
-              CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: () async {
-                  final result =
-                      await Navigator.pushNamed(context, '/registerScreen');
+                const SizedBox(height: 8.0),
+                CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: _loginUser,
+                  text: 'Logga in',
+                ),
+                CustomButtons.buildElevatedFunctionButton(
+                  context: context,
+                  onPressed: () async {
+                    final result =
+                        await Navigator.pushNamed(context, '/registerScreen');
 
-                  if (result != null && result is String) {
-                    List<String> credentials = result
-                        .toString()
-                        .split(',')
-                        .map((e) => e.trim())
-                        .toList();
+                    if (result != null && result is String) {
+                      List<String> credentials = result
+                          .toString()
+                          .split(',')
+                          .map((e) => e.trim())
+                          .toList();
 
-                    if (credentials.length == 2) {
-                      setState(() {
-                        _usernameController.text = credentials[0]; // Email
-                        _passwordController.text = credentials[1]; // Password
-                      });
+                      if (credentials.length == 2) {
+                        setState(() {
+                          _usernameController.text = credentials[0]; // Email
+                          _passwordController.text = credentials[1]; // Password
+                        });
+                      }
                     }
-                  }
-                },
-                text: 'Registrera',
-              ),
-            ],
+                  },
+                  text: 'Registrera',
+                ),
+              ],
+            ),
           ),
         ),
       ),

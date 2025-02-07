@@ -6,6 +6,7 @@ import 'package:nesforgains/screens/dishScreens/add_dish_screen.dart';
 import 'package:nesforgains/screens/dishScreens/edit_dish_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
+import 'package:nesforgains/widgets/custom_app_container.dart';
 import 'package:nesforgains/widgets/custom_appbar.dart';
 import 'package:nesforgains/widgets/custom_buttons.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
@@ -93,57 +94,46 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(AppConstants.appbackgroundimage),
-            fit: BoxFit.cover,
+    return CustomAppContainer(
+      titleText: 'Maträtter',
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 40.0,
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CustomAppbar(
-              title: 'Dishlist',
-            ),
-            const SizedBox(
-              height: 40.0,
-            ),
-            Expanded(
-              child: FutureBuilder<List<Dish>>(
-                future: _handlefetchAllDishes(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildDishList([], 'Indicator');
-                  } else if (snapshot.hasError) {
-                    return _buildDishList([], 'Error loading dishes');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildDishList([], 'No dishes available');
-                  }
+          Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: FutureBuilder<List<Dish>>(
+              future: _handlefetchAllDishes(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildDishList([], 'Indicator');
+                } else if (snapshot.hasError) {
+                  return _buildDishList([], 'Error loading dishes');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildDishList([], 'No dishes available');
+                }
 
-                  final dishes = snapshot.data!;
-                  return _buildDishList(dishes, '');
-                },
-              ),
+                final dishes = snapshot.data!;
+                return _buildDishList(dishes, '');
+              },
             ),
-            const SizedBox(height: 8.0),
-            CustomButtons.buildElevatedFunctionButton(
+          ),
+          const SizedBox(height: 8.0),
+          CustomButtons.buildElevatedFunctionButton(
+            context: context,
+            onPressed: _navigatetoadd,
+            text: 'Add',
+          ),
+          CustomButtons.buildElevatedFunctionButton(
               context: context,
-              onPressed: _navigatetoadd,
-              text: 'Add',
-            ),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                text: 'Back'),
-            const SizedBox(height: 8.0),
-          ],
-        ),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              text: 'Back'),
+          const SizedBox(height: 8.0),
+        ],
       ),
     );
   }

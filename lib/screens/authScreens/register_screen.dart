@@ -83,65 +83,65 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        padding: const EdgeInsets.all(16.0),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage(AppConstants.appbackgroundimage),
-              fit: BoxFit.cover),
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 40.0,
-              ),
-              CustomCards.buildFormCard(
-                context: context,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Ny användare',
-                      style: AppConstants.headingStyle,
-                    ),
-                    const SizedBox(height: 16.0),
-                    _buildTextFormField(
-                        controller: _emailController,
-                        hintText: 'Email',
-                        textInputType: TextInputType.text,
-                        icon: const Icon(Icons.mail, color: Colors.white),
-                        errorMessage: emailError,
-                        hasBorder: true),
-                    const SizedBox(
-                      height: 16.0,
-                    ),
-                    _buildTextFormField(
-                        controller: _passwordController,
-                        hintText: 'Lösenord',
-                        textInputType: TextInputType.text,
-                        icon: const Icon(Icons.lock, color: Colors.white),
-                        errorMessage: passwordError,
-                        hasBorder: true),
-                  ],
+      body: SizedBox.expand(
+        child: Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(AppConstants.appbackgroundimage),
+                fit: BoxFit.cover),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 100.0,
                 ),
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              CustomButtons.buildElevatedFunctionButton(
+                CustomCards.buildFormCard(
                   context: context,
-                  onPressed: _createNewUser,
-                  text: 'Registrera'),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  text: 'Tillbaka'),
-            ],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Ny användare',
+                        style: AppConstants.headingStyle,
+                      ),
+                      const SizedBox(height: 16.0),
+                      _buildTextFormField(
+                          controller: _emailController,
+                          hintText: 'Email',
+                          textInputType: TextInputType.text,
+                          icon: const Icon(Icons.mail, color: Colors.white),
+                          errorMessage: emailError,
+                          hasBorder: true),
+                      const SizedBox(
+                        height: 16.0,
+                      ),
+                      _buildTextFormField(
+                          controller: _passwordController,
+                          hintText: 'Lösenord',
+                          textInputType: TextInputType.text,
+                          icon: const Icon(Icons.lock, color: Colors.white),
+                          errorMessage: passwordError,
+                          hasBorder: true),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 8.0,
+                ),
+                CustomButtons.buildElevatedFunctionButton(
+                    context: context,
+                    onPressed: _createNewUser,
+                    text: 'Registrera'),
+                CustomButtons.buildElevatedFunctionButton(
+                    context: context,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    text: 'Tillbaka'),
+              ],
+            ),
           ),
         ),
       ),
