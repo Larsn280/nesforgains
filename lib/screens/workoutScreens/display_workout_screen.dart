@@ -10,7 +10,7 @@ import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_checkboxes.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
@@ -209,14 +209,12 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
               ),
             ),
             const SizedBox(height: 8.0),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
+            CustomButtons(
                 onPressed: () {
                   _navigateToAddWorkout();
                 },
                 text: 'Lägg till'),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
+            CustomButtons(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },

@@ -4,7 +4,7 @@ import 'package:nesforgains/models/dish.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -138,10 +138,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
           const SizedBox(
             height: 8.0,
           ),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context, onPressed: _submitNewDish, text: 'Spara'),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context,
+          CustomButtons(onPressed: _submitNewDish, text: 'Spara'),
+          CustomButtons(
               onPressed: () {
                 Navigator.pop(context);
               },

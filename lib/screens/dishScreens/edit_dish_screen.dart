@@ -6,7 +6,7 @@ import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
@@ -143,10 +143,8 @@ class _EditDishScreenState extends State<EditDishScreen> {
           const SizedBox(
             height: 30,
           ),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context, onPressed: _editDish, text: 'Save'),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context,
+          CustomButtons(onPressed: _editDish, text: 'Save'),
+          CustomButtons(
               onPressed: () {
                 Navigator.pop(context);
               },

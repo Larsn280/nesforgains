@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {

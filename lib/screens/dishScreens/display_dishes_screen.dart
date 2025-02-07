@@ -7,7 +7,7 @@ import 'package:nesforgains/screens/dishScreens/edit_dish_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
@@ -120,13 +120,11 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
             ),
           ),
           const SizedBox(height: 8.0),
-          CustomButtons.buildElevatedFunctionButton(
-            context: context,
+          CustomButtons(
             onPressed: _navigatetoadd,
             text: 'Add',
           ),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context,
+          CustomButtons(
               onPressed: () {
                 Navigator.pop(context, true);
               },

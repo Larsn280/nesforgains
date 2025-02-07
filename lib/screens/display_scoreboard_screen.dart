@@ -8,7 +8,7 @@ import 'package:nesforgains/viewModels/userscore_viewmodel.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
 import 'package:nesforgains/widgets/custom_back_navigation.dart';
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
@@ -90,8 +90,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
             const SizedBox(
               height: 8.0,
             ),
-            CustomButtons.buildElevatedFunctionButton(
-                context: context,
+            CustomButtons(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },

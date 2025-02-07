@@ -7,7 +7,7 @@ import 'package:nesforgains/models/stage.dart';
 import 'package:nesforgains/service/recipe_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
@@ -173,10 +173,8 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
             ),
           ),
           const SizedBox(height: 30.0),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context, onPressed: _handleEditRecipe, text: 'Save'),
-          CustomButtons.buildElevatedFunctionButton(
-              context: context,
+          CustomButtons(onPressed: _handleEditRecipe, text: 'Save'),
+          CustomButtons(
               onPressed: () {
                 Navigator.pop(context);
               },

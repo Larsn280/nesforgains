@@ -6,7 +6,7 @@ import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/service/nutrition_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-import 'package:nesforgains/widgets/custom_buttons.dart';
+import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -218,14 +218,12 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 ),
               ),
               const SizedBox(height: 30.0),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
+              CustomButtons(
                   onPressed: () {
                     _navigatetodishlist();
                   },
                   text: 'Dishlist'),
-              CustomButtons.buildElevatedFunctionButton(
-                  context: context,
+              CustomButtons(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },

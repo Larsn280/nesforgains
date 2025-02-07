@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
-class CustomButtons {
-  static Widget buildElevatedFunctionButton({
-    required BuildContext context,
-    required Function() onPressed,
-    required String text,
-  }) {
+class CustomButtons extends StatelessWidget {
+  final Function() onPressed;
+  final String text;
+
+  const CustomButtons({
+    super.key,
+    required this.onPressed,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.50,
       child: ElevatedButton(
-        onPressed: () {
-          onPressed();
-        },
+        onPressed: onPressed,
         style: ButtonStyle(
           foregroundColor: WidgetStateProperty.all(Colors.white),
           backgroundColor:
