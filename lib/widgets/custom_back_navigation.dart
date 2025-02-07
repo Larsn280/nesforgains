@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomBackNavigation {
-  static Widget customBackNavigation({
-    required BuildContext context,
-    required Widget child,
-  }) {
+class CustomBackNavigation extends StatelessWidget {
+  final Widget child;
+
+  const CustomBackNavigation({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {

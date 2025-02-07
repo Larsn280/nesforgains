@@ -140,8 +140,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: CustomAppContainer(
         titleText: 'Editera Träningspass',
         child: Column(

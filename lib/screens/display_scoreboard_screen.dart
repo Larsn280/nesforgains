@@ -60,8 +60,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: CustomAppContainer(
         titleText: 'Resultattavla',
         child: Column(

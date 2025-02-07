@@ -15,8 +15,7 @@ class BookOfExuses extends StatefulWidget {
 class _BookOfExusesScreenState extends State<BookOfExuses> {
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: CustomAppContainer(
         titleText: 'Ursäkternas bok!',
         child: Column(

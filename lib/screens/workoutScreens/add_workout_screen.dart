@@ -166,8 +166,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: GestureDetector(
         onTap: () {
           setState(() {});

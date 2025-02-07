@@ -74,8 +74,7 @@ class _VolumeTrackerScreen extends State<VolumeTrackerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: CustomAppContainer(
         titleText: 'Volym Spårare',
         child: Column(

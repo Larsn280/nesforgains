@@ -179,8 +179,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation.customBackNavigation(
-      context: context,
+    return CustomBackNavigation(
       child: CustomAppContainer(
         titleText: 'Träningspass',
         child: Column(
