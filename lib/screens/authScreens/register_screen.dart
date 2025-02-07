@@ -130,8 +130,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 8.0,
                 ),
-                CustomButtons(onPressed: _createNewUser, text: 'Registrera'),
-                CustomButtons(
+                CustomButton(onPressed: _createNewUser, text: 'Registrera'),
+                CustomButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },

@@ -175,8 +175,8 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
               ),
             ),
             const SizedBox(height: 8.0),
-            CustomButtons(onPressed: _handleEditWorkout, text: 'Spara'),
-            CustomButtons(
+            CustomButton(onPressed: _handleEditWorkout, text: 'Spara'),
+            CustomButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

@@ -97,7 +97,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
                 child: _buildRecipeDetails(recipe),
               )),
           const SizedBox(height: 8.0),
-          CustomButtons(
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },

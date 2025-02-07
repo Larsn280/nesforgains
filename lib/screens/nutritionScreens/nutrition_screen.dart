@@ -218,12 +218,12 @@ class _NutritionScreenState extends State<NutritionScreen> {
                 ),
               ),
               const SizedBox(height: 30.0),
-              CustomButtons(
+              CustomButton(
                   onPressed: () {
                     _navigatetodishlist();
                   },
                   text: 'Dishlist'),
-              CustomButtons(
+              CustomButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/');
                   },

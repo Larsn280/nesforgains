@@ -173,8 +173,8 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
             ),
           ),
           const SizedBox(height: 30.0),
-          CustomButtons(onPressed: _handleEditRecipe, text: 'Save'),
-          CustomButtons(
+          CustomButton(onPressed: _handleEditRecipe, text: 'Save'),
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context);
               },

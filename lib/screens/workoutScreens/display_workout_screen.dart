@@ -209,12 +209,12 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
               ),
             ),
             const SizedBox(height: 8.0),
-            CustomButtons(
+            CustomButton(
                 onPressed: () {
                   _navigateToAddWorkout();
                 },
                 text: 'Lägg till'),
-            CustomButtons(
+            CustomButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },

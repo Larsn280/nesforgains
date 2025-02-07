@@ -120,11 +120,11 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
             ),
           ),
           const SizedBox(height: 8.0),
-          CustomButtons(
+          CustomButton(
             onPressed: _navigatetoadd,
             text: 'Add',
           ),
-          CustomButtons(
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },

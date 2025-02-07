@@ -105,7 +105,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
               child: _buildWorkoutDetails(workout),
             ),
             const SizedBox(height: 8.0),
-            CustomButtons(
+            CustomButton(
                 onPressed: () {
                   Navigator.pop(context, true);
                 },

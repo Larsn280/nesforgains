@@ -90,7 +90,7 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
             const SizedBox(
               height: 8.0,
             ),
-            CustomButtons(
+            CustomButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, '/');
                 },

@@ -143,8 +143,8 @@ class _EditDishScreenState extends State<EditDishScreen> {
           const SizedBox(
             height: 30,
           ),
-          CustomButtons(onPressed: _editDish, text: 'Save'),
-          CustomButtons(
+          CustomButton(onPressed: _editDish, text: 'Save'),
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context);
               },

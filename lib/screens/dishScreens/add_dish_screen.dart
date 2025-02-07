@@ -138,8 +138,8 @@ class _AddDishScreenState extends State<AddDishScreen> {
           const SizedBox(
             height: 8.0,
           ),
-          CustomButtons(onPressed: _submitNewDish, text: 'Spara'),
-          CustomButtons(
+          CustomButton(onPressed: _submitNewDish, text: 'Spara'),
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context);
               },

@@ -465,7 +465,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                  CustomButtons.buildSmallElevatedButton(
+                                  CustomButton.buildSmallElevatedButton(
                                     onPressed: () {
                                       if (_validateExerciseInput() == true) {
                                         setState(() {
@@ -506,8 +506,8 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
               const SizedBox(height: 8.0),
               // Submit button
-              CustomButtons(onPressed: _saveTrainingData, text: 'Spara'),
-              CustomButtons(
+              CustomButton(onPressed: _saveTrainingData, text: 'Spara'),
+              CustomButton(
                   onPressed: () {
                     Navigator.pop(context, true);
                   },

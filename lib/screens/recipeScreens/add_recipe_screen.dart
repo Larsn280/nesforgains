@@ -163,8 +163,8 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
 
           // Save Button
           const SizedBox(height: 8.0),
-          CustomButtons(onPressed: _handleSaveRecipe, text: 'Save Recipe'),
-          CustomButtons(
+          CustomButton(onPressed: _handleSaveRecipe, text: 'Save Recipe'),
+          CustomButton(
               onPressed: () {
                 Navigator.pop(context, true);
               },

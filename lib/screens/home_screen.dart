@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-
 import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -102,14 +100,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomButtons.buildElevatedUrlButton(
+                      CustomButton.buildElevatedUrlButton(
                           context: context,
                           onPressed: _launchTrello,
                           text: 'Trello'),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.15,
                       ),
-                      CustomButtons.buildElevatedUrlButton(
+                      CustomButton.buildElevatedUrlButton(
                           context: context,
                           onPressed: _launchKalkylator,
                           text: 'Kalkylator')

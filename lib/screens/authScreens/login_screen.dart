@@ -143,11 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                CustomButtons(
+                CustomButton(
                   onPressed: _loginUser,
                   text: 'Logga in',
                 ),
-                CustomButtons(
+                CustomButton(
                   onPressed: () async {
                     final result =
                         await Navigator.pushNamed(context, '/registerScreen');

@@ -102,12 +102,12 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
             ),
           ),
           const SizedBox(height: 8.0),
-          CustomButtons(
+          CustomButton(
               onPressed: () {
                 _navigateToAddRecipe();
               },
               text: 'Add'),
-          CustomButtons(
+          CustomButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/');
               },
