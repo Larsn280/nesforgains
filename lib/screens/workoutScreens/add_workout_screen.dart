@@ -465,7 +465,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                   const SizedBox(
                                     height: 10.0,
                                   ),
-                                  CustomButton.buildSmallElevatedButton(
+                                  CustomButton(
                                     onPressed: () {
                                       if (_validateExerciseInput() == true) {
                                         setState(() {
@@ -491,7 +491,6 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                                       }
                                     },
                                     text: 'Lägg till',
-                                    context: context,
                                   ),
                                 ],
                               ),

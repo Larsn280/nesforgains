@@ -81,17 +81,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                      // const Positioned(
-                      //   bottom: 10.0,
-                      //   child: Text(
-                      //     'Benchpress!!!',
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontWeight: FontWeight.bold,
-                      //       fontSize: 20.0,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                   const SizedBox(
@@ -100,17 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomButton.buildElevatedUrlButton(
-                          context: context,
-                          onPressed: _launchTrello,
-                          text: 'Trello'),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                      ),
-                      CustomButton.buildElevatedUrlButton(
-                          context: context,
-                          onPressed: _launchKalkylator,
-                          text: 'Kalkylator')
+                      CustomButton(onPressed: _launchTrello, text: 'Trello'),
+                      const SizedBox(width: 60.0),
+                      CustomButton(
+                          onPressed: _launchKalkylator, text: 'Kalkylator')
                     ],
                   ),
                   const SizedBox(height: 20.0),
