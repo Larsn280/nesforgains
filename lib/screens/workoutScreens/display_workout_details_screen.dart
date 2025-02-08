@@ -91,26 +91,24 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation(
-      child: CustomAppContainer(
-        titleText: 'Träningspass',
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 40.0,
-            ),
-            CustomCards.buildListCard(
-              context: context,
-              child: _buildWorkoutDetails(workout),
-            ),
-            const SizedBox(height: 8.0),
-            CustomButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                text: 'Tillbaka'),
-          ],
-        ),
+    return CustomAppContainer(
+      titleText: 'Träningspass',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
+          ),
+          CustomCards.buildListCard(
+            context: context,
+            child: _buildWorkoutDetails(workout),
+          ),
+          const SizedBox(height: 8.0),
+          CustomButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              text: 'Tillbaka'),
+        ],
       ),
     );
   }

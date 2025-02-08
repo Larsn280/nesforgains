@@ -166,361 +166,353 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation(
-      child: GestureDetector(
-        onTap: () {
-          setState(() {});
-        },
-        child: CustomAppContainer(
-          titleText: 'Logga Träningspass',
-          child: Column(
-            children: [
-              const SizedBox(height: 40.0),
-              CustomCards.buildFormCard(
-                context: context,
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Date Picker
+    return GestureDetector(
+      onTap: () {
+        setState(() {});
+      },
+      child: CustomAppContainer(
+        titleText: 'Logga Träningspass',
+        child: Column(
+          children: [
+            const SizedBox(height: 40.0),
+            CustomCards.buildFormCard(
+              context: context,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Date Picker
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      child: Row(
+                        children: [
+                          // Text and Date Picker Icon are grouped together
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Text(
+                                  _selectedDate == null
+                                      ? 'Välj datum'
+                                      : DateFormat('yyyy-MM-dd', 'sv_SE')
+                                          .format(_selectedDate!),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.calendar_today,
+                                      color: Colors.white),
+                                  onPressed: () async {
+                                    DateTime? pickedDate = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2101),
+                                      locale: const Locale('sv',
+                                          'SE'), // Ställ in språk till svenska
+                                    );
+                                    if (pickedDate != null) {
+                                      setState(() {
+                                        _selectedDate = pickedDate;
+                                        _dateError = null;
+                                      });
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                          // Checkmark Icon, visible only when a date is selected
+                          if (_selectedDate != null)
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green, // Green checkmark
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (_dateError != null)
                       Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 4.0,
-                        ),
-                        child: Row(
-                          children: [
-                            // Text and Date Picker Icon are grouped together
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    _selectedDate == null
-                                        ? 'Välj datum'
-                                        : DateFormat('yyyy-MM-dd', 'sv_SE')
-                                            .format(_selectedDate!),
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.calendar_today,
-                                        color: Colors.white),
-                                    onPressed: () async {
-                                      DateTime? pickedDate =
-                                          await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(2000),
-                                        lastDate: DateTime(2101),
-                                        locale: const Locale('sv',
-                                            'SE'), // Ställ in språk till svenska
-                                      );
-                                      if (pickedDate != null) {
-                                        setState(() {
-                                          _selectedDate = pickedDate;
-                                          _dateError = null;
-                                        });
-                                      }
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                            // Checkmark Icon, visible only when a date is selected
-                            if (_selectedDate != null)
-                              const Icon(
-                                Icons.check_circle,
-                                color: Colors.green, // Green checkmark
-                              ),
-                          ],
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Text(
+                          _dateError!,
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 12.0),
                         ),
                       ),
-                      if (_dateError != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            _dateError!,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 12.0),
+                    const SizedBox(
+                      height: 8.0,
+                    ),
+                    CustomSearchDropdownList(
+                      isNumeric: false,
+                      errorMessage: _workoutError,
+                      controller: _workoutController,
+                      hasBorder: true,
+                      defaultText: 'Träningspass',
+                      listItems: _workoutList,
+                      onErrorChanged: (newError) {
+                        setState(() {
+                          _workoutError = newError;
+                        });
+                      },
+                    ),
+                    if (_workoutError != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Text(
+                          _workoutError!,
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 12.0),
+                        ),
+                      ),
+                    if (selectedExercises.isNotEmpty)
+                      Column(
+                        children: [
+                          const SizedBox(
+                            height: 8.0,
                           ),
-                        ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      CustomSearchDropdownList(
-                        isNumeric: false,
-                        errorMessage: _workoutError,
-                        controller: _workoutController,
-                        hasBorder: true,
-                        defaultText: 'Träningspass',
-                        listItems: _workoutList,
-                        onErrorChanged: (newError) {
-                          setState(() {
-                            _workoutError = newError;
-                          });
-                        },
-                      ),
-                      if (_workoutError != null)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4.0),
-                          child: Text(
-                            _workoutError!,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 12.0),
-                          ),
-                        ),
-                      if (selectedExercises.isNotEmpty)
-                        Column(
-                          children: [
-                            const SizedBox(
-                              height: 8.0,
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 4.0,
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              child: Wrap(
-                                spacing:
-                                    8.0, // Horizontal spacing between items
-                                runSpacing:
-                                    8.0, // Vertical spacing between rows
-                                alignment: WrapAlignment.center,
-                                children: selectedExercises.map((exercise) {
-                                  return SizedBox(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.green,
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize
-                                            .min, // Shrink the Row to fit content
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              exercise.name,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                    12.0, // Compact font size
-                                              ),
-                                              overflow: TextOverflow
-                                                  .ellipsis, // Truncate long text
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              width:
-                                                  2.0), // Minimal space between text and icon
-                                          GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                selectedExercises
-                                                    .remove(exercise);
-                                              });
-                                            },
-                                            child: const Icon(
-                                              Icons.cancel,
+                            width: MediaQuery.of(context).size.width,
+                            child: Wrap(
+                              spacing: 8.0, // Horizontal spacing between items
+                              runSpacing: 8.0, // Vertical spacing between rows
+                              alignment: WrapAlignment.center,
+                              children: selectedExercises.map((exercise) {
+                                return SizedBox(
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize
+                                          .min, // Shrink the Row to fit content
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            exercise.name,
+                                            style: const TextStyle(
                                               color: Colors.white,
-                                              size: 12.0, // Compact icon size
+                                              fontSize:
+                                                  12.0, // Compact font size
                                             ),
+                                            overflow: TextOverflow
+                                                .ellipsis, // Truncate long text
                                           ),
-                                        ],
+                                        ),
+                                        const SizedBox(
+                                            width:
+                                                2.0), // Minimal space between text and icon
+                                        GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedExercises
+                                                  .remove(exercise);
+                                            });
+                                          },
+                                          child: const Icon(
+                                            Icons.cancel,
+                                            color: Colors.white,
+                                            size: 12.0, // Compact icon size
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    _exerciseController.text.isEmpty &&
+                            _exerciseController.text.length < 2
+                        ? Column(
+                            children: [
+                              CustomSearchDropdownList(
+                                isNumeric: false,
+                                errorMessage: _exerciseError,
+                                hasBorder: true,
+                                controller: _exerciseController,
+                                defaultText: 'Övning',
+                                listItems: _exerciseList,
+                                onErrorChanged: (newError) {
+                                  setState(() {
+                                    _exerciseError = newError;
+                                  });
+                                },
+                              ),
+                              if (_exerciseError != null)
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  child: Text(
+                                    _exerciseError!,
+                                    style: const TextStyle(
+                                        color: Colors.red, fontSize: 12.0),
+                                  ),
+                                ),
+                            ],
+                          )
+                        : Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 20.0),
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                border:
+                                    Border.all(color: Colors.white, width: 1.0),
+                                borderRadius: BorderRadius.circular(20.0)),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Avbryt',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.transparent),
+                                    ),
+                                    Text(
+                                      'Input for ${_exerciseController.text}',
+                                      style: const TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _exerciseController.clear();
+                                          _setsController.clear();
+                                          _repsController.clear();
+                                          _weigthController.clear();
+                                        });
+                                      },
+                                      child: const Text(
+                                        'Avbryt',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      _exerciseController.text.isEmpty &&
-                              _exerciseController.text.length < 2
-                          ? Column(
-                              children: [
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 16.0,
+                                ),
+                                CustomDropdownlistnew(
+                                    errormessage: _repsError,
+                                    hasboarder: true,
+                                    controller: _repsController,
+                                    defaulttext: 'Välj Reps',
+                                    listitems: _selectsvalues),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                CustomDropdownlistnew(
+                                  errormessage: _setsError,
+                                  hasboarder: true,
+                                  controller: _setsController,
+                                  defaulttext: 'Välj Sets',
+                                  listitems: _selectsvalues,
+                                ),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
                                 CustomSearchDropdownList(
-                                  isNumeric: false,
-                                  errorMessage: _exerciseError,
+                                  isNumeric: true,
+                                  errorMessage: _weightError,
                                   hasBorder: true,
-                                  controller: _exerciseController,
-                                  defaultText: 'Övning',
-                                  listItems: _exerciseList,
+                                  controller: _weigthController,
+                                  defaultText: 'Skriv vikt',
+                                  listItems: const [],
                                   onErrorChanged: (newError) {
                                     setState(() {
-                                      _exerciseError = newError;
+                                      _weightError = newError;
                                     });
                                   },
                                 ),
-                                if (_exerciseError != null)
+                                if (_weightError != null)
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 4.0),
                                     child: Text(
-                                      _exerciseError!,
+                                      _weightError!,
                                       style: const TextStyle(
                                           color: Colors.red, fontSize: 12.0),
                                     ),
                                   ),
-                              ],
-                            )
-                          : Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20.0, vertical: 20.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.black,
-                                  border: Border.all(
-                                      color: Colors.white, width: 1.0),
-                                  borderRadius: BorderRadius.circular(20.0)),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Avbryt',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.transparent),
-                                      ),
-                                      Text(
-                                        'Input for ${_exerciseController.text}',
-                                        style: const TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _exerciseController.clear();
-                                            _setsController.clear();
-                                            _repsController.clear();
-                                            _weigthController.clear();
-                                          });
-                                        },
-                                        child: const Text(
-                                          'Avbryt',
-                                          style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  CustomDropdownlistnew(
-                                      errormessage: _repsError,
-                                      hasboarder: true,
-                                      controller: _repsController,
-                                      defaulttext: 'Välj Reps',
-                                      listitems: _selectsvalues),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  CustomDropdownlistnew(
-                                    errormessage: _setsError,
-                                    hasboarder: true,
-                                    controller: _setsController,
-                                    defaulttext: 'Välj Sets',
-                                    listitems: _selectsvalues,
-                                  ),
-                                  const SizedBox(
-                                    height: 5.0,
-                                  ),
-                                  CustomSearchDropdownList(
-                                    isNumeric: true,
-                                    errorMessage: _weightError,
-                                    hasBorder: true,
-                                    controller: _weigthController,
-                                    defaultText: 'Skriv vikt',
-                                    listItems: const [],
-                                    onErrorChanged: (newError) {
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                CustomButton(
+                                  onPressed: () {
+                                    if (_validateExerciseInput() == true) {
                                       setState(() {
-                                        _weightError = newError;
+                                        // Create a new instance of SelectedExercise
+                                        final newExercise = SelectedExercise(
+                                          name: _exerciseController.text,
+                                          reps: _repsController.text,
+                                          sets: _setsController.text,
+                                          weight: double.tryParse(
+                                                  _weigthController.text) ??
+                                              0,
+                                        );
+
+                                        // Add the new instance to the list
+                                        selectedExercises.add(newExercise);
+
+                                        // Clear the input fields
+                                        _exerciseController.clear();
+                                        _repsController.clear();
+                                        _setsController.clear();
+                                        _weigthController.clear();
                                       });
-                                    },
-                                  ),
-                                  if (_weightError != null)
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 4.0),
-                                      child: Text(
-                                        _weightError!,
-                                        style: const TextStyle(
-                                            color: Colors.red, fontSize: 12.0),
-                                      ),
-                                    ),
-                                  const SizedBox(
-                                    height: 10.0,
-                                  ),
-                                  CustomButton(
-                                    onPressed: () {
-                                      if (_validateExerciseInput() == true) {
-                                        setState(() {
-                                          // Create a new instance of SelectedExercise
-                                          final newExercise = SelectedExercise(
-                                            name: _exerciseController.text,
-                                            reps: _repsController.text,
-                                            sets: _setsController.text,
-                                            weight: double.tryParse(
-                                                    _weigthController.text) ??
-                                                0,
-                                          );
-
-                                          // Add the new instance to the list
-                                          selectedExercises.add(newExercise);
-
-                                          // Clear the input fields
-                                          _exerciseController.clear();
-                                          _repsController.clear();
-                                          _setsController.clear();
-                                          _weigthController.clear();
-                                        });
-                                      }
-                                    },
-                                    text: 'Lägg till',
-                                  ),
-                                ],
-                              ),
+                                    }
+                                  },
+                                  text: 'Lägg till',
+                                ),
+                              ],
                             ),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: Wrap(
-                  alignment: WrapAlignment.spaceEvenly,
-                  children: [
-                    CustomButton(
-                        width: 110,
-                        onPressed: _saveTrainingData,
-                        text: 'Spara'),
-                    CustomButton(
-                        width: 110,
-                        onPressed: () {
-                          Navigator.pop(context, true);
-                        },
-                        text: 'Tillbaka')
+                          ),
+                    const SizedBox(
+                      height: 16.0,
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                children: [
+                  CustomButton(
+                      width: 110, onPressed: _saveTrainingData, text: 'Spara'),
+                  CustomButton(
+                      width: 110,
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      },
+                      text: 'Tillbaka')
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

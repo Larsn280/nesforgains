@@ -179,57 +179,55 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation(
-      child: CustomAppContainer(
-        titleText: 'Träningspass',
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 40.0,
-            ),
-            Container(
-              constraints: const BoxConstraints(maxHeight: 600),
-              child: FutureBuilder<List<Workout>>(
-                future: _futureWorkouts,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildTrainingList([], 'Indicator');
-                  } else if (snapshot.hasError) {
-                    return _buildTrainingList([], 'Error loading logs');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildTrainingList(
-                        [], 'Inga träningspass tillgängliga');
-                  }
+    return CustomAppContainer(
+      titleText: 'Träningspass',
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 40.0,
+          ),
+          Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: FutureBuilder<List<Workout>>(
+              future: _futureWorkouts,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildTrainingList([], 'Indicator');
+                } else if (snapshot.hasError) {
+                  return _buildTrainingList([], 'Error loading logs');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildTrainingList(
+                      [], 'Inga träningspass tillgängliga');
+                }
 
-                  final logs = snapshot.data!;
-                  return _buildTrainingList(logs, '');
-                },
-              ),
+                final logs = snapshot.data!;
+                return _buildTrainingList(logs, '');
+              },
             ),
-            SizedBox(
-              width: double.infinity,
-              child: Wrap(
-                alignment: WrapAlignment.spaceEvenly,
-                children: [
-                  CustomButton(
-                      width: 120,
-                      onPressed: () {
-                        _navigateToAddWorkout();
-                      },
-                      text: 'Lägg till'),
-                  CustomButton(
-                      width: 120,
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, '/');
-                      },
-                      text: 'Hem'),
-                ],
-              ),
+          ),
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              children: [
+                CustomButton(
+                    width: 120,
+                    onPressed: () {
+                      _navigateToAddWorkout();
+                    },
+                    text: 'Lägg till'),
+                CustomButton(
+                    width: 120,
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, '/');
+                    },
+                    text: 'Hem'),
+              ],
             ),
-            const SizedBox(height: 20.0),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20.0),
+        ],
       ),
     );
   }

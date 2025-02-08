@@ -140,48 +140,45 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation(
-      child: CustomAppContainer(
-        titleText: 'Editera Träningspass',
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 40.0,
-            ),
-            CustomCards.buildFormCard(
-              context: context,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16.0),
-                    _buildFormTextFormField(
-                        'Träningspass (eg: Bröst, Ben, Rygg)',
-                        _workoutController),
-                    _buildFormTextFormField(
-                        'Övning eg: (Bänkpress, comma separerad)',
-                        _exerciseController),
-                    _buildFormTextFormField(
-                        'Datum (YYYY-MM-DD)', _dateController),
-                    _buildFormTextFormField(
-                        '(Reps, comma separerad)', _repsController),
-                    _buildFormTextFormField(
-                        '(Sets, comma separerad)', _setsController),
-                    _buildFormTextFormField(
-                        '(Kg, comma separerad)', _kgController),
-                  ],
-                ),
+    return CustomAppContainer(
+      titleText: 'Editera Träningspass',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
+          ),
+          CustomCards.buildFormCard(
+            context: context,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(height: 16.0),
+                  _buildFormTextFormField('Träningspass (eg: Bröst, Ben, Rygg)',
+                      _workoutController),
+                  _buildFormTextFormField(
+                      'Övning eg: (Bänkpress, comma separerad)',
+                      _exerciseController),
+                  _buildFormTextFormField(
+                      'Datum (YYYY-MM-DD)', _dateController),
+                  _buildFormTextFormField(
+                      '(Reps, comma separerad)', _repsController),
+                  _buildFormTextFormField(
+                      '(Sets, comma separerad)', _setsController),
+                  _buildFormTextFormField(
+                      '(Kg, comma separerad)', _kgController),
+                ],
               ),
             ),
-            const SizedBox(height: 8.0),
-            CustomButton(onPressed: _handleEditWorkout, text: 'Spara'),
-            CustomButton(
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-                text: 'Tillbaka'),
-          ],
-        ),
+          ),
+          const SizedBox(height: 8.0),
+          CustomButton(onPressed: _handleEditWorkout, text: 'Spara'),
+          CustomButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              text: 'Tillbaka'),
+        ],
       ),
     );
   }

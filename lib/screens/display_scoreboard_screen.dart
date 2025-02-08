@@ -60,45 +60,43 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBackNavigation(
-      child: CustomAppContainer(
-        titleText: 'Resultattavla',
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 40.0,
-            ),
-            Container(
-              constraints: const BoxConstraints(maxHeight: 600),
-              child: FutureBuilder<List<UserscoreViewmodel>>(
-                future: _futureScores,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _buildScoreboardList([], 'Indicator');
-                  } else if (snapshot.hasError) {
-                    return _buildScoreboardList([], 'Error loading scores');
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return _buildScoreboardList([], 'No scores available');
-                  }
+    return CustomAppContainer(
+      titleText: 'Resultattavla',
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 40.0,
+          ),
+          Container(
+            constraints: const BoxConstraints(maxHeight: 600),
+            child: FutureBuilder<List<UserscoreViewmodel>>(
+              future: _futureScores,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return _buildScoreboardList([], 'Indicator');
+                } else if (snapshot.hasError) {
+                  return _buildScoreboardList([], 'Error loading scores');
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return _buildScoreboardList([], 'No scores available');
+                }
 
-                  final scores = snapshot.data!;
-                  return _buildScoreboardList(scores, '');
-                },
-              ),
+                final scores = snapshot.data!;
+                return _buildScoreboardList(scores, '');
+              },
             ),
-            const SizedBox(
-              height: 8.0,
-            ),
-            CustomButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-                text: 'Hem'),
-            const SizedBox(
-              height: 20.0,
-            )
-          ],
-        ),
+          ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          CustomButton(
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+              text: 'Hem'),
+          const SizedBox(
+            height: 20.0,
+          )
+        ],
       ),
     );
   }
