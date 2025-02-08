@@ -29,8 +29,8 @@ dependencies:
   intl: ^0.19.0
   # Hanterar länkar
   url_launcher: ^6.3.1
-  # For AWS
   http: ^1.2.2
+  # For AWS
   aws_common: ^0.3.0
   aws_signature_v4: ^0.3.0
   flutter_dotenv: ^5.2.1
