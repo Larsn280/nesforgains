@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:nesforgains/widgets/custom_app_container.dart';
-
-import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:nesforgains/widgets/custom_button.dart';
 
 class BookOfExuses extends StatefulWidget {

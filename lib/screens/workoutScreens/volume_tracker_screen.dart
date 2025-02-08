@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
-
-import 'package:nesforgains/widgets/custom_back_navigation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:fl_chart/fl_chart.dart';
 
