@@ -501,15 +501,24 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 8.0),
-              // Submit button
-              CustomButton(onPressed: _saveTrainingData, text: 'Spara'),
-              CustomButton(
-                  onPressed: () {
-                    Navigator.pop(context, true);
-                  },
-                  text: 'Tillbaka')
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: [
+                    CustomButton(
+                        width: 110,
+                        onPressed: _saveTrainingData,
+                        text: 'Spara'),
+                    CustomButton(
+                        width: 110,
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        text: 'Tillbaka')
+                  ],
+                ),
+              ),
             ],
           ),
         ),

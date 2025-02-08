@@ -161,21 +161,21 @@ class _NutritionScreenState extends State<NutritionScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 15.0),
-                    Text('Total calories today: $calories g',
+                    Text('Kalorier idag: $calories g',
                         style: AppConstants.subheadingStyle),
                     const SizedBox(height: 10),
                     Text('Protein: $proteine g',
                         style: AppConstants.subheadingStyle),
-                    Text('Carbohydrates: $carbohydrates g',
+                    Text('Kolhydrater: $carbohydrates g',
                         style: AppConstants.subheadingStyle),
-                    Text('Fat: $fat g', style: AppConstants.subheadingStyle),
+                    Text('Fett: $fat g', style: AppConstants.subheadingStyle),
                     const SizedBox(
                       height: 16.0,
                     ),
                     TextField(
                       controller: _searchController,
                       decoration: const InputDecoration(
-                        hintText: 'Enter dish',
+                        hintText: 'Skriv maträtt',
                         contentPadding: EdgeInsets.symmetric(horizontal: 6.0),
                       ),
                     ),
@@ -217,17 +217,26 @@ class _NutritionScreenState extends State<NutritionScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 30.0),
-              CustomButton(
-                  onPressed: () {
-                    _navigatetodishlist();
-                  },
-                  text: 'Dishlist'),
-              CustomButton(
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                  text: 'Home')
+              SizedBox(
+                width: double.infinity,
+                child: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  children: [
+                    CustomButton(
+                        width: 110,
+                        onPressed: () {
+                          _navigatetodishlist();
+                        },
+                        text: 'Maträtter'),
+                    CustomButton(
+                        width: 110,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/');
+                        },
+                        text: 'Hem')
+                  ],
+                ),
+              ),
             ],
           ),
           if (_filteredDishes.isNotEmpty)

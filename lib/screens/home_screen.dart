@@ -86,21 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  Wrap(
-                    spacing: 40,
-                    alignment: WrapAlignment.center,
-                    children: [
-                      CustomButton(
-                        onPressed: _launchTrello,
-                        text: 'Trello',
-                        width: 110,
-                      ),
-                      CustomButton(
-                        onPressed: _launchKalkylator,
-                        text: 'Kalkylator',
-                        width: 110,
-                      ),
-                    ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      children: [
+                        CustomButton(
+                          onPressed: _launchTrello,
+                          text: 'Trello',
+                          width: 110,
+                        ),
+                        CustomButton(
+                          onPressed: _launchKalkylator,
+                          text: 'Kalkylator',
+                          width: 110,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20.0),
                   const Text('Välkommen till NESForGains!',

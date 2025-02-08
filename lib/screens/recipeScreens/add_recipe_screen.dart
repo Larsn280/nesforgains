@@ -117,23 +117,22 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 16.0),
                   // Title Input
                   _buildTextFormField(
                       controller: _titleController,
-                      labelText: 'Title',
+                      labelText: 'Titel',
                       validatorMessage: 'Please enter the recipe title'),
 
                   // Description Input
                   _buildTextFormField(
                       controller: _descriptionController,
-                      labelText: 'Description',
+                      labelText: 'Beskrivning',
                       validatorMessage: 'Please enter a description'),
 
                   // Duration Input
                   _buildTextFormField(
                     controller: _durationController,
-                    labelText: 'Duration (in minutes)',
+                    labelText: 'Tid (i minuter)',
                     validatorMessage: 'Please enter the duration',
                     keyboardType: TextInputType.number,
                     isNumeric: true,
@@ -142,33 +141,40 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
                   // Difficulty Input
                   _buildTextFormField(
                       controller: _difficultyController,
-                      labelText: 'Difficulty',
+                      labelText: 'Svårhetsgrad',
                       validatorMessage: 'Please enter the difficulty'),
 
                   // Ingredients Input
                   _buildTextFormField(
                       controller: _ingredientsController,
-                      labelText: 'Ingredients (comma separated)',
+                      labelText: 'Ingridienser (comma separerad)',
                       validatorMessage: 'Please enter at least one ingredient'),
 
                   // Steps Input
                   _buildTextFormField(
                       controller: _stepsController,
-                      labelText: 'Steps (period separated)',
+                      labelText: 'Steg (punkt separerad)',
                       validatorMessage: 'Please enter the steps'),
                 ],
               ),
             ),
           ),
-
-          // Save Button
-          const SizedBox(height: 8.0),
-          CustomButton(onPressed: _handleSaveRecipe, text: 'Save Recipe'),
-          CustomButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-              text: 'Back')
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              children: [
+                CustomButton(
+                    width: 110, onPressed: _handleSaveRecipe, text: 'Spara'),
+                CustomButton(
+                    width: 110,
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    text: 'Tillbaka')
+              ],
+            ),
+          ),
         ],
       ),
     );

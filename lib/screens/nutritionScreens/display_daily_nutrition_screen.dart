@@ -73,12 +73,11 @@ class _DisplayDailyNutritionScreenState
               },
             ),
           ),
-          const SizedBox(height: 8.0),
           CustomButton(
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/');
               },
-              text: 'Home'),
+              text: 'Hem'),
           const SizedBox(height: 8.0),
         ],
       ),
@@ -88,11 +87,11 @@ class _DisplayDailyNutritionScreenState
   Widget _buildDailyNutritionHeader() {
     return Row(
       children: [
-        _buildNutritionColumnHeader('Date', 0.25),
-        _buildNutritionColumnHeader('Cal', 0.10),
+        _buildNutritionColumnHeader('Datum', 0.20),
+        _buildNutritionColumnHeader('Kal', 0.10),
         _buildNutritionColumnHeader('Protein', 0.15),
-        _buildNutritionColumnHeader('Carbs', 0.15),
-        _buildNutritionColumnHeader('Fat', 0.10),
+        _buildNutritionColumnHeader('Kolhydrater', 0.25),
+        _buildNutritionColumnHeader('Fett', 0.10),
         const Flexible(child: SizedBox()),
       ],
     );
@@ -111,10 +110,10 @@ class _DisplayDailyNutritionScreenState
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
         children: [
-          _buildNutritionColumn(dailyNutrition.date!.toString(), 0.25),
+          _buildNutritionColumn(dailyNutrition.date!.toString(), 0.20),
           _buildNutritionColumn(dailyNutrition.calories.toString(), 0.10),
           _buildNutritionColumn(dailyNutrition.protein.toString(), 0.15),
-          _buildNutritionColumn(dailyNutrition.carbohydrates.toString(), 0.15),
+          _buildNutritionColumn(dailyNutrition.carbohydrates.toString(), 0.25),
           _buildNutritionColumn(dailyNutrition.fat.toString(), 0.10),
           const Flexible(child: SizedBox()),
         ],

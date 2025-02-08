@@ -96,12 +96,12 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
               child: SingleChildScrollView(
                 child: _buildRecipeDetails(recipe),
               )),
-          const SizedBox(height: 8.0),
           CustomButton(
+              width: 110,
               onPressed: () {
                 Navigator.pop(context, true);
               },
-              text: 'Back'),
+              text: 'Tillbaka'),
         ],
       ),
     );
@@ -139,11 +139,11 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
           height: 20.0,
         ),
         Text(
-          'Duration: ${recipe.duration} min',
+          'Tid: ${recipe.duration} min',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
         ),
         Text(
-          'Difficulty: ${recipe.difficulty}',
+          'Svårhetsgrad: ${recipe.difficulty}',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
         ),
         const SizedBox(

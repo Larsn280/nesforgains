@@ -140,7 +140,6 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  const SizedBox(height: 16.0),
                   _buildTextFormField(
                       controller: _titleController,
                       labelText: 'Title',
@@ -172,13 +171,22 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 30.0),
-          CustomButton(onPressed: _handleEditRecipe, text: 'Save'),
-          CustomButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              text: 'Cancle'),
+          SizedBox(
+            width: double.infinity,
+            child: Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              children: [
+                CustomButton(
+                    width: 110, onPressed: _handleEditRecipe, text: 'Spara'),
+                CustomButton(
+                    width: 110,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    text: 'Avbryt'),
+              ],
+            ),
+          )
         ],
       ),
     );
