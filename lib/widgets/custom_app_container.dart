@@ -34,6 +34,18 @@ class CustomAppContainer extends StatelessWidget {
           ),
           centerTitle: true,
           leading: const CustomNavigationMenu(),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.person,
+                color: Colors.white,
+                semanticLabel: 'Profile',
+              ),
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+          ],
         ),
         body: SizedBox.expand(
           child: Container(
