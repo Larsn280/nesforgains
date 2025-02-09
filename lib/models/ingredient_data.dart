@@ -1,4 +1,4 @@
-class Ingredient {
+class IngredientData {
   int? id;
   int? recipeId;
   String? name; // Ingredient name (e.g., "Flour", "Eggs")
@@ -6,6 +6,6 @@ class Ingredient {
   double? quantity; // Quantity of the ingredient (e.g., "200 grams")
   String? note; // Optional note (e.g., "chopped finely")
 
-  Ingredient(
+  IngredientData(
       {this.id, this.recipeId, this.name, this.unit, this.quantity, this.note});
 }

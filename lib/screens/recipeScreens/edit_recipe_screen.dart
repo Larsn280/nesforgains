@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/ingredient.dart';
+import 'package:nesforgains/models/ingredient_data.dart';
 import 'package:nesforgains/models/recipe.dart';
 import 'package:nesforgains/models/stage.dart';
 import 'package:nesforgains/service/recipe_service.dart';
@@ -78,7 +78,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
 
   void _handleEditRecipe() async {
     try {
-      late List<Ingredient> ingredientsList = [];
+      late List<IngredientData> ingredientsList = [];
       final List<Stage> stageList = [];
 
       if (_formKey.currentState!.validate()) {
@@ -94,7 +94,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         final splitStageList = _stagesController.text.split('.');
 
         for (var ingredientText in splitIngredientList) {
-          final ingredient = Ingredient()
+          final ingredient = IngredientData()
             ..name = ingredientText.trim() // Remove any extra spaces
             ..quantity =
                 1 // Default quantity, you can extend this for user input

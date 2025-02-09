@@ -1,4 +1,4 @@
-import 'package:nesforgains/models/ingredient.dart';
+import 'package:nesforgains/models/ingredient_data.dart';
 import 'package:nesforgains/models/stage.dart';
 
 class Recipe {
@@ -7,7 +7,7 @@ class Recipe {
   String? description; // Optional description of the recipe
   int? duration; // Duration in minutes (e.g., 30 mins)
   String? difficulty; // Difficulty level (e.g., "Easy", "Medium", "Hard")
-  List<Ingredient>? ingredients;
+  List<IngredientData>? ingredients;
   List<Stage>? stages;
   // final categories = IsarLinks<Category>();     // Linking to categories like "Italian", "Vegetarian"
   String? createdAt; // Date when the recipe was created
