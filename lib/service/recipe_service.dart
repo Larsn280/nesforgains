@@ -1,6 +1,6 @@
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/ingredient_data.dart';
-import 'package:nesforgains/models/recipe.dart';
+import 'package:nesforgains/models/recipe_data.dart';
 import 'package:nesforgains/models/response_data.dart';
 import 'package:nesforgains/models/stage.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,7 +10,7 @@ class RecipeService {
 
   RecipeService(this._sqflite);
 
-  Future<ResponseData> addRecipe(Recipe recipe,
+  Future<ResponseData> addRecipe(RecipeData recipe,
       List<IngredientData> ingredients, List<Stage> stages) async {
     try {
       // Check if the recipe already exists
@@ -84,7 +84,7 @@ class RecipeService {
     }
   }
 
-  Future<ResponseData> editRecipe(Recipe recipe,
+  Future<ResponseData> editRecipe(RecipeData recipe,
       List<IngredientData> newIngredients, List<Stage> newStages) async {
     try {
       // Check if the recipe exists
@@ -171,7 +171,7 @@ class RecipeService {
     }
   }
 
-  Future<ResponseData> deleteRecipe(Recipe recipe) async {
+  Future<ResponseData> deleteRecipe(RecipeData recipe) async {
     try {
       // Check if the recipe exists
       final existingRecipes = await _sqflite.query(
@@ -207,7 +207,7 @@ class RecipeService {
     }
   }
 
-  Future<List<Recipe>> getAllRecipesInAlphabeticalOrder() async {
+  Future<List<RecipeData>> getAllRecipesInAlphabeticalOrder() async {
     try {
       // Query all recipes sorted alphabetically by title
       final recipesData = await _sqflite.query(
@@ -216,7 +216,7 @@ class RecipeService {
       );
 
       // Initialize a list to store Recipe objects
-      List<Recipe> recipes = [];
+      List<RecipeData> recipes = [];
 
       for (var recipeData in recipesData) {
         // Fetch ingredients for the recipe
@@ -256,7 +256,7 @@ class RecipeService {
         }).toList();
 
         // Create the Recipe object
-        recipes.add(Recipe(
+        recipes.add(RecipeData(
           id: recipeData['id'] as int,
           title: recipeData['title'] as String,
           description: recipeData['description'] as String?,
@@ -276,7 +276,7 @@ class RecipeService {
     }
   }
 
-  Future<Recipe> fetchRecipeById(int recipeId) async {
+  Future<RecipeData> fetchRecipeById(int recipeId) async {
     try {
       // Fetch the recipe by ID
       final recipeData = await _sqflite.query(
@@ -327,7 +327,7 @@ class RecipeService {
       }).toList();
 
       // Map the recipe data into a Recipe object
-      final recipe = Recipe(
+      final recipe = RecipeData(
         id: recipeData.first['id'] as int,
         title: recipeData.first['title'] as String,
         description: recipeData.first['description'] as String?,

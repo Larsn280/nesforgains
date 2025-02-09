@@ -1,7 +1,7 @@
 import 'package:nesforgains/models/ingredient_data.dart';
 import 'package:nesforgains/models/stage.dart';
 
-class Recipe {
+class RecipeData {
   int? id; // Automatically generated unique ID
   String? title; // Recipe title (e.g. "Spaghetti Carbonara")
   String? description; // Optional description of the recipe
@@ -13,7 +13,7 @@ class Recipe {
   String? createdAt; // Date when the recipe was created
   String? updatedAt; // Date when the recipe was last updated
 
-  Recipe(
+  RecipeData(
       {this.id,
       this.title,
       this.description,
