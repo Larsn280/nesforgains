@@ -31,8 +31,8 @@ class _DisplayScoreboardScreenState extends State<DisplayScoreboardScreen> {
   @override
   void initState() {
     super.initState();
-    username = AuthProvider.of(context).username;
-    userId = AuthProvider.of(context).id;
+    username = AuthProvider.of(context).loggedInUser.username;
+    userId = AuthProvider.of(context).loggedInUser.id;
     scoreboardService = ScoreboardService(widget.sqflite);
     awsBucketService = AwsBucketService();
     // _futureScores = _fetchAllScores();

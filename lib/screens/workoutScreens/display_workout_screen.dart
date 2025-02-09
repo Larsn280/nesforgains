@@ -76,7 +76,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
 
   Future<List<WorkoutData>> _fetchAllWorkouts() async {
     try {
-      final userId = AuthProvider.of(context).id;
+      final userId = AuthProvider.of(context).loggedInUser.id;
       final response = await workoutService.fetchAllWorkouts(userId);
       return response;
     } catch (e) {

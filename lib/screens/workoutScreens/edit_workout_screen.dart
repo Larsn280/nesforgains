@@ -101,7 +101,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
           return;
         }
 
-        final userIdValue = AuthProvider.of(context).id;
+        final userIdValue = AuthProvider.of(context).loggedInUser.id;
 
         final workout = WorkoutData(
             id: widget.workout.id,

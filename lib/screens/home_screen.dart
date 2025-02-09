@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    userName = AuthProvider.of(context).username;
+    userName = AuthProvider.of(context).loggedInUser.username;
   }
 
   Future<void> _launchTrello() async {

@@ -35,7 +35,7 @@ class _DisplayDailyNutritionScreenState
   Future<List<NutritionData>> _fetchDailyNutritionItems() async {
     try {
       final response = await nutritionService
-          .fetchNutritionListByUserId(AuthProvider.of(context).id);
+          .fetchNutritionListByUserId(AuthProvider.of(context).loggedInUser.id);
       return response;
     } catch (e) {
       logger.e('Error fetching daily nutrition', error: e);

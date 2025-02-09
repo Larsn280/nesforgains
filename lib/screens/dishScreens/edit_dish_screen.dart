@@ -73,7 +73,7 @@ class _EditDishScreenState extends State<EditDishScreen> {
             carbohydrates: int.tryParse(_carbController.text) ?? 0,
             fat: int.tryParse(_fatController.text) ?? 0);
         final response = await dishService.editDish(
-            newDish, olddishname, AuthProvider.of(context).id);
+            newDish, olddishname, AuthProvider.of(context).loggedInUser.id);
 
         if (response.checksuccess == true) {
           if (mounted) {

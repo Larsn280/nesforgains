@@ -55,7 +55,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
         );
 
         final response = await nutritionService.addDish(
-            nutritionData, AuthProvider.of(context).id);
+            nutritionData, AuthProvider.of(context).loggedInUser.id);
 
         if (response.checksuccess == true) {
           _nameController.clear();

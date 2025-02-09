@@ -50,8 +50,8 @@ class _NutritionScreenState extends State<NutritionScreen> {
 
   void _fetchAllDishNames() async {
     try {
-      final dishList =
-          await dishService.fetchAllDishNamesById(AuthProvider.of(context).id);
+      final dishList = await dishService
+          .fetchAllDishNamesById(AuthProvider.of(context).loggedInUser.id);
       setState(() {
         _allDishNames = dishList;
       });
@@ -63,7 +63,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   void _fetchDailyIntake() async {
     try {
       final intake = await nutritionService
-          .fetchDailyNutritionById(AuthProvider.of(context).id);
+          .fetchDailyNutritionById(AuthProvider.of(context).loggedInUser.id);
       setState(() {
         calories = intake.calories;
         proteine = intake.protein;
@@ -78,7 +78,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   void _postDailyDish(dish) async {
     try {
       final response = await nutritionService.postDailyDish(
-          dish, AuthProvider.of(context).id);
+          dish, AuthProvider.of(context).loggedInUser.id);
       if (response.checksuccess == true) {
         _searchController.clear();
         _fetchDailyIntake();
@@ -91,7 +91,7 @@ class _NutritionScreenState extends State<NutritionScreen> {
   void _putDailyDish(dish) async {
     try {
       final response = await nutritionService.putDailyDish(
-          dish, AuthProvider.of(context).id);
+          dish, AuthProvider.of(context).loggedInUser.id);
       if (response.checksuccess == true) {
         _searchController.clear();
         _fetchDailyIntake();

@@ -1,9 +1,11 @@
 class UserData {
-  final String id;
-  final String username;
+  String id;
+  String username;
+  bool? isloggedin;
 
   UserData({
     required this.id,
     required this.username,
+    this.isloggedin,
   });
 }

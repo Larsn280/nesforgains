@@ -112,7 +112,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
           _formKey.currentState!.validate()) {
         final workoutValue = _workoutController.text.toString();
 
-        final userIdValue = AuthProvider.of(context).id;
+        final userIdValue = AuthProvider.of(context).loggedInUser.id;
 
         final workout = WorkoutData(
             id: 0,

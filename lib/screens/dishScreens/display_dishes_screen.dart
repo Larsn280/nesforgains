@@ -34,7 +34,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
   Future<List<DishData>> _handlefetchAllDishes() async {
     try {
       final response = await nutritionService
-          .fetchAllDishesById(AuthProvider.of(context).id);
+          .fetchAllDishesById(AuthProvider.of(context).loggedInUser.id);
       return response;
     } catch (e) {
       logger.e('Error fetching dishes', error: e);
@@ -178,7 +178,8 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.redAccent),
                   onPressed: () {
-                    _handleDeleteDish(dish.dish!, AuthProvider.of(context).id);
+                    _handleDeleteDish(
+                        dish.dish!, AuthProvider.of(context).loggedInUser.id);
                   },
                 ),
               ],
