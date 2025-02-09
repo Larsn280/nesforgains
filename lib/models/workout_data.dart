@@ -1,6 +1,6 @@
 import 'package:nesforgains/models/exercise_data.dart';
 
-class Workout {
+class WorkoutData {
   int id;
 
   late String name;
@@ -13,7 +13,7 @@ class Workout {
 
   List<ExerciseData>? exercises;
 
-  Workout(
+  WorkoutData(
       {required this.id,
       required this.name,
       required this.date,

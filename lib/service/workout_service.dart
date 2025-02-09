@@ -1,7 +1,7 @@
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/exercise_data.dart';
 import 'package:nesforgains/models/response_data.dart';
-import 'package:nesforgains/models/workout.dart';
+import 'package:nesforgains/models/workout_data.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WorkoutService {
@@ -10,7 +10,7 @@ class WorkoutService {
   WorkoutService(this._sqflite);
 
   Future<ResponseData> addWorkout(
-      Workout workout, List<ExerciseData> exercises) async {
+      WorkoutData workout, List<ExerciseData> exercises) async {
     try {
       // Helper to parse the date
       String parseDate(String dateTime) => dateTime.split(' ')[0];
@@ -79,7 +79,7 @@ class WorkoutService {
     }
   }
 
-  Future<List<Workout>> fetchAllWorkouts(String userId) async {
+  Future<List<WorkoutData>> fetchAllWorkouts(String userId) async {
     try {
       // Fetch workouts along with their exercises in one query using JOIN
       final List<Map<String, dynamic>> rows = await _sqflite.rawQuery(
@@ -95,7 +95,7 @@ class WorkoutService {
       );
 
       // Create a map to store workouts by id
-      Map<int, Workout> workoutMap = {};
+      Map<int, WorkoutData> workoutMap = {};
 
       // Process the query results
       for (final row in rows) {
@@ -111,7 +111,7 @@ class WorkoutService {
 
         // Check if the workout already exists in the map, if not, create a new one
         if (!workoutMap.containsKey(workoutId)) {
-          workoutMap[workoutId] = Workout(
+          workoutMap[workoutId] = WorkoutData(
             id: workoutId,
             name: row['name'],
             userId: row['userId'],
@@ -133,7 +133,7 @@ class WorkoutService {
     }
   }
 
-  Future<Workout> fetchWorkoutById(int? workoutId) async {
+  Future<WorkoutData> fetchWorkoutById(int? workoutId) async {
     try {
       // Fetch the workout by ID
       final List<Map<String, dynamic>> workoutRows = await _sqflite.query(
@@ -170,7 +170,7 @@ class WorkoutService {
       }
 
       // Create the Workout instance with exercises
-      Workout workout = Workout(
+      WorkoutData workout = WorkoutData(
         id: workoutRow['id'],
         name: workoutRow['name'],
         userId: workoutRow['userId'],
@@ -187,7 +187,7 @@ class WorkoutService {
   }
 
   Future<ResponseData> editWorkout(
-    Workout workoutToEdit,
+    WorkoutData workoutToEdit,
     List<ExerciseData> exerciseListToEdit,
     int workoutId,
   ) async {
@@ -280,7 +280,7 @@ class WorkoutService {
     }
   }
 
-  Future<ResponseData> deleteWorkout(Workout workout) async {
+  Future<ResponseData> deleteWorkout(WorkoutData workout) async {
     try {
       // Start a transaction to ensure atomicity
       await _sqflite.transaction((txn) async {

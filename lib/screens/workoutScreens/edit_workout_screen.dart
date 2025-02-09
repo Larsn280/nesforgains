@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/exercise_data.dart';
-import 'package:nesforgains/models/workout.dart';
+import 'package:nesforgains/models/workout_data.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -12,7 +12,7 @@ import 'package:sqflite/sqflite.dart';
 
 class EditWorkoutScreen extends StatefulWidget {
   final Database sqflite;
-  final Workout workout; // Pass the log to edit
+  final WorkoutData workout; // Pass the log to edit
 
   const EditWorkoutScreen(
       {super.key, required this.sqflite, required this.workout});
@@ -58,7 +58,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
     super.dispose();
   }
 
-  void _sortIsarLinks(Workout workout) {
+  void _sortIsarLinks(WorkoutData workout) {
     final exerciseList = workout.exercises!.map((e) => e.name).toList();
     final repList = workout.exercises!.map((e) => e.rep).toList();
     final setList = workout.exercises!.map((e) => e.set).toList();
@@ -103,7 +103,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
 
         final userIdValue = AuthProvider.of(context).id;
 
-        final workout = Workout(
+        final workout = WorkoutData(
             id: widget.workout.id,
             name: workoutValue,
             date: _dateController.text.toString(),

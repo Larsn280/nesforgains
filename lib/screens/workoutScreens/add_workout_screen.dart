@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/exercise_data.dart';
 import 'package:nesforgains/models/selected_exercise.dart';
-import 'package:nesforgains/models/workout.dart';
+import 'package:nesforgains/models/workout_data.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -114,7 +114,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
         final userIdValue = AuthProvider.of(context).id;
 
-        final workout = Workout(
+        final workout = WorkoutData(
             id: 0,
             name: workoutValue,
             date: _selectedDate.toString(),

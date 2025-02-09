@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/workout.dart';
+import 'package:nesforgains/models/workout_data.dart';
 import 'package:nesforgains/screens/workoutScreens/edit_workout_screen.dart';
 import 'package:nesforgains/service/workout_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -12,7 +12,7 @@ import 'package:nesforgains/widgets/custom_snackbar.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DisplayWorkoutDetailsScreen extends StatefulWidget {
-  final Workout workout;
+  final WorkoutData workout;
   final Database sqflite;
 
   const DisplayWorkoutDetailsScreen(
@@ -25,7 +25,7 @@ class DisplayWorkoutDetailsScreen extends StatefulWidget {
 
 class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
   late WorkoutService workoutService;
-  late Workout workout;
+  late WorkoutData workout;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
     workoutService = WorkoutService(widget.sqflite);
   }
 
-  Future<Workout> _fetchWorkout() async {
+  Future<WorkoutData> _fetchWorkout() async {
     try {
       final fetchedWorkout =
           await workoutService.fetchWorkoutById(widget.workout.id);
@@ -45,7 +45,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
     }
   }
 
-  void _navigateToEditWorkout(Workout workout) async {
+  void _navigateToEditWorkout(WorkoutData workout) async {
     try {
       final result = await Navigator.push(
         context,
@@ -70,7 +70,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
     }
   }
 
-  Future<void> _handleDeleteWorkout(Workout workout) async {
+  Future<void> _handleDeleteWorkout(WorkoutData workout) async {
     try {
       final response = await workoutService.deleteWorkout(workout);
 
@@ -112,7 +112,7 @@ class _DisplayWorkoutDetailsState extends State<DisplayWorkoutDetailsScreen> {
     );
   }
 
-  Widget _buildWorkoutDetails(Workout workout) {
+  Widget _buildWorkoutDetails(WorkoutData workout) {
     final exercises = workout.exercises!.map((e) => e).toList();
     return Column(
       children: [

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/checkbox_item.dart';
-import 'package:nesforgains/models/workout.dart';
+import 'package:nesforgains/models/workout_data.dart';
 import 'package:nesforgains/screens/workoutScreens/add_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_details_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -26,7 +26,7 @@ class DisplayWorkoutScreen extends StatefulWidget {
 class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
   static const double sizedBoxHeight = 18.0;
   late WorkoutService workoutService;
-  late Future<List<Workout>> _futureWorkouts;
+  late Future<List<WorkoutData>> _futureWorkouts;
   List<CheckboxItem> isFirstCheckedList = [];
   List<CheckboxItem> isSecondCheckedList = [];
 
@@ -74,7 +74,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
     return false;
   }
 
-  Future<List<Workout>> _fetchAllWorkouts() async {
+  Future<List<WorkoutData>> _fetchAllWorkouts() async {
     try {
       final userId = AuthProvider.of(context).id;
       final response = await workoutService.fetchAllWorkouts(userId);
@@ -89,7 +89,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
     }
   }
 
-  void _navigateToWorkoutDetails(Workout workout) async {
+  void _navigateToWorkoutDetails(WorkoutData workout) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -187,7 +187,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 600),
-            child: FutureBuilder<List<Workout>>(
+            child: FutureBuilder<List<WorkoutData>>(
               future: _futureWorkouts,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -267,7 +267,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
                 style: const TextStyle(fontWeight: FontWeight.bold)));
   }
 
-  Widget _buildTrainingRow(Workout log) {
+  Widget _buildTrainingRow(WorkoutData log) {
     Color color = Colors.black;
 
     if (log.markedColor != null) {
@@ -389,7 +389,7 @@ class _DisplayWorkScreenState extends State<DisplayWorkoutScreen> {
           );
   }
 
-  Widget _buildTrainingList(List<Workout> logs, String message) {
+  Widget _buildTrainingList(List<WorkoutData> logs, String message) {
     final areAllWorkoutsMarked =
         logs.isNotEmpty && logs.every((log) => log.markedColor != null);
     return CustomCards.buildListCard(
