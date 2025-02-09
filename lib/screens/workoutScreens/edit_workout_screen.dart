@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/exercise.dart';
+import 'package:nesforgains/models/exercise_data.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/workout_service.dart';
@@ -82,7 +82,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
 
   Future<void> _handleEditWorkout() async {
     try {
-      final List<Exercise> exerciseList = [];
+      final List<ExerciseData> exerciseList = [];
       final int workoutId = widget.workout.id;
       if (_formKey.currentState!.validate()) {
         final workoutValue = _workoutController.text.toString();
@@ -110,7 +110,7 @@ class _EditWorkoutScreenState extends State<EditWorkoutScreen> {
             userId: userIdValue);
 
         for (int i = 0; i < splitExerciseList.length; i++) {
-          final exercise = Exercise(
+          final exercise = ExerciseData(
             name: splitExerciseList[i].trim(),
             kg: double.tryParse(splitKgList[i].trim()),
             rep: int.tryParse(splitRepList[i].trim()),

@@ -1,5 +1,5 @@
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/exercise.dart';
+import 'package:nesforgains/models/exercise_data.dart';
 import 'package:nesforgains/models/response_data.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:sqflite/sqflite.dart';
@@ -10,7 +10,7 @@ class WorkoutService {
   WorkoutService(this._sqflite);
 
   Future<ResponseData> addWorkout(
-      Workout workout, List<Exercise> exercises) async {
+      Workout workout, List<ExerciseData> exercises) async {
     try {
       // Helper to parse the date
       String parseDate(String dateTime) => dateTime.split(' ')[0];
@@ -100,7 +100,7 @@ class WorkoutService {
       // Process the query results
       for (final row in rows) {
         final workoutId = row['id'];
-        final exercise = Exercise(
+        final exercise = ExerciseData(
           id: row['exercise_id'],
           name: row['exercise_name'],
           workoutId: row['workoutId'],
@@ -157,9 +157,9 @@ class WorkoutService {
       );
 
       // Manually map exercises
-      List<Exercise> exercises = [];
+      List<ExerciseData> exercises = [];
       for (final exerciseRow in exerciseRows) {
-        exercises.add(Exercise(
+        exercises.add(ExerciseData(
           id: exerciseRow['id'],
           name: exerciseRow['name'],
           workoutId: exerciseRow['workoutId'],
@@ -188,7 +188,7 @@ class WorkoutService {
 
   Future<ResponseData> editWorkout(
     Workout workoutToEdit,
-    List<Exercise> exerciseListToEdit,
+    List<ExerciseData> exerciseListToEdit,
     int workoutId,
   ) async {
     try {

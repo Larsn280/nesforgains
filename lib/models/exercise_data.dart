@@ -1,4 +1,4 @@
-class Exercise {
+class ExerciseData {
   int? id;
 
   String? workoutId;
@@ -11,7 +11,7 @@ class Exercise {
 
   int? set;
 
-  Exercise({
+  ExerciseData({
     this.id,
     this.workoutId,
     this.name,

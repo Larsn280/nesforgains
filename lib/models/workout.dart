@@ -1,4 +1,4 @@
-import 'package:nesforgains/models/exercise.dart';
+import 'package:nesforgains/models/exercise_data.dart';
 
 class Workout {
   int id;
@@ -11,7 +11,7 @@ class Workout {
 
   String? markedColor;
 
-  List<Exercise>? exercises;
+  List<ExerciseData>? exercises;
 
   Workout(
       {required this.id,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/exercise.dart';
+import 'package:nesforgains/models/exercise_data.dart';
 import 'package:nesforgains/models/selected_exercise.dart';
 import 'package:nesforgains/models/workout.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -106,7 +106,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
 
   void _saveTrainingData() async {
     try {
-      final List<Exercise> exerciseList = [];
+      final List<ExerciseData> exerciseList = [];
       if (_validateWorkoutInput() == true &&
           _selectedDate != null &&
           _formKey.currentState!.validate()) {
@@ -121,7 +121,7 @@ class _AddWorkoutScreen extends State<AddWorkoutScreen> {
             userId: userIdValue);
 
         for (var exercise in selectedExercises) {
-          final newExercise = Exercise(
+          final newExercise = ExerciseData(
             name: exercise.name.trim().toLowerCase() == 'bänkpress'
                 ? 'Benchpress'
                 : exercise.name.trim(),
