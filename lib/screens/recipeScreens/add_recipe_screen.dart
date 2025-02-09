@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/ingredient_data.dart';
-import 'package:nesforgains/models/recipe.dart';
-import 'package:nesforgains/models/stage.dart';
+import 'package:nesforgains/models/recipe_data.dart';
+import 'package:nesforgains/models/stage_data.dart';
 import 'package:nesforgains/service/recipe_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
@@ -55,9 +55,9 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
       // Validate the form
       if (_formKey.currentState!.validate()) {
         final List<IngredientData> ingredientsList = [];
-        final List<Stage> stageList = [];
+        final List<StageData> stageList = [];
 
-        final recipe = Recipe()
+        final recipe = RecipeData()
           ..title = _titleController.text
           ..description = _descriptionController.text
           ..duration = int.parse(_durationController.text)
@@ -78,7 +78,7 @@ class _AddRecipeScreenState extends State<AddRecipeScreen> {
         }
 
         for (int i = 0; i < splitStageList.length; i++) {
-          final stage = Stage()
+          final stage = StageData()
             ..stageNumber = i + 1
             ..instruction = splitStageList[i].trim();
           stageList.add(stage);

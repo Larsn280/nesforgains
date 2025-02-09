@@ -1,4 +1,4 @@
-class Stage {
+class StageData {
   int? id;
   int? stageNumber; // Step number (e.g., 1, 2, 3)
   int? recipeId;
@@ -6,7 +6,7 @@ class Stage {
   int?
       duration; // Optional duration for this step in minutes (e.g., 5 minutes for boiling)
 
-  Stage(
+  StageData(
       {this.id,
       this.stageNumber,
       this.recipeId,

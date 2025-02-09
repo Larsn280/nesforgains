@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/recipe.dart';
+import 'package:nesforgains/models/recipe_data.dart';
 import 'package:nesforgains/screens/recipeScreens/add_recipe_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_details_screen.dart';
 import 'package:nesforgains/service/recipe_service.dart';
@@ -29,7 +29,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
     recipeService = RecipeService(widget.sqflite);
   }
 
-  Future<List<Recipe>> _fetchAllRecipes() async {
+  Future<List<RecipeData>> _fetchAllRecipes() async {
     try {
       return await recipeService.getAllRecipesInAlphabeticalOrder();
     } catch (e, stackTrace) {
@@ -56,7 +56,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
     }
   }
 
-  void _navigateToRecipeDetails(Recipe recipe) async {
+  void _navigateToRecipeDetails(RecipeData recipe) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -84,7 +84,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 600),
-            child: FutureBuilder<List<Recipe>>(
+            child: FutureBuilder<List<RecipeData>>(
               future: _fetchAllRecipes(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -129,7 +129,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeScreen> {
     );
   }
 
-  Widget _buildRecipeList(List<Recipe> recipes, String message) {
+  Widget _buildRecipeList(List<RecipeData> recipes, String message) {
     return CustomCards.buildListCard(
       context: context,
       child: Column(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/recipe.dart';
+import 'package:nesforgains/models/recipe_data.dart';
 import 'package:nesforgains/screens/recipeScreens/edit_recipe_screen.dart';
 import 'package:nesforgains/service/recipe_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -13,7 +13,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DisplayRecipeDetailsScreen extends StatefulWidget {
   final Database sqflite;
-  final Recipe recipe;
+  final RecipeData recipe;
   const DisplayRecipeDetailsScreen(
       {super.key, required this.recipe, required this.sqflite});
 
@@ -24,7 +24,7 @@ class DisplayRecipeDetailsScreen extends StatefulWidget {
 
 class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
   late RecipeService recipeService;
-  late Recipe recipe;
+  late RecipeData recipe;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
     recipeService = RecipeService(widget.sqflite);
   }
 
-  Future<Recipe> _fetchRecipe() async {
+  Future<RecipeData> _fetchRecipe() async {
     try {
       final fetchedRecipe =
           await recipeService.fetchRecipeById(widget.recipe.id!);
@@ -44,7 +44,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
     }
   }
 
-  void _handleDeleteRecipe(Recipe recipe) async {
+  void _handleDeleteRecipe(RecipeData recipe) async {
     try {
       final result = await recipeService.deleteRecipe(recipe);
 
@@ -64,7 +64,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
     }
   }
 
-  void _navigateToEditRecipe(Recipe recipe) async {
+  void _navigateToEditRecipe(RecipeData recipe) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -107,7 +107,7 @@ class _DisplayRecipeScreenState extends State<DisplayRecipeDetailsScreen> {
     );
   }
 
-  Widget _buildRecipeDetails(Recipe recipe) {
+  Widget _buildRecipeDetails(RecipeData recipe) {
     final ingredients = recipe.ingredients!.map((i) => i).toList();
     final stages = recipe.stages!.map((i) => i.instruction).toList();
     return Column(

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/ingredient_data.dart';
-import 'package:nesforgains/models/recipe.dart';
-import 'package:nesforgains/models/stage.dart';
+import 'package:nesforgains/models/recipe_data.dart';
+import 'package:nesforgains/models/stage_data.dart';
 import 'package:nesforgains/service/recipe_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
 
@@ -14,7 +14,7 @@ import 'package:sqflite/sqflite.dart';
 
 class EditRecipeScreen extends StatefulWidget {
   final Database sqflite;
-  final Recipe recipe; // The recipe to edit
+  final RecipeData recipe; // The recipe to edit
 
   const EditRecipeScreen(
       {super.key, required this.sqflite, required this.recipe});
@@ -62,7 +62,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     super.dispose();
   }
 
-  void _sortIsarLinks(Recipe recipe) {
+  void _sortIsarLinks(RecipeData recipe) {
     final ingredients = recipe.ingredients!.map((i) => i.name).toList();
     final stages = recipe.stages!.map((i) => i.instruction).toList();
 
@@ -79,11 +79,11 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
   void _handleEditRecipe() async {
     try {
       late List<IngredientData> ingredientsList = [];
-      final List<Stage> stageList = [];
+      final List<StageData> stageList = [];
 
       if (_formKey.currentState!.validate()) {
         // Create updated recipe object
-        final recipe = Recipe()
+        final recipe = RecipeData()
           ..id = widget.recipe.id
           ..title = _titleController.text
           ..description = _descriptionController.text
@@ -103,7 +103,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         }
 
         for (int i = 0; i < splitStageList.length; i++) {
-          final stage = Stage()
+          final stage = StageData()
             ..stageNumber = i + 1
             ..instruction = splitStageList[i].trim();
           stageList.add(stage);

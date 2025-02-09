@@ -2,7 +2,7 @@ import 'package:nesforgains/logger.dart';
 import 'package:nesforgains/models/ingredient_data.dart';
 import 'package:nesforgains/models/recipe_data.dart';
 import 'package:nesforgains/models/response_data.dart';
-import 'package:nesforgains/models/stage.dart';
+import 'package:nesforgains/models/stage_data.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipeService {
@@ -11,7 +11,7 @@ class RecipeService {
   RecipeService(this._sqflite);
 
   Future<ResponseData> addRecipe(RecipeData recipe,
-      List<IngredientData> ingredients, List<Stage> stages) async {
+      List<IngredientData> ingredients, List<StageData> stages) async {
     try {
       // Check if the recipe already exists
       final existingRecipes = await _sqflite.query(
@@ -85,7 +85,7 @@ class RecipeService {
   }
 
   Future<ResponseData> editRecipe(RecipeData recipe,
-      List<IngredientData> newIngredients, List<Stage> newStages) async {
+      List<IngredientData> newIngredients, List<StageData> newStages) async {
     try {
       // Check if the recipe exists
       final existingRecipes = await _sqflite.query(
@@ -246,7 +246,7 @@ class RecipeService {
         }).toList();
 
         final stages = stagesData.map((data) {
-          return Stage(
+          return StageData(
             id: data['id'] as int,
             recipeId: data['recipeId'] as int,
             stageNumber: data['stageNumber'] as int?,
@@ -317,7 +317,7 @@ class RecipeService {
 
       // Map the stages data into Stage objects
       final stages = stagesData.map((data) {
-        return Stage(
+        return StageData(
           id: data['id'] as int,
           recipeId: data['recipeId'] as int,
           stageNumber: data['stageNumber'] as int?,
