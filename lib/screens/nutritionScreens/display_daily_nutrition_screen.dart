@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/nutrition.dart';
+import 'package:nesforgains/models/nutrition_data.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/service/nutrition_service.dart';
@@ -32,7 +32,7 @@ class _DisplayDailyNutritionScreenState
     nutritionService = NutritionService(widget.sqflite);
   }
 
-  Future<List<Nutrition>> _fetchDailyNutritionItems() async {
+  Future<List<NutritionData>> _fetchDailyNutritionItems() async {
     try {
       final response = await nutritionService
           .fetchNutritionListByUserId(AuthProvider.of(context).id);
@@ -55,7 +55,7 @@ class _DisplayDailyNutritionScreenState
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 600),
-            child: FutureBuilder<List<Nutrition>>(
+            child: FutureBuilder<List<NutritionData>>(
               future: _fetchDailyNutritionItems(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -105,7 +105,7 @@ class _DisplayDailyNutritionScreenState
     );
   }
 
-  Widget _buildDailyNutritionRow(Nutrition dailyNutrition) {
+  Widget _buildDailyNutritionRow(NutritionData dailyNutrition) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -130,7 +130,7 @@ class _DisplayDailyNutritionScreenState
   }
 
   Widget _buildDailyNutritionList(
-      List<Nutrition> dailyNutrition, String message) {
+      List<NutritionData> dailyNutrition, String message) {
     return CustomCards.buildListCard(
       context: context,
       child: Column(

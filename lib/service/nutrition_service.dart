@@ -1,5 +1,5 @@
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/nutrition.dart';
+import 'package:nesforgains/models/nutrition_data.dart';
 import 'package:nesforgains/models/response_data.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,7 +8,7 @@ class NutritionService {
 
   NutritionService(this._sqflite);
 
-  Future<Nutrition> fetchDailyNutritionById(String userId) async {
+  Future<NutritionData> fetchDailyNutritionById(String userId) async {
     try {
       // Get the current date (set the time to 00:00:00)
       final currentDate = DateTime.now();
@@ -26,7 +26,7 @@ class NutritionService {
       if (nutritionItems.isNotEmpty) {
         final intake = nutritionItems.first;
 
-        return Nutrition(
+        return NutritionData(
           id: intake['id'] as int,
           date: intake['date'] as String,
           calories: intake['calories'] as int,
@@ -38,7 +38,7 @@ class NutritionService {
       }
 
       // Return default nutrition data if no record is found
-      return Nutrition(
+      return NutritionData(
         id: 0,
         date: currentDay.toIso8601String(),
         calories: 0,
@@ -50,7 +50,7 @@ class NutritionService {
     } catch (e) {
       // Log the error and return default Nutrition data
       logger.e('Error fetching daily nutrition: ${e.toString()}');
-      return Nutrition(
+      return NutritionData(
         id: 0,
         date: DateTime.now().toIso8601String(),
         calories: 0,
@@ -62,7 +62,7 @@ class NutritionService {
     }
   }
 
-  Future<List<Nutrition>> fetchNutritionListByUserId(String userId) async {
+  Future<List<NutritionData>> fetchNutritionListByUserId(String userId) async {
     try {
       // Query the Nutrition table for all entries with the given userId
       final nutritionItems = await _sqflite.query(
@@ -77,8 +77,8 @@ class NutritionService {
       }
 
       // Map the fetched data to Nutrition objects
-      List<Nutrition> nutritionList = nutritionItems.map((item) {
-        return Nutrition(
+      List<NutritionData> nutritionList = nutritionItems.map((item) {
+        return NutritionData(
           id: item['id'] as int,
           date: item['date'] as String,
           calories: item['calories'] as int,

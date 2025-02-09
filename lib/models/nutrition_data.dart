@@ -1,4 +1,4 @@
-class Nutrition {
+class NutritionData {
   int? id;
   String? date;
   final int calories;
@@ -7,7 +7,7 @@ class Nutrition {
   final int fat;
   String? userId;
 
-  Nutrition({
+  NutritionData({
     this.id,
     this.date,
     required this.calories,
