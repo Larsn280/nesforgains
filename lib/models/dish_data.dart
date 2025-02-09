@@ -1,4 +1,4 @@
-class Dish {
+class DishData {
   String? dish;
   int? calories;
   int? protein;
@@ -6,7 +6,7 @@ class Dish {
   int? fat;
   int? userId;
 
-  Dish({
+  DishData({
     this.dish,
     this.calories,
     this.protein,

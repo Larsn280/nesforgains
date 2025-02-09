@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/dish.dart';
+import 'package:nesforgains/models/dish_data.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -46,7 +46,7 @@ class _AddDishScreenState extends State<AddDishScreen> {
   void _submitNewDish() async {
     try {
       if (_formKey.currentState?.validate() ?? false) {
-        final nutritionData = Dish(
+        final nutritionData = DishData(
           dish: _nameController.text,
           calories: int.tryParse(_caloriesController.text) ?? 0,
           protein: int.tryParse(_proteinController.text) ?? 0,

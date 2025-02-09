@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/dish.dart';
+import 'package:nesforgains/models/dish_data.dart';
 import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/dish_service.dart';
 import 'package:nesforgains/widgets/custom_app_container.dart';
@@ -13,7 +13,7 @@ import 'package:sqflite/sqflite.dart';
 
 class EditDishScreen extends StatefulWidget {
   final Database sqflite;
-  final Dish dish;
+  final DishData dish;
 
   const EditDishScreen({super.key, required this.sqflite, required this.dish});
 
@@ -31,7 +31,7 @@ class _EditDishScreenState extends State<EditDishScreen> {
   String olddishname = '';
 
   late DishService dishService;
-  late Dish newDish;
+  late DishData newDish;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _EditDishScreenState extends State<EditDishScreen> {
   void _editDish() async {
     try {
       if (_formKey.currentState!.validate()) {
-        newDish = Dish(
+        newDish = DishData(
             dish: _nameController.text,
             calories: int.tryParse(_calorieController.text) ?? 0,
             protein: int.tryParse(_proteinController.text) ?? 0,

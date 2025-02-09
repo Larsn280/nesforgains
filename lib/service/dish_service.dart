@@ -1,5 +1,5 @@
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/dish.dart';
+import 'package:nesforgains/models/dish_data.dart';
 import 'package:nesforgains/models/response_data.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,7 +8,7 @@ class DishService {
 
   DishService(this._sqflite);
 
-  Future<List<Dish>> fetchAllDishesById(String userId) async {
+  Future<List<DishData>> fetchAllDishesById(String userId) async {
     try {
       // Query the dishes for the given userId
       final dishData = await _sqflite.query(
@@ -23,8 +23,8 @@ class DishService {
       }
 
       // Transforming the dish data into Nutrition objects
-      List<Dish> allDishItems = dishData.map((dish) {
-        return Dish(
+      List<DishData> allDishItems = dishData.map((dish) {
+        return DishData(
           dish: dish['name'] as String,
           calories: dish['calories'] as int? ?? 0,
           protein: dish['protein'] as int? ?? 0,
@@ -72,7 +72,7 @@ class DishService {
     }
   }
 
-  Future<ResponseData> addDish(Dish data, String userId) async {
+  Future<ResponseData> addDish(DishData data, String userId) async {
     try {
       // Query the Dish table to check if the dish already exists
       final existingDish = await _sqflite.query(
@@ -165,7 +165,7 @@ class DishService {
   }
 
   Future<ResponseData> editDish(
-      Dish dishData, String oldDishName, String userId) async {
+      DishData dishData, String oldDishName, String userId) async {
     try {
       // Early return if the new dish name is empty
       if (dishData.dish == '') {

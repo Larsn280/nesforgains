@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/models/dish.dart';
+import 'package:nesforgains/models/dish_data.dart';
 import 'package:nesforgains/screens/dishScreens/add_dish_screen.dart';
 import 'package:nesforgains/screens/dishScreens/edit_dish_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -31,7 +31,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
     nutritionService = DishService(widget.sqflite);
   }
 
-  Future<List<Dish>> _handlefetchAllDishes() async {
+  Future<List<DishData>> _handlefetchAllDishes() async {
     try {
       final response = await nutritionService
           .fetchAllDishesById(AuthProvider.of(context).id);
@@ -52,7 +52,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
     }
   }
 
-  void _navigateToEditDish(Dish dish) async {
+  void _navigateToEditDish(DishData dish) async {
     try {
       final result = await Navigator.push(
         context,
@@ -103,7 +103,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
           ),
           Container(
             constraints: const BoxConstraints(maxHeight: 600),
-            child: FutureBuilder<List<Dish>>(
+            child: FutureBuilder<List<DishData>>(
               future: _handlefetchAllDishes(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -156,7 +156,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
     );
   }
 
-  Widget _buildDishRow(Dish dish) {
+  Widget _buildDishRow(DishData dish) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -197,7 +197,7 @@ class _DisplayDishesScreenState extends State<DisplayDishesScreen> {
     );
   }
 
-  Widget _buildDishList(List<Dish> dishes, String message) {
+  Widget _buildDishList(List<DishData> dishes, String message) {
     return CustomCards.buildListCard(
       context: context,
       child: Column(
