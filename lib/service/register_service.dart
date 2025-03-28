@@ -1,7 +1,15 @@
+import 'dart:convert';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
 
 class RegisterService {
+  final String baseUrl = dotenv.env['API_GATEWAY_URL'] ??
+      (throw Exception(
+          'API_GATEWAY_KEY is missing in .env. Please check your .env file.'));
+
   final Database _sqflite;
   var uuid = const Uuid();
 
@@ -23,6 +31,32 @@ class RegisterService {
   bool isValidEmail(String email) {
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     return emailRegex.hasMatch(email);
+  }
+
+  Future<http.Response> register(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/register'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: json.encode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        print('Registered user successfully');
+      } else {
+        throw Exception('Error trying to register user');
+      }
+
+      return response;
+    } catch (e) {
+      throw Exception('Error trying to register: $e');
+    }
   }
 
   // Create a new user if they don't already exist.
