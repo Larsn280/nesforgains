@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -60,32 +62,56 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Proceed only if there are no input validation errors
       if (usernameError.isEmpty && passwordError.isEmpty) {
-        final response = await loginService.loginUser(
+        final response = await loginService.login(
           _usernameController.text.trim(),
           _passwordController.text.trim(),
         );
 
-        // Handle error cases based on response
-        setState(() {
-          if (response['success'] == false) {
-            final error = response['error'];
-            if (error == 'Fel användarnamn eller email.') {
-              usernameError = error;
-            } else if (error == 'Fel lösenord.') {
-              passwordError = error;
-            } else if (error.contains(',')) {
-              // Handle both errors case
-              final errors = error.split(',');
-              usernameError = errors[0].trim();
-              passwordError = errors[1].trim();
-            }
-          } else if (response['success'] == true) {
-            // Login successful
-            final user = response['user'];
-            AuthProvider.of(context).login(user.id, user.username);
-            Navigator.pushReplacementNamed(context, '/homeScreen');
+        if (response.statusCode == 200) {
+          final body = json.decode(response.body);
+
+          // Login successful
+          final user = body['user'];
+
+          AuthProvider.of(context)
+              .login(user['sk'], user['userName'], user['email']);
+          Navigator.pushReplacementNamed(context, '/homeScreen');
+        } else if (response.statusCode == 404) {
+          // User not found
+          final body = json.decode(response.body);
+          setState(() {
+            usernameError = body['Message']; // 'User not found.'
+          });
+        } else if (response.statusCode == 401) {
+          // Incorrect password
+          final body = json.decode(response.body);
+          setState(() {
+            passwordError = body['Message']; // 'Incorrect password.'
+          });
+        } else if (response.statusCode == 500) {
+          // Internal server error
+          final body = json.decode(response.body);
+          setState(() {
+            usernameError = 'Something went wrong. Please try again later.';
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Server error: ${body['Message']}')),
+            );
           }
-        });
+        } else {
+          // Handle any other status codes (unknown errors)
+          setState(() {
+            usernameError =
+                'An unknown error occurred. Please try again later.';
+          });
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('Unexpected error: ${response.statusCode}')),
+            );
+          }
+        }
       }
     } catch (e) {
       if (mounted) {

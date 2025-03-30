@@ -4,7 +4,8 @@ import 'package:nesforgains/service/secure_storage_service.dart';
 import 'package:provider/provider.dart';
 
 class AuthState extends ChangeNotifier {
-  UserData loggedInUser = UserData(id: '', username: '', isloggedin: false);
+  UserData loggedInUser =
+      UserData(id: '', username: '', email: '', isloggedin: false);
 
   bool get isLoggedIn => loggedInUser.isloggedin!;
 
@@ -12,18 +13,21 @@ class AuthState extends ChangeNotifier {
   Future<void> initialize() async {
     final storedId = await SecureStorageService().read('user_id');
     final storedUsername = await SecureStorageService().read('username');
+    final storedEmail = await SecureStorageService().read('email');
 
     if (storedId != null && storedUsername != null) {
       loggedInUser.id = storedId;
       loggedInUser.username = storedUsername;
+      loggedInUser.email = storedEmail;
       loggedInUser.isloggedin = true;
     }
     notifyListeners();
   }
 
-  void login(String id, String username) {
-    loggedInUser.id = id;
+  void login(String sk, String username, String email) {
+    loggedInUser.id = sk;
     loggedInUser.username = username[0].toUpperCase() + username.substring(1);
+    loggedInUser.email = email;
     loggedInUser.isloggedin = true;
     notifyListeners();
   }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
 import 'package:nesforgains/logger.dart';
@@ -37,46 +39,59 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _createNewUser() async {
+  Future<void> _createNewUser() async {
     try {
+      // Set error messages based on form validation
       setState(() {
         emailError =
-            _emailController.text.isEmpty ? 'Vänligen ange en email.' : '';
-        passwordError = _passwordController.text.isEmpty
-            ? 'Vänligen ange ett lösenord'
-            : '';
+            _emailController.text.isEmpty ? 'Please enter an email.' : '';
+        passwordError =
+            _passwordController.text.isEmpty ? 'Please enter a password.' : '';
       });
 
       if (emailError.isEmpty && passwordError.isEmpty) {
-        final response = await registerService.createNewUser(
-            _emailController.text.trim(), _passwordController.text.trim());
-        logger.i(response);
-        logger.i('Username: ${_emailController.text}');
-        logger.i('Password: ${_passwordController.text}');
+        final response = await registerService.register(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
 
-        // Handle error cases based on response
-        setState(() {
-          if (response['success'] == false) {
-            final error = response['error'];
-            if (error == 'Ogiltig emailadress: ${_emailController.text}') {
-              emailError = error;
-            } else if (error ==
-                'Användaren med email: ${_emailController.text} finns redan!') {
-              emailError = error;
-            }
-          } else if (response['success'] == true) {
-            // Login successful
-            CustomSnackbar.showSnackBar(
-                message: '${_emailController.text.toString()} was registered.');
-            if (mounted) {
-              Navigator.pop(context,
-                  '${_emailController.text}, ${_passwordController.text}');
-            }
+        // Check the response from the API
+        if (response.statusCode == 201) {
+          // Registration successful
+          CustomSnackbar.showSnackBar(
+            message: '${_emailController.text} was successfully registered.',
+          );
+          if (mounted) {
+            Navigator.pop(context, _emailController.text);
           }
-        });
+        } else {
+          // Registration failed; handle different error cases
+          final responseBody = json.decode(response.body);
+          String errorMessage =
+              responseBody['message'] ?? 'Unknown error occurred';
+
+          setState(() {
+            // Handle specific errors based on the message returned
+            if (errorMessage.contains('Email already exists')) {
+              emailError = errorMessage;
+            } else if (errorMessage.contains('Username already exists')) {
+              emailError =
+                  errorMessage; // Could also be usernameError if you want
+            } else if (errorMessage.contains('Invalid email format')) {
+              emailError = errorMessage;
+            } else {
+              // Generic fallback if no specific error is detected
+              emailError = 'An error occurred. Please try again.';
+            }
+          });
+        }
       }
     } catch (e) {
+      // Catch any unexpected errors
       logger.w('Error creating user', error: e);
+      setState(() {
+        emailError = 'Something went wrong. Please try again later.';
+      });
     }
   }
 
