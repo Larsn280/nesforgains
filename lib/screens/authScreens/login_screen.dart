@@ -80,13 +80,13 @@ class _LoginScreenState extends State<LoginScreen> {
           // User not found
           final body = json.decode(response.body);
           setState(() {
-            usernameError = body['Message']; // 'User not found.'
+            usernameError = body['message']; // 'User not found.'
           });
         } else if (response.statusCode == 401) {
           // Incorrect password
           final body = json.decode(response.body);
           setState(() {
-            passwordError = body['Message']; // 'Incorrect password.'
+            passwordError = body['message']; // 'Incorrect password.'
           });
         } else if (response.statusCode == 500) {
           // Internal server error
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           });
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Server error: ${body['Message']}')),
+              SnackBar(content: Text('Server error: ${body['message']}')),
             );
           }
         } else {

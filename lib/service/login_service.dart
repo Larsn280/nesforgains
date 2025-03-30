@@ -45,8 +45,6 @@ class LoginService {
         await _storage.write(key: 'user_id', value: user['sk']);
         await _storage.write(key: 'username', value: user['userName']);
         await _storage.write(key: 'email', value: user['email']);
-      } else {
-        throw Exception('Error trying to log in');
       }
 
       return response;
