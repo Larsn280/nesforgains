@@ -15,7 +15,7 @@ class AuthState extends ChangeNotifier {
     final storedUsername = await SecureStorageService().read('username');
     final storedEmail = await SecureStorageService().read('email');
 
-    if (storedId != null && storedUsername != null) {
+    if (storedId != null && storedUsername != null && storedEmail != null) {
       loggedInUser.id = storedId;
       loggedInUser.username = storedUsername;
       loggedInUser.email = storedEmail;
