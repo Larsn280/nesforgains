@@ -7,12 +7,9 @@ import 'package:nesforgains/service/register_service.dart';
 import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
 import 'package:nesforgains/widgets/custom_snackbar.dart';
-import 'package:sqflite/sqflite.dart';
 
 class RegisterScreen extends StatefulWidget {
-  final Database sqflite;
-
-  const RegisterScreen({super.key, required this.sqflite});
+  const RegisterScreen({super.key});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -29,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    registerService = RegisterService(widget.sqflite);
+    registerService = RegisterService();
   }
 
   @override

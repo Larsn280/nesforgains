@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
 
 class RegisterService {
   final String baseUrl = dotenv.env['API_GATEWAY_URL'] ??
@@ -15,10 +13,7 @@ class RegisterService {
       (throw Exception(
           'API_GATEWAY_KEY is missing in .env. Please check your .env file.'));
 
-  final Database _sqflite;
-  var uuid = const Uuid();
-
-  RegisterService(this._sqflite);
+  RegisterService();
 
   Future<http.Response> register(String email, String password) async {
     try {
@@ -43,23 +38,5 @@ class RegisterService {
     } catch (e) {
       throw Exception('Error trying to register: $e');
     }
-  }
-
-  // Check if email already exists in the database.
-  Future<bool> checkIfUserExists(String email) async {
-    // Query the database for a user with the given email
-    final List<Map<String, dynamic>> results = await _sqflite.query(
-      'AppUser',
-      where: 'email = ?', // Use parameterized query to prevent SQL injection
-      whereArgs: [email.toLowerCase()],
-    );
-
-    return results.isNotEmpty;
-  }
-
-  // Regular expression to validate standard email format.
-  bool isValidEmail(String email) {
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    return emailRegex.hasMatch(email);
   }
 }

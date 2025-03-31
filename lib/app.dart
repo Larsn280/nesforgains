@@ -54,9 +54,7 @@ class App extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.done) {
                   final isLoggedIn =
                       Provider.of<AuthState>(context).checkLoginStatus();
-                  return isLoggedIn
-                      ? const HomeScreen()
-                      : LoginScreen(sqflite: sqflite);
+                  return isLoggedIn ? const HomeScreen() : const LoginScreen();
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -65,7 +63,7 @@ class App extends StatelessWidget {
           },
           '/homeScreen': (context) => const HomeScreen(),
           '/bookofexusesScreen': (context) => const BookOfExuses(),
-          '/registerScreen': (context) => RegisterScreen(sqflite: sqflite),
+          '/registerScreen': (context) => const RegisterScreen(),
           '/nutritionScreen': (context) => NutritionScreen(sqflite: sqflite),
           '/displaydishesScreen': (context) =>
               DisplayDishesScreen(sqflite: sqflite),

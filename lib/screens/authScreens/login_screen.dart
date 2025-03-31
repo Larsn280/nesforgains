@@ -6,12 +6,9 @@ import 'package:nesforgains/service/auth_service.dart';
 import 'package:nesforgains/service/login_service.dart';
 import 'package:nesforgains/widgets/custom_button.dart';
 import 'package:nesforgains/widgets/custom_cards.dart';
-import 'package:sqflite/sqflite.dart';
 
 class LoginScreen extends StatefulWidget {
-  final Database sqflite;
-
-  const LoginScreen({super.key, required this.sqflite});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
