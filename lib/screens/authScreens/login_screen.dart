@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    loginService = LoginService(widget.sqflite);
+    loginService = LoginService();
     _checkLoginState();
   }
 

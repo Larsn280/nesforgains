@@ -3,7 +3,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nesforgains/app.dart';
 import 'package:nesforgains/database.dart/database.dart';
 import 'package:nesforgains/logger.dart';
-import 'package:nesforgains/service/register_service.dart';
 // import 'package:nesforgains/service/scoreboard_service.dart';
 
 void main() async {
@@ -16,9 +15,6 @@ void main() async {
 
     // final scoreboardService = ScoreboardService(sqflite);
     // await scoreboardService.syncS3ToDatabase();
-
-    final registerService = RegisterService(sqflite);
-    await registerService.getSqfliteAllUsers();
 
     runApp(App(
       sqflite: sqflite,
