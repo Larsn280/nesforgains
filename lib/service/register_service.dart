@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nesforgains/logger.dart';
+import 'package:nesforgains/models/temp_usertransfer.dart';
+import 'package:nesforgains/models/user_data.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:http/http.dart' as http;
 import 'package:uuid/uuid.dart';
@@ -37,13 +39,65 @@ class RegisterService {
 
       if (response.statusCode == 201) {
         logger.i('Registered user successfully');
-      } else {
-        throw Exception('Error trying to register user');
       }
 
       return response;
     } catch (e) {
       throw Exception('Error trying to register: $e');
+    }
+  }
+
+  Future<http.Response> registerFromSqflite(
+      String sk, String username, String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/transfer'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'x-api-key': apiKey,
+        },
+        body: json.encode({
+          'sk': sk,
+          'userName': username,
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        logger.i('Registered users successfully');
+      }
+
+      return response;
+    } catch (e) {
+      throw Exception('Error trying to register: $e');
+    }
+  }
+
+  Future<List<TempUsertransfer>> getSqfliteAllUsers() async {
+    try {
+      final users = await _sqflite.query('AppUser');
+
+      List<TempUsertransfer> userList = [];
+
+      for (var user in users) {
+        String sk =
+            user['id'].toString(); // Replace 'sk' with actual column name
+        String email = user['email'].toString();
+        String password = user['password'].toString();
+        String username = user['username'].toString();
+
+        if (sk.isNotEmpty && email.isNotEmpty && password.isNotEmpty) {
+          await registerFromSqflite(sk, username, email, password);
+          userList.add(TempUsertransfer(
+              id: sk, username: username, email: email, password: password));
+        }
+      }
+
+      return userList;
+    } catch (e) {
+      throw Exception('Error fetching users: $e');
     }
   }
 
