@@ -70,9 +70,11 @@ class _LoginScreenState extends State<LoginScreen> {
           // Login successful
           final user = body['user'];
 
-          AuthProvider.of(context)
-              .login(user['sk'], user['userName'], user['email']);
-          Navigator.pushReplacementNamed(context, '/homeScreen');
+          if (mounted) {
+            AuthProvider.of(context)
+                .login(user['sk'], user['userName'], user['email']);
+            Navigator.pushReplacementNamed(context, '/homeScreen');
+          }
         } else if (response.statusCode == 404) {
           // User not found
           final body = json.decode(response.body);

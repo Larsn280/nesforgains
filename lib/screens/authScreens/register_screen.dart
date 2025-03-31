@@ -59,7 +59,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             message: '${_emailController.text} was successfully registered.',
           );
           if (mounted) {
-            Navigator.pop(context, _emailController.text);
+            Navigator.pop(context,
+                '${_emailController.text},${_passwordController.text}');
           }
         } else {
           // Registration failed; handle different error cases
