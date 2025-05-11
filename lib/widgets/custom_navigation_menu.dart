@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nesforgains/routes.dart';
 import 'package:nesforgains/service/auth_service.dart';
 
 class CustomNavigationMenu extends StatefulWidget {
@@ -128,10 +129,20 @@ class CustomNavigationMenuState extends State<CustomNavigationMenu> {
                               children: [
                                 buildMenuOption(
                                   icon: Icons.list,
-                                  label: 'Träningspass',
+                                  label: 'Logg',
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(
                                         context, '/displayworkoutScreen');
+                                    _removeOverlay();
+                                  },
+                                  color: subColor,
+                                ),
+                                buildMenuOption(
+                                  icon: Icons.list,
+                                  label: 'Program',
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                        context, AppRoutes.trainingPrograms);
                                     _removeOverlay();
                                   },
                                   color: subColor,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nesforgains/constants.dart';
+import 'package:nesforgains/routes.dart';
 import 'package:nesforgains/screens/authScreens/login_screen.dart';
 import 'package:nesforgains/screens/authScreens/register_screen.dart';
 import 'package:nesforgains/screens/book_of_exuses.dart';
@@ -9,6 +10,7 @@ import 'package:nesforgains/screens/home_screen.dart';
 import 'package:nesforgains/screens/nutritionScreens/display_daily_nutrition_screen.dart';
 import 'package:nesforgains/screens/nutritionScreens/nutrition_screen.dart';
 import 'package:nesforgains/screens/recipeScreens/display_recipe_screen.dart';
+import 'package:nesforgains/screens/training_program_screens/training_program_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/display_workout_screen.dart';
 import 'package:nesforgains/screens/workoutScreens/volume_tracker_screen.dart';
 import 'package:nesforgains/service/auth_service.dart';
@@ -77,6 +79,9 @@ class App extends StatelessWidget {
               DisplayRecipeScreen(sqflite: sqflite),
           '/displayscoreboardScreen': (context) =>
               DisplayScoreboardScreen(sqflite: sqflite),
+          AppRoutes.trainingPrograms: (context) => TrainingProgramScreen(
+                sqflite: sqflite,
+              ), //TODO Ta bort sqflite.
         },
       ),
     );
